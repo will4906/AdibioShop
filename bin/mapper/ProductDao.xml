@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017. willshuhua.
+  -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.willshuhua.adibioshop.dao.ProductDao">
+
+    <select id="queryAllProduct" resultType="Product">
+        SELECT product_id, product_groupid, name, price, description FROM products
+    </select>
+
+    <select id="queryProductByProductId" resultType="Product">
+        SELECT product_id, product_groupid, name, price, description FROM products WHERE product_id = #{productId}
+    </select>
+
+</mapper>

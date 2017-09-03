@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017. willshuhua.
+  -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.willshuhua.adibioshop.dao.CustomerDao">
+
+    <insert id="createCustomerAccount" parameterType="Customer">
+        INSERT INTO customers(customer_id, telphone, email, wechat_id, register_time)
+        VALUES
+        (#{customer_id}, #{telphone}, #{email}, #{wechat_id}, #{register_time})
+    </insert>
+
+    <select id="queryCustomerByOpenId" resultType="Customer">
+        SELECT customer_id, telphone, email, wechat_id, register_time FROM customers WHERE wechat_id = #{openId}
+    </select>
+
+</mapper>

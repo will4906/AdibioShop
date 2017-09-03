@@ -1,0 +1,5 @@
+function requestPayEvent() {
+    $.ajax({
+        url: ''
+    })
+}

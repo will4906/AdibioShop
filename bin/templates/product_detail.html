@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2017. willshuhua.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui.css}"/>
+    <title>服务信息</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+    <script type="text/javascript" data-th-src="@{/AUI/script/aui-dialog.js}"></script>
+
+
+</head>
+<body>
+<section class="aui-grid aui-margin-b-15">
+    <div class="aui-content aui-content-padded">
+        <div>操作视频:</div>
+        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503288333155&di=8100d32622b38ed6e4ae6b9aa08e80d3&imgtype=0&src=http%3A%2F%2Fpic.uuhy.com%2Fuploads%2F2012%2F01%2F10%2FMacro_by_AstridT.jpg">
+
+    </div>
+
+</section>
+<section class="aui-grid aui-margin-b-15">
+    <div class="aui-content aui-content-padded">
+        <div>操作流程:</div>
+        <div>购买产品服务→微信支付→等待公司送取样杯→取样操作→寄送样本</div>
+    </div>
+</section>
+<section class="aui-grid aui-margin-b-15">
+    <div class="aui-content aui-content-padded">
+        <div>注意事项:</div>
+        <div>取样杯的使用注意、寄送样本的地址、样品收集日期</div>
+    </div>
+</section>
+
+<footer class="aui-bar aui-bar-tab">
+    <div class="aui-btn aui-btn-info aui-bar-tab-item" tapmode id="buy">购买服务</div>
+
+</footer>
+
+</body>
+<script type="text/javascript" th:inline="javascript">
+    var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/
+    var path = /*[[${productId}]]*/
+        $("#buy").click(function (e) {
+            var dialog = new auiDialog({});
+            dialog.alert({
+                title: "购买确认",
+                msg: '确定购买该服务吗？',
+                buttons: ['取消', '确定']
+            }, function (ret) {
+                if (ret.buttonIndex == 2) {
+                    window.location.href = context + "/pay_detail?product_id=" + path;
+                }
+            });
+
+
+        });
+</script>
+</html>
+

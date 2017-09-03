@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017. willshuhua.
+  -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.willshuhua.adibioshop.dao.OrderDao">
+
+    <insert id="createOrder" parameterType="com.willshuhua.adibioshop.entity.order.Order">
+        INSERT INTO orders(order_id, customer_id, price, status, description)
+        VALUES (#{order_id}, #{customer_id}, #{price}, #{status}, #{description})
+    </insert>
+
+    <insert id="createOrderInfo" parameterType="com.willshuhua.adibioshop.entity.order.OrderInfo">
+        INSERT INTO order_infos(order_id, order_infoid, name, gender, age, address, phone, pregnant, height, weight)
+        VALUES (#{order_id}, #{order_infoid}, #{name}, #{gender}, #{age}, #{address}, #{phone}, #{pregnant}, #{height}, #{weight})
+    </insert>
+
+    <insert id="createOrderEvent" parameterType="com.willshuhua.adibioshop.entity.order.OrderEvent">
+        INSERT INTO order_events(order_eventid, order_id, event_time, event_title, event_executor, description)
+        VALUES (#{order_eventid}, #{order_id}, #{event_time}, #{event_title}, #{event_executor}, #{description})
+    </insert>
+
+    <insert id="createOrderItem" parameterType="com.willshuhua.adibioshop.entity.order.OrderItem">
+        INSERT INTO order_items(order_id, order_itemid, product_id, quantity)
+        VALUES (#{order_id}, #{order_itemid}, #{product_id}, #{quantity})
+    </insert>
+
+    <update id="updateOrderStatus" >
+        UPDATE orders SET status = #{status} WHERE order_id = #{orderId}
+    </update>
+
+</mapper>

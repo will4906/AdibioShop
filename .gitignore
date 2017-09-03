@@ -1,0 +1,30 @@
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+### My Configuration ###
+src/main/resources/config/wechat.properties
+src/main/resources/application.properties
+src/main/resources/static/MP_verify_Hx52t4apIVUQ0U3b.txt

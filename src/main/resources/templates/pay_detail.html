@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2017. willshuhua.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui.css}"/>
+    <link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/weui.min.css}">
+    <link data-th-href="@{/jquery-weui/css/jquery-weui.min.css}" rel="stylesheet">
+
+    <title>服务购买</title>
+
+</head>
+
+<style>
+    .black {
+        position: relative;
+    }
+    .Mask {
+        z-index: 2;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #eee;
+        opacity: 0.5
+    }
+    .beMask {
+        z-index: 1;
+        position: absolute;
+    }
+
+</style>
+
+<body>
+<section class="aui-content-padded">
+    <form id="payinfo_form" name="inform" onchange="changed()" oninput="changed()">
+
+        <div class="aui-content aui-margin-b-15">
+            <ul class="aui-list aui-from-list">
+                <li class="aui-list-header">填写信息（必填）</li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">*姓名:</div>
+                        <div class="aui-list-item-input">
+                            <input type="text" placeholder="姓名" name="name">
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">*性别:</div>
+                        <div class="aui-list-item-input">
+                            <label><input class="aui-radio" type="radio" name="gender" value="M"
+                                          checked="true">男</label>
+                            <label><input class="aui-radio" type="radio" name="gender" value="F">女</label>
+                            <!--<input type="text" placeholder="男/女" name="sex">-->
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">*年龄:</div>
+                        <div class="aui-list-item-input">
+                            <input type="number" placeholder="年龄" name="age">
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">*邮寄地址:</div>
+                        <div class="aui-list-item-input">
+                            <input type="text" name="local" class="weui-input" value="" id="city-picker">
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label"></div>
+                        <div class="aui-list-item-input">
+                            <input type="text" placeholder="详细地址" name="address">
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">*联系电话:</div>
+                        <div class="aui-list-item-input">
+                            <input type="number" placeholder="电话" name="phone">
+                        </div>
+                    </div>
+                </li>
+
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">*是否怀孕:</div>
+                        <div class="aui-list-item-input">
+                            <label><input class="aui-radio" type="radio" name="pregnant" value="1">是</label>
+                            <label><input class="aui-radio" type="radio" name="pregnant" value="0"
+                                          checked="true">否</label>
+
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="aui-content aui-margin-b-15">
+            <ul class="aui-list aui-from-list">
+                <li class="aui-list-header">其他信息（选题）</li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">身高:</div>
+                        <div class="aui-list-item-input">
+                            <input type="number" placeholder="身高（cm）" name="height">
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label">体重:</div>
+                        <div class="aui-list-item-input">
+                            <input type="number" placeholder="体重（kg）" name="weight">
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--/*@thymesVar id="product" type="com.willshuhua.entity.Product"*/-->
+        <input type="hidden" th:value="${product.product_id}" name="product_id">
+        <p class="">
+            <input class="aui-checkbox" type="radio" name="isagree" onclick="agreeClick(this)">
+            <span data-th-text="'本项目仅用于' + ${product.name} + '，所测结果并不代表最终确诊结果。'"></span>
+        </p>
+    </form>
+</section>
+
+
+<footer class="aui-bar aui-bar-tab">
+    <div class="black">
+        <div class="Mask" id="mask"></div>
+        <div class="beMask weui-btn weui-btn_primary aui-bar-tab-item bemask" id="pay" tapmode>支付</div>
+    </div>
+</footer>
+
+</body>
+<script data-th-src="@{/jquery-weui/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" data-th-src="@{/AUI/script/aui-dialog.js}"></script>
+
+<script data-th-src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+<script data-th-src="@{/jquery-weui/js/city-picker.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    var wechat_ready = false;
+    function onBridgeReady(){
+        wechat_ready = true;
+    }
+    if (typeof WeixinJSBridge == "undefined"){
+        if( document.addEventListener ){
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        }else if (document.attachEvent){
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+        }
+    }else{
+        onBridgeReady();
+    }
+
+    var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
+    var paypath = context + '/direct_pay';
+
+    function requestPayEvent() {
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: paypath,
+            data: $('#payinfo_form').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.result === 'err'){
+                    alert(data.errMsg);
+                }
+                console.log(data);
+                if (data.result === "ok" && wechat_ready === true){
+                    WeixinJSBridge.invoke(
+                        'getBrandWCPayRequest', {
+                            "appId":data.parm.appId,     //公众号名称，由商户传入
+                            "timeStamp":data.parm.timeStamp,         //时间戳，自1970年以来的秒数
+                            "nonceStr":data.parm.nonceStr, //随机串
+                            "package":data.parm.package_sign_cut,
+                            "signType":data.parm.signType,         //微信签名方式：
+                            "paySign":data.parm.paySign //微信签名
+                        },
+                        function(res){
+                            if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                                // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                                window.location.href = context + "/pay_success";
+                            }else if (res.err_msg == "get_brand_wcpay_request:fail"){
+                                window.location.href = context + "/pay_fail";
+                            }else {
+                                //TODO:此处填写取消支付的处理，还没想好
+                            }
+                        }
+                    );
+                }
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+
+    //呼出省市选择器
+    $("#city-picker").cityPicker({
+        showDistrict: true
+    });
+
+    //启用/禁用蒙版
+    function Mask(action){
+    	if(action == 'hide'){
+    		document.getElementById('mask').style.display="block";
+    	}else{
+    		document.getElementById('mask').style.display="none";
+    	}
+    }
+
+    //启用、禁用按钮
+    function changed() {
+        //阻止input-age内输入e
+        $('input[name=age]').val($('input[name=age]').val().replace(/^[e.]$/, ''));
+        $('input[name=phone]').val($('input[name=phone]').val().replace(/^[e.]$/, ''));
+        //遍历form的元素值
+        var arr = $('form').serializeArray();
+        var data = {};
+        //变成json格式
+        for (var item in arr) {
+            data[arr[item].name] = arr[item].value;
+        }
+        if (data.name == '' || data.name == ' ' || data.age == '' || data.age == ' ' || data.local == "" || data.address == '' || data.address == ' ' || data.phone == '' || data.phone == ' ' || (!data.isagree)) {
+            Mask('hide');
+        } else {
+            Mask('unhide');
+            
+        }
+    }
+
+    //radio按钮取消/选定
+    var aflag = true;
+    function agreeClick(id) {
+        id.checked = aflag;
+        aflag = !aflag;
+        changed();
+    }
+
+    //点击支付按钮
+    $('#pay').click(function (e) {
+        console.log("click pay");
+        //遍历form的元素值
+        var dialog = new auiDialog({});
+        var arr = $('form').serializeArray();
+        var phone = /^[1][3,5,8][0-9]{9}$/;
+        var data = {};
+        //变成json格式
+        for (var item in arr) {
+            data[arr[item].name] = arr[item].value;
+        }
+        console.log(data);
+        //判断电话是否为手机
+        if (!phone.test(data.phone)) {
+        	Mask('hide');
+            dialog.alert({
+                title: "提示",
+                msg: '请填写正确的电话号码',
+                buttons: ['确定']
+            },function(re){
+            	Mask('unhide');
+            });
+        } else {
+            show_confirm();
+        }
+    });
+    function show_confirm()
+    {
+        var r=confirm("确定信息无误并且支付？");
+        if (r===true) {
+            requestPayEvent();
+        }
+    }
+</script>
+</html>
+
+
