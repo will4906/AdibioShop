@@ -169,7 +169,7 @@
     }
 
     var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
-    var paypath = context + '/pay_event';
+    var paypath = context + '/direct_pay';
 
     function requestPayEvent() {
         $.ajax({

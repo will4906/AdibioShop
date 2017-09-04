@@ -8,6 +8,8 @@ import com.willshuhua.adibioshop.dto.access.AccessToken;
 import com.willshuhua.adibioshop.dto.access.Authorization;
 import com.willshuhua.adibioshop.dto.template.TemplateBack;
 import com.willshuhua.adibioshop.dto.template.WechatTemplate;
+import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrder;
+import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrderBack;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -24,4 +26,7 @@ public interface WechatRequest {
 
     @GET("/sns/oauth2/access_token?grant_type=authorization_code")
     Call<Authorization> requestAuthorization(@Query("appid") String appId, @Query("secret") String appSecret, @Query("code") String code);
+
+    @POST("/pay/unifiedorder")
+    Call<UnifiedOrderBack> requestUnifiedOrder(@Body UnifiedOrder unifiedOrder);
 }

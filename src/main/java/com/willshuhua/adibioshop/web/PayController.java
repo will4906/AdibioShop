@@ -4,6 +4,8 @@ import com.willshuhua.adibioshop.common.SnowflakeIdWorker;
 import com.willshuhua.adibioshop.define.order.OrderStatus;
 import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.dto.order.PatientDetail;
+import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrder;
+import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrderBack;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.Product;
 import com.willshuhua.adibioshop.entity.order.Order;
@@ -11,21 +13,29 @@ import com.willshuhua.adibioshop.entity.order.OrderEvent;
 import com.willshuhua.adibioshop.entity.order.OrderInfo;
 import com.willshuhua.adibioshop.entity.order.OrderItem;
 import com.willshuhua.adibioshop.properties.WechatProperties;
+import com.willshuhua.adibioshop.retrofit.RetrofitManager;
+import com.willshuhua.adibioshop.retrofit.wechat.WechatRequest;
 import com.willshuhua.adibioshop.service.CustomerService;
 import com.willshuhua.adibioshop.service.OrderService;
 import com.willshuhua.adibioshop.service.ProductService;
+import com.willshuhua.adibioshop.util.Encryption;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import retrofit2.Call;
+import retrofit2.Retrofit;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
 @Controller
 public class PayController {
 
+    private RetrofitManager retrofitManager = RetrofitManager.getInstance();
     @Autowired
     private CustomerService customerService;
     @Autowired
@@ -49,7 +59,8 @@ public class PayController {
 
     @RequestMapping(value = "/direct_pay", method = RequestMethod.POST)
     @ResponseBody
-    public Object payEvent(@ModelAttribute("patientDetail")PatientDetail patientDetail, HttpSession httpSession){
+    public Object payEvent(@ModelAttribute("patientDetail")PatientDetail patientDetail, HttpServletRequest request, HttpSession httpSession){
+        logger.info(patientDetail);
 //        校验各种东西，到时候需要重新构造 TODO:考虑使用spring security或者其他方式处理
         Customer customer = (Customer) httpSession.getAttribute("customer");
         if (customer == null){
@@ -93,7 +104,32 @@ public class PayController {
             orderInfo.setWeight(Float.valueOf(patientDetail.getWeight()));
         }
 
-        logger.info(patientDetail);
+        orderService.createOrder(order, orderInfo, orderEvent, orderItem);
+
+        UnifiedOrder unifiedOrder = new UnifiedOrder();
+
+        String appId = wechatProperties.getAppid();
+        String muh_id = wechatProperties.getMch_id();
+        String nonce_str = Encryption.md5(UUID.randomUUID().toString());
+        String body = wechatProperties.getMerchant() + "-" + product.getName();
+        String out_trade_no = order.getOrder_id();
+        String total_fee = product.getPrice().multiply(new BigDecimal(100)).toBigInteger().toString();
+        String spbill_create_ip = request.getRemoteAddr();
+        String notify_url = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/wechat_pay_notify";
+        String trade_type = "JSAPI";
+        String openid = customer.getWechat_id();
+
+        //TODO:准备利用反射，计算出sign对应的参数
+
+        Retrofit retrofit = retrofitManager.getXmlRetrofit();
+        WechatRequest wechatRequest = retrofit.create(WechatRequest.class);
+//        Call<UnifiedOrderBack> unifiedOrderBackCall = wechatRequest.requestUnifiedOrder();
+
+        logger.info(order);
+        logger.info(orderItem);
+        logger.info(orderEvent);
+        logger.info(orderInfo);
+
         return new Result();
     }
 

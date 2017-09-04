@@ -77,7 +77,7 @@ public class ProductController {
     }
 
     private void analyseCustomer(String code, HttpSession httpSession, boolean isAsnyc) throws IOException {
-        Retrofit retrofit = retrofitManager.getRetrofit();
+        Retrofit retrofit = retrofitManager.getGsonRetrofit();
         WechatRequest wechatRequest = retrofit.create(WechatRequest.class);
         Call<Authorization> authorizationCall = wechatRequest.requestAuthorization(wechatProperties.getAppid(), wechatProperties.getAppsecret(), code);
         if (isAsnyc){
