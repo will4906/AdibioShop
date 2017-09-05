@@ -1,12 +1,17 @@
 package com.willshuhua.adibioshop.web;
 
 import com.willshuhua.adibioshop.common.SnowflakeIdWorker;
+import com.willshuhua.adibioshop.common.TokenInstance;
 import com.willshuhua.adibioshop.define.order.OrderStatus;
+import com.willshuhua.adibioshop.define.template.TemplateId;
 import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.dto.order.PatientDetail;
+import com.willshuhua.adibioshop.dto.template.TemplateBack;
+import com.willshuhua.adibioshop.dto.template.WechatTemplate;
 import com.willshuhua.adibioshop.dto.wechat_pay.JsPayParm;
 import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrder;
 import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrderBack;
+import com.willshuhua.adibioshop.dto.wechat_pay.WechatPayBack;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.Product;
 import com.willshuhua.adibioshop.entity.order.Order;
@@ -39,14 +44,16 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.SortedMap;
-import java.util.UUID;
+import java.math.RoundingMode;
+import java.util.*;
+
 
 @Controller
 public class PayController {
 
     private RetrofitManager retrofitManager = RetrofitManager.getInstance();
+
+    private TokenInstance tokenInstance = TokenInstance.getInstance();
     @Autowired
     private CustomerService customerService;
     @Autowired
@@ -182,5 +189,72 @@ public class PayController {
         return new Result();
     }
 
+    @RequestMapping(value = "/wechat_pay_notify", method = RequestMethod.POST)
+    @ResponseBody
+    public String wechatPayNotify(@RequestBody WechatPayBack wechatPayBack) throws IOException {
+        logger.info(wechatPayBack);
+        Customer customer = customerService.queryCustomerByOpenId(wechatPayBack.getOpenid());
+        OrderEvent orderEvent = new OrderEvent();
+        orderEvent.setOrder_eventid(UUID.randomUUID().toString());
+        orderEvent.setEvent_title(OrderStatus.PAID);
+        orderEvent.setDescription(wechatPayBack.toString());
+        orderEvent.setEvent_time(new Date());
+        orderEvent.setOrder_id(wechatPayBack.getOut_trade_no());
+        orderEvent.setEvent_executor(customer.getCustomer_id());
+        orderService.changeOrderStatus(orderEvent);
+
+        WechatTemplate wechatTemplate = new WechatTemplate();
+        wechatTemplate.setTouser(customer.getWechat_id());
+        wechatTemplate.setTemplate_id(TemplateId.CHECKOUT_SUCCESS);
+        Map<String, Map<String, String>> data = new HashMap<>();
+        Map<String, String> first = new HashMap<>();
+        first.put("value", "您好，您已下单成功。");
+        first.put("color", "#173177");
+        data.put("first", first);
+        Map<String, String> keyword1 = new HashMap<>();
+        keyword1.put("value", orderEvent.getOrder_id());
+        keyword1.put("color", "#173177");
+        data.put("keyword1", keyword1);
+        Map<String, String> keyword2 = new HashMap<>();
+        keyword2.put("value", "￥" + (new BigDecimal(wechatPayBack.getCash_fee()).divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP)).toString());
+        keyword2.put("color", "#173177");
+        data.put("keyword2", keyword2);
+        Map<String, String> keyword3 = new HashMap<>();
+        keyword3.put("value", "微信支付");
+        keyword3.put("color", "#173177");
+        data.put("keyword3", keyword3);
+        Map<String, String> keyword4 = new HashMap<>();
+        keyword4.put("value", "需要");
+        keyword4.put("color", "#173177");
+        data.put("keyword4", keyword4);
+        Map<String, String> remark = new HashMap<>();
+        remark.put("value", "点击【详情】查看完整订单信息");
+        remark.put("color", "#173177");
+        data.put("remark", remark);
+        wechatTemplate.setData(data);
+
+        String access_token = tokenInstance.getAccessToken(wechatProperties.getAppid(), wechatProperties.getAppsecret());
+
+        Retrofit retrofit = retrofitManager.getGsonRetrofit();
+        WechatRequest wechatRequest = retrofit.create(WechatRequest.class);
+
+        Call<TemplateBack> backCall = wechatRequest.sendTemplate(access_token, wechatTemplate);
+        backCall.enqueue(new Callback<TemplateBack>() {
+            @Override
+            public void onResponse(Call<TemplateBack> call, Response<TemplateBack> response) {
+                logger.info(response);
+            }
+
+            @Override
+            public void onFailure(Call<TemplateBack> call, Throwable t) {
+                logger.error("发送失败");
+                logger.warn(t);
+            }
+        });
+        return "<xml>\n" +
+                "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
+                "  <return_msg><![CDATA[OK]]></return_msg>\n" +
+                "</xml>";
+    }
 
 }

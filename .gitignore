@@ -28,3 +28,4 @@ nbdist/
 src/main/resources/config/wechat.properties
 src/main/resources/application.properties
 src/main/resources/static/MP_verify_Hx52t4apIVUQ0U3b.txt
+token.xml

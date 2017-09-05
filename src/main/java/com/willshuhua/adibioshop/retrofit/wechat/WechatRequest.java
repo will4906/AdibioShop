@@ -25,7 +25,6 @@ public interface WechatRequest {
     @GET("/sns/oauth2/access_token?grant_type=authorization_code")
     Call<Authorization> requestAuthorization(@Query("appid") String appId, @Query("secret") String appSecret, @Query("code") String code);
 
-    @Headers("Content-Type: application/json; encoding=utf-8")
     @POST("/pay/unifiedorder")
     Call<UnifiedOrderBack> requestUnifiedOrder(@Body UnifiedOrder unifiedOrder);
 }
