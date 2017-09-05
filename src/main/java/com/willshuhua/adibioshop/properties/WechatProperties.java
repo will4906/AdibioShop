@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * Created by will on 2017/8/19.
  */
 @Component
-@PropertySource(name = "wechat", value = "classpath:config/wechat.properties", encoding = "GBK")
+@PropertySource(name = "wechat", value = "classpath:config/wechat.properties", encoding = "utf-8")
 public class WechatProperties {
 
     private String token;

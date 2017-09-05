@@ -15,9 +15,9 @@
 
     <insert id="createOrderInfo" parameterType="com.willshuhua.adibioshop.entity.order.OrderInfo">
         INSERT INTO 
-        order_infos(order_itemid, order_infoid, name, gender, age, country, province, city, district, address, phone, has_diabetic, is_pregnant, height, weight)
+        order_infos(order_itemid, order_infoid, product_id, name, gender, age, country, province, city, district, address, phone, has_diabetic, is_pregnant, height, weight)
         VALUES 
-        (#{order_itemid}, #{order_infoid}, #{name}, #{gender}, #{age}, #{country}, #{province}, #{city}, #{district}, #{address}, #{phone}, #{has_diabetic}, #{is_pregnant}, #{height}, #{weight})
+        (#{order_itemid}, #{order_infoid}, #{product_id}, #{name}, #{gender}, #{age}, #{country}, #{province}, #{city}, #{district}, #{address}, #{phone}, #{has_diabetic}, #{is_pregnant}, #{height}, #{weight})
     </insert>
 
     <insert id="createOrderEvent" parameterType="com.willshuhua.adibioshop.entity.order.OrderEvent">

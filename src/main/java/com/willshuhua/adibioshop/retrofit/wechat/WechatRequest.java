@@ -10,11 +10,9 @@ import com.willshuhua.adibioshop.dto.template.TemplateBack;
 import com.willshuhua.adibioshop.dto.template.WechatTemplate;
 import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrder;
 import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrderBack;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Query;
+import retrofit2.http.*;
 
 public interface WechatRequest {
 
@@ -27,6 +25,7 @@ public interface WechatRequest {
     @GET("/sns/oauth2/access_token?grant_type=authorization_code")
     Call<Authorization> requestAuthorization(@Query("appid") String appId, @Query("secret") String appSecret, @Query("code") String code);
 
+    @Headers("Content-Type: application/json; encoding=utf-8")
     @POST("/pay/unifiedorder")
     Call<UnifiedOrderBack> requestUnifiedOrder(@Body UnifiedOrder unifiedOrder);
 }

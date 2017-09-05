@@ -35,26 +35,26 @@ public class UnifiedOrder {
     private String trade_type;                      //     * 交易类型
     @Element(name = "openid")
     private String openid;                          //      * 用户标识
-    @Element(name = "device_info")
+    @Element(name = "device_info", required = false)
     private String device_info;                    //    设备号
-    @Element(name = "sign_type")
+    @Element(name = "sign_type", required = false)
     private String sign_type;                      //     签名类型
-    @Element(name = "detail")
+    @Element(name = "detail", required = false)
     private String detail;                          //     商品详情
-    @Element(name = "attach")
+    @Element(name = "attach", required = false)
     private String attach;                          //     附加数据
-    @Element(name = "fee_type")
+    @Element(name = "fee_type", required = false)
     private String fee_type;                        //     标价币种
-    @Element(name = "time_start")
+    @Element(name = "time_start", required = false)
     private String time_start;                      //     交易起始时间
-    @Element(name = "time_expire")
+    @Element(name = "time_expire", required = false)
     private String time_expire;                     //     交易结束时间
-    @Element(name = "goods_tag")
+    @Element(name = "goods_tag", required = false)
     private String goods_tag;                       //     订单优惠标记
-    @Element(name = "product_id")
+    @Element(name = "product_id", required = false)
     private String product_id;                      //     商品ID
-    @Element(name = "limit_pay")
+    @Element(name = "limit_pay", required = false)
     private String limit_pay;                       //     指定支付方式
-    @Element(name = "scene_info")
+    @Element(name = "scene_info", required = false)
     private String scene_info;                      //      场景信息
 }

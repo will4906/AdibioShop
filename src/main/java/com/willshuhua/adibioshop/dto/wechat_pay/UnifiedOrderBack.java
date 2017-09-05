@@ -15,21 +15,21 @@ public class UnifiedOrderBack {
     private String return_code;             //返回状态码:SUCCESS/FAIL, 此字段是通信标识，非交易标识，交易是否成功需要查看result_code来判断
     @Element(name = "return_msg")
     private String return_msg;
-    @Element(name = "appid")
+    @Element(name = "appid", required = false)
     private String appid;
-    @Element(name = "mch_id")
+    @Element(name = "mch_id", required = false)
     private String mch_id;
-    @Element(name = "nonce_str")
+    @Element(name = "nonce_str", required = false)
     private String nonce_str;
-    @Element(name = "openid")
+    @Element(name = "openid", required = false)
     private String openid;
-    @Element(name = "sign")
+    @Element(name = "sign", required = false)
     private String sign;
-    @Element(name = "result_code")
+    @Element(name = "result_code", required = false)
     private String result_code;
-    @Element(name = "prepay_id")
+    @Element(name = "prepay_id", required = false)
     private String prepay_id;
-    @Element(name = "trade_type")
+    @Element(name = "trade_type", required = false)
     private String trade_type;
 
 }

@@ -4,6 +4,7 @@ import com.willshuhua.adibioshop.common.SnowflakeIdWorker;
 import com.willshuhua.adibioshop.define.order.OrderStatus;
 import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.dto.order.PatientDetail;
+import com.willshuhua.adibioshop.dto.wechat_pay.JsPayParm;
 import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrder;
 import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrderBack;
 import com.willshuhua.adibioshop.entity.Customer;
@@ -18,18 +19,28 @@ import com.willshuhua.adibioshop.retrofit.wechat.WechatRequest;
 import com.willshuhua.adibioshop.service.CustomerService;
 import com.willshuhua.adibioshop.service.OrderService;
 import com.willshuhua.adibioshop.service.ProductService;
+import com.willshuhua.adibioshop.util.BeanUtil;
 import com.willshuhua.adibioshop.util.Encryption;
+import com.willshuhua.adibioshop.util.WechatTool;
 import org.apache.log4j.Logger;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.SortedMap;
 import java.util.UUID;
 
 @Controller
@@ -59,7 +70,7 @@ public class PayController {
 
     @RequestMapping(value = "/direct_pay", method = RequestMethod.POST)
     @ResponseBody
-    public Object payEvent(@ModelAttribute("patientDetail")PatientDetail patientDetail, HttpServletRequest request, HttpSession httpSession){
+    public Object payEvent(@ModelAttribute("patientDetail")PatientDetail patientDetail, HttpServletRequest request, HttpSession httpSession) throws Exception {
         logger.info(patientDetail);
 //        校验各种东西，到时候需要重新构造 TODO:考虑使用spring security或者其他方式处理
         Customer customer = (Customer) httpSession.getAttribute("customer");
@@ -119,11 +130,49 @@ public class PayController {
         String trade_type = "JSAPI";
         String openid = customer.getWechat_id();
 
-        //TODO:准备利用反射，计算出sign对应的参数
+        unifiedOrder.setAppid(appId);
+        unifiedOrder.setMch_id(muh_id);
+        unifiedOrder.setNonce_str(nonce_str);
+        unifiedOrder.setBody(body);
+        unifiedOrder.setOut_trade_no(out_trade_no);
+        unifiedOrder.setTotal_fee(total_fee);
+        unifiedOrder.setSpbill_create_ip(spbill_create_ip);
+        unifiedOrder.setNotify_url(notify_url);
+        unifiedOrder.setTrade_type(trade_type);
+        unifiedOrder.setOpenid(openid);
+        //计算sign
+        SortedMap<String, String> sortedMap = BeanUtil.beanToMap(unifiedOrder);
+        if (sortedMap == null){
+            return new Result(Result.ERR, "Can't parse the order.");
+        }
+        String sign = WechatTool.generateMD5PaySign(sortedMap, wechatProperties.getApikey());
+        unifiedOrder.setSign(sign);
 
         Retrofit retrofit = retrofitManager.getXmlRetrofit();
         WechatRequest wechatRequest = retrofit.create(WechatRequest.class);
-//        Call<UnifiedOrderBack> unifiedOrderBackCall = wechatRequest.requestUnifiedOrder();
+
+        Call<UnifiedOrderBack> unifiedOrderBackCall = wechatRequest.requestUnifiedOrder(unifiedOrder);
+        Response<UnifiedOrderBack> backResponse = unifiedOrderBackCall.execute();
+        UnifiedOrderBack unifiedOrderBack = backResponse.body();
+
+        JsPayParm jsPayParm = new JsPayParm();
+        if (unifiedOrderBack != null){
+            jsPayParm.setAppId(wechatProperties.getAppid());
+            jsPayParm.setPackage_sign_cut("prepay_id=" + unifiedOrderBack.getPrepay_id());
+            jsPayParm.setNonceStr(Encryption.md5(UUID.randomUUID().toString()));
+            jsPayParm.setTimeStamp(String.valueOf(new Date().getTime() / 1000));
+            jsPayParm.setSignType("MD5");
+
+            //计算sign
+            SortedMap<String, String> jsSortMap = BeanUtil.beanToMap(jsPayParm);
+            if (jsSortMap == null){
+                return new Result(Result.ERR, "Can't parse the order.");
+            }
+            String paySign = WechatTool.generateMD5PaySign(jsSortMap, wechatProperties.getApikey());
+            jsPayParm.setPaySign(paySign);
+
+            return new Result(Result.OK, jsPayParm);
+        }
 
         logger.info(order);
         logger.info(orderItem);

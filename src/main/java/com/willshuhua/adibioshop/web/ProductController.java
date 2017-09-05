@@ -55,7 +55,7 @@ public class ProductController {
             return modelAndView;
         }
 
-        analyseCustomer(code, httpSession, true);
+        analyseCustomer(code, httpSession, false);
         return modelAndView;
     }
 
