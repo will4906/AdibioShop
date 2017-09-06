@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -34,5 +37,10 @@ public class OrderServiceImpl implements OrderService {
     public void changeOrderStatus(OrderEvent orderEvent) {
         orderDao.createOrderEvent(orderEvent);
         orderDao.updateOrderStatus(orderEvent.getOrder_id(), orderEvent.getEvent_title());
+    }
+
+    @Override
+    public List<Map<String,Object>> queryOrderInfoByOrderId(String orderId) {
+        return orderDao.queryOrderInfoByOrderId(orderId);
     }
 }

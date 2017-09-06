@@ -4,6 +4,7 @@ import com.willshuhua.adibioshop.dto.access.AccessToken;
 import com.willshuhua.adibioshop.dto.token.Token;
 import com.willshuhua.adibioshop.retrofit.RetrofitManager;
 import com.willshuhua.adibioshop.retrofit.wechat.WechatRequest;
+import org.apache.log4j.Logger;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import retrofit2.Call;
@@ -14,6 +15,9 @@ import java.io.IOException;
 import java.util.Date;
 
 public class TokenInstance {
+
+    private Logger logger = Logger.getLogger(TokenInstance.class);
+
     private static TokenInstance ourInstance = new TokenInstance();
 
     public static TokenInstance getInstance() {
@@ -41,6 +45,9 @@ public class TokenInstance {
             WechatRequest wechatRequest = retrofit.create(WechatRequest.class);
             Call<AccessToken> tokenCall = wechatRequest.requestAccessToken(appId, appSecret);
             AccessToken accessToken = tokenCall.execute().body();
+
+            logger.info(accessToken);
+
             token = new Token();
             token.setAccess_time(new Date().getTime());
             token.setAccess_token(accessToken.getAccess_token());

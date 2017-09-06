@@ -8,10 +8,7 @@ import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.dto.template.TemplateBack;
 import com.willshuhua.adibioshop.dto.template.WechatTemplate;
-import com.willshuhua.adibioshop.dto.wechat_pay.JsPayParm;
-import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrder;
-import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrderBack;
-import com.willshuhua.adibioshop.dto.wechat_pay.WechatPayBack;
+import com.willshuhua.adibioshop.dto.wechat_pay.*;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.Product;
 import com.willshuhua.adibioshop.entity.order.Order;
@@ -40,8 +37,10 @@ import retrofit2.Retrofit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -191,8 +190,9 @@ public class PayController {
 
     @RequestMapping(value = "/wechat_pay_notify", method = RequestMethod.POST)
     @ResponseBody
-    public String wechatPayNotify(@RequestBody WechatPayBack wechatPayBack) throws IOException {
+    public String wechatPayNotify(@RequestBody WechatPayBack wechatPayBack, HttpServletRequest request) throws Exception {
         logger.info(wechatPayBack);
+
         Customer customer = customerService.queryCustomerByOpenId(wechatPayBack.getOpenid());
         OrderEvent orderEvent = new OrderEvent();
         orderEvent.setOrder_eventid(UUID.randomUUID().toString());
@@ -206,6 +206,7 @@ public class PayController {
         WechatTemplate wechatTemplate = new WechatTemplate();
         wechatTemplate.setTouser(customer.getWechat_id());
         wechatTemplate.setTemplate_id(TemplateId.CHECKOUT_SUCCESS);
+        wechatTemplate.setUrl(request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/order_info?order_id=" + wechatPayBack.getOut_trade_no());
         Map<String, Map<String, String>> data = new HashMap<>();
         Map<String, String> first = new HashMap<>();
         first.put("value", "您好，您已下单成功。");
@@ -251,10 +252,16 @@ public class PayController {
                 logger.warn(t);
             }
         });
-        return "<xml>\n" +
-                "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
-                "  <return_msg><![CDATA[OK]]></return_msg>\n" +
-                "</xml>";
+
+        Serializer serializer = new Persister();
+        ReturnPayNotify returnPayNotify = new ReturnPayNotify("SUCCESS", "OK");
+
+        StringWriter resultWriter = new StringWriter();
+        String result = "";
+        serializer.write(returnPayNotify, resultWriter);
+        result = resultWriter.toString();
+
+        return result;
     }
 
 }

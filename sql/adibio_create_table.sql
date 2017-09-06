@@ -32,6 +32,29 @@ CREATE TABLE customers
 --     headimgurl VARCHAR(255) NOT NULL
 -- );
 
+-- 患者描述信息
+DROP TABLE IF EXISTS patient_infos CASCADE;
+CREATE TABLE patient_infos 
+(
+    row_id SERIAL,
+    customer_id VARCHAR(255) NOT NULL,
+    patient_infoid VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    gender VARCHAR(5) NOT NULL,
+    age NUMERIC NOT NULL,
+    country VARCHAR(255) NOT NULL,
+    province VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    district VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    phone VARCHAR(255) NOT NULL,
+    has_diabetic INT NOT NULL,
+    is_pregnant INT NOT NULL,
+    height NUMERIC,
+    weight NUMERIC,
+    CONSTRAINT patient_infos_rowid_pk PRIMARY KEY (row_id),
+    CONSTRAINT patient_infos_infoid_unique UNIQUE (patient_infoid)
+)
 -- 描述订单基本信息
 DROP TABLE IF EXISTS orders CASCADE;
 CREATE TABLE orders 
@@ -126,3 +149,49 @@ CREATE TABLE products
     CONSTRAINT products_productid_unique UNIQUE(product_id),
     CONSTRAINT products_name_unique UNIQUE(name)
 );
+
+-- 描述购物车内存储的患者订单信息
+DROP TABLE IF EXISTS cart_cache_info CASCADE;
+CREATE TABLE cart_patient_infos 
+(
+    row_id SERIAL,
+    cart_itemid VARCHAR(255) NOT NULL,
+    cart_patient_infoid VARCHAR(255) NOT NULL,
+    product_id VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    gender VARCHAR(5) NOT NULL,
+    age NUMERIC NOT NULL,
+    country VARCHAR(255) NOT NULL,
+    province VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    district VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    phone VARCHAR(255) NOT NULL,
+    has_diabetic INT NOT NULL,
+    is_pregnant INT NOT NULL,
+    height NUMERIC,
+    weight NUMERIC,
+    CONSTRAINT cart_patient_infos_rowid_pk PRIMARY KEY (row_id),
+    CONSTRAINT cart_patient_infos_unique UNIQUE (cart_patient_infoid)
+);
+
+-- 描述购物车信息
+DROP TABLE IF EXISTS shopping_cart CASCADE;
+CREATE TABLE shopping_carts 
+(
+    row_id SERIAL,
+    customer_id VARCHAR(255) NOT NULL,
+    cart_id VARCHAR(255) NOT NULL
+);
+
+-- 描述购物车项目及数量信息
+DROP TABLE IF EXISTS cart_items CASCADE;
+CREATE TABLE cart_items
+(
+    row_id SERIAL,
+    cart_itemid VARCHAR(255) NOT NULL,
+    product_id VARCHAR(255) NOT NULL,
+    quantity INT NOT NULL,
+    CONSTRAINT cart_items_rowid_pk PRIMARY KEY (row_id),
+    CONSTRAINT cart_items_itemid_unique UNIQUE (cart_itemid)
+)

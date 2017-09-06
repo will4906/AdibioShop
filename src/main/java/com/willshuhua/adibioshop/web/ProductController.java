@@ -46,8 +46,9 @@ public class ProductController {
         String state = request.getParameter("state");
 
         logger.info("code===" + code);
+        logger.info(httpSession);
+        ModelAndView modelAndView  = new ModelAndView("product_list");
 
-        ModelAndView modelAndView = new ModelAndView("product_list");
         List<Product> productList = productService.queryAllProduct();
         modelAndView.addObject("productList", productList);
 

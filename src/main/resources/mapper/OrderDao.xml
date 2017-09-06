@@ -34,4 +34,23 @@
         UPDATE orders SET status = #{status} WHERE order_id = #{orderId}
     </update>
 
+    <select id="queryOrderInfoByOrderId" resultType="java.util.Map">
+        SELECT
+        orders.order_id, orders.price, orders.status, orders.description,
+        products.name,
+        order_items.order_itemid, order_items.product_id, order_items.quantity,
+        oi.order_infoid, oi.name, oi.gender, oi.age, oi.country, oi.province, oi.city, oi.district, oi.address, oi.phone, oi.has_diabetic, oi.is_pregnant, oi.height, oi.weight
+        FROM
+        orders, order_items, order_infos AS oi, products
+        WHERE
+        orders.order_id = #{orderId}
+        AND
+        orders.order_id = order_items.order_id
+        AND
+        order_items.order_itemid = oi.order_itemid
+        AND
+        order_items.product_id = oi.product_id
+        AND
+        products.product_id = oi.product_id
+    </select>
 </mapper>

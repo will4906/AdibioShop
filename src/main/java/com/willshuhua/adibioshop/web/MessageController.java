@@ -9,6 +9,8 @@ import com.willshuhua.adibioshop.service.MessageService;
 import com.willshuhua.adibioshop.util.InitMsgUtil;
 import com.willshuhua.adibioshop.util.XmlTool;
 import org.apache.log4j.Logger;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +34,7 @@ public class MessageController {
     }
 
     @RequestMapping(value = "/message", method = RequestMethod.POST, consumes = { "text/xml" }, produces = {"application/xml" })
-    public String answerMessage(@RequestBody String wechatData){
+    public String answerMessage(@RequestBody String wechatData) throws Exception {
         logger.info(wechatData);
 
         Map map = XmlTool.readStringXmlOut(wechatData);

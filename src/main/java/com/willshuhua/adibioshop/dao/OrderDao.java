@@ -11,6 +11,9 @@ import com.willshuhua.adibioshop.entity.order.OrderItem;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface OrderDao {
 
@@ -23,4 +26,6 @@ public interface OrderDao {
     void createOrderItem(OrderItem orderItem);
 
     void updateOrderStatus(@Param("orderId") String orderId, @Param("status") String status);
+
+    List<Map<String,Object>> queryOrderInfoByOrderId(@Param("orderId") String orderId);
 }
