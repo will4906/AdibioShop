@@ -37,6 +37,7 @@ dependencies {
 //    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 //	数据库
 	runtime('org.postgresql:postgresql')
+	compile('org.springframework.boot:spring-boot-starter-data-redis')
 //	语法
     compileOnly 'org.projectlombok:lombok:1.16.18'
 //    xml

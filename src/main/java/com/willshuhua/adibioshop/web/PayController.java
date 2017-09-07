@@ -28,6 +28,8 @@ import org.apache.log4j.Logger;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import retrofit2.Call;
@@ -45,6 +47,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 @Controller
@@ -61,6 +64,8 @@ public class PayController {
     private OrderService orderService;
     @Autowired
     private WechatProperties wechatProperties;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     private Logger logger = Logger.getLogger(PayController.class);
 
@@ -193,6 +198,21 @@ public class PayController {
     public String wechatPayNotify(@RequestBody WechatPayBack wechatPayBack, HttpServletRequest request) throws Exception {
         logger.info(wechatPayBack);
 
+        Serializer serializer = new Persister();
+        ReturnPayNotify returnPayNotify = new ReturnPayNotify("SUCCESS", "OK");
+
+        StringWriter resultWriter = new StringWriter();
+        String result = "";
+        serializer.write(returnPayNotify, resultWriter);
+        result = resultWriter.toString();
+
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        if (redisTemplate.hasKey("pay." + wechatPayBack.getOut_trade_no())){
+            return result;
+        }else {
+            ops.set("pay." + wechatPayBack.getOut_trade_no(), "send", 1, TimeUnit.DAYS);
+        }
+
         Customer customer = customerService.queryCustomerByOpenId(wechatPayBack.getOpenid());
         OrderEvent orderEvent = new OrderEvent();
         orderEvent.setOrder_eventid(UUID.randomUUID().toString());
@@ -252,14 +272,6 @@ public class PayController {
                 logger.warn(t);
             }
         });
-
-        Serializer serializer = new Persister();
-        ReturnPayNotify returnPayNotify = new ReturnPayNotify("SUCCESS", "OK");
-
-        StringWriter resultWriter = new StringWriter();
-        String result = "";
-        serializer.write(returnPayNotify, resultWriter);
-        result = resultWriter.toString();
 
         return result;
     }

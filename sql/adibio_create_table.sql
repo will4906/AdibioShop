@@ -54,7 +54,7 @@ CREATE TABLE patient_infos
     weight NUMERIC,
     CONSTRAINT patient_infos_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT patient_infos_infoid_unique UNIQUE (patient_infoid)
-)
+);
 -- 描述订单基本信息
 DROP TABLE IF EXISTS orders CASCADE;
 CREATE TABLE orders 
@@ -189,9 +189,10 @@ DROP TABLE IF EXISTS cart_items CASCADE;
 CREATE TABLE cart_items
 (
     row_id SERIAL,
+    cart_id VARCHAR(255) NOT NULL,
     cart_itemid VARCHAR(255) NOT NULL,
     product_id VARCHAR(255) NOT NULL,
     quantity INT NOT NULL,
     CONSTRAINT cart_items_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT cart_items_itemid_unique UNIQUE (cart_itemid)
-)
+);
