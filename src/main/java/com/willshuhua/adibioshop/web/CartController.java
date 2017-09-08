@@ -4,7 +4,6 @@ import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
-import com.willshuhua.adibioshop.entity.cart.ItemProduct;
 import com.willshuhua.adibioshop.entity.cart.ShoppingCart;
 import com.willshuhua.adibioshop.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +63,10 @@ public class CartController {
             return new Result(Result.ERR, "Can't find the customer");
         }
         return new Result(Result.OK, cartService.queryCartForCustomer(customer.getCustomer_id()));
+    }
+
+    @RequestMapping(value = "/shopping_cart", method = RequestMethod.GET)
+    public ModelAndView shoppingCart(HttpSession httpSession){
+        return new ModelAndView("shopping_cart");
     }
 }
