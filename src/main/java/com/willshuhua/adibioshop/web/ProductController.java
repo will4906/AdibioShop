@@ -3,9 +3,11 @@ package com.willshuhua.adibioshop.web;
 import com.willshuhua.adibioshop.dto.access.Authorization;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.Product;
+import com.willshuhua.adibioshop.entity.cart.ShoppingCart;
 import com.willshuhua.adibioshop.properties.WechatProperties;
 import com.willshuhua.adibioshop.retrofit.RetrofitManager;
 import com.willshuhua.adibioshop.retrofit.wechat.WechatRequest;
+import com.willshuhua.adibioshop.service.CartService;
 import com.willshuhua.adibioshop.service.CustomerService;
 import com.willshuhua.adibioshop.service.ProductService;
 import org.apache.log4j.Logger;
@@ -38,6 +40,8 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private CartService cartService;
     @Autowired
     private WechatProperties wechatProperties;
     @Autowired
@@ -138,6 +142,7 @@ public class ProductController {
             createCus.setRegister_time(new Date());
             customerService.createCustomerAccount(createCus);
             customer = createCus;
+            cartService.createShoppingCart(new ShoppingCart(customerId, UUID.randomUUID().toString()));
         }
         logger.info(customer);
         return customer;

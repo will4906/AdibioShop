@@ -14,8 +14,8 @@ public class Product {
     private int row_id;
     private String product_id;
     private String product_groupid;
-    private String name;
-    private BigDecimal price;
+    private String product_name;
+    private BigDecimal unit_price;
     private String description;
 
 }

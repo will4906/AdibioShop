@@ -5,7 +5,9 @@
 package com.willshuhua.adibioshop.dao;
 
 
+import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.entity.PatientInfo;
 import org.apache.ibatis.annotations.Param;
 
 public interface CustomerDao{
@@ -14,4 +16,7 @@ public interface CustomerDao{
 
     Customer queryCustomerByOpenId(@Param("openId") String openId);
 
+    PatientInfo hasPatientInfo(PatientInfo patientInfo);
+
+    void createPatientInfo(PatientInfo patientInfo);
 }

@@ -7,11 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartPatientInfo {
+public class ShoppingCart {
 
-    private String cart_itemid;
-    private String cart_patient_infoid;
-    private String product_id;
-    private String patient_infoid;
-
+    private String customer_id;
+    private String cart_id;
 }

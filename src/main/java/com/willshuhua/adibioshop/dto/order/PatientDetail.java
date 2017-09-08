@@ -5,9 +5,11 @@ import lombok.Data;
 @Data
 public class PatientDetail {
 
+    private String customer_id; //用户id，不需要前端填写
     private String name;        //姓名
     private String gender;      //性别
     private String age;         //年龄
+    private String country;     //国家，由后台自动填写
     private String province;    //省份
     private String city;        //城市
     private String district;    //区

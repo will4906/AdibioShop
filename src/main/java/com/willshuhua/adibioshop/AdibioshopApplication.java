@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {"com.willshuhua.adibioshop"})
 @MapperScan(basePackages = {"com.willshuhua.adibioshop.dao"})
 @EnableTransactionManagement
-//@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class AdibioshopApplication {
 
 	public static void main(String[] args) {

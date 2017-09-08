@@ -1,5 +1,6 @@
 package com.willshuhua.adibioshop.web;
 
+import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,5 +32,12 @@ public class OrderController {
     @ResponseBody
     public Object orderInfo(@RequestParam("order_id")String orderId){
         return orderService.queryOrderInfoByOrderId(orderId);
+    }
+
+    @RequestMapping(value = "/patient_infos", method = RequestMethod.GET)
+    @ResponseBody
+    public Object patientInfos(HttpSession httpSession){
+        Customer customer = (Customer)httpSession.getAttribute("customer");
+        return null;
     }
 }

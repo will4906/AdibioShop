@@ -8,12 +8,36 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.willshuhua.adibioshop.dao.CartDao">
 
-    <select id="queryCartForCustomer" resultType="CartItem">
-        SELECT cart_items.cart_id, cart_items.cart_itemid, cart_items.product_id, cart_items.quantity
-        FROM cart_items, cart
+    <select id="queryCartForCustomer" resultType="ItemProduct">
+        SELECT cart_items.cart_id, cart_items.cart_itemid, cart_items.product_id, cart_items.quantity, products.product_name, products.unit_price
+        FROM cart_items, shopping_carts AS cart, products
         WHERE cart.customer_id = #{customerId}
         AND
         cart_items.cart_id = cart.cart_id
+        AND
+        products.product_id = cart_items.product_id
+    </select>
+
+    <select id="updateCartItemQuantity">
+        UPDATE cart_items SET quantity = #{quantity} WHERE cart_itemid = #{cart_itemid}
+    </select>
+
+    <insert id="insertCartItem">
+        INSERT INTO cart_items(cart_id, cart_itemid, product_id, quantity)
+        VALUES (#{cart_id}, #{cart_itemid}, #{product_id}, #{quantity})
+    </insert>
+
+    <select id="queryShoppingCart">
+        SELECT customer_id, cart_id FROM shopping_carts WHERE customer_id = #{customer_id}
+    </select>
+
+    <insert id="createShoppingCart">
+        INSERT INTO shopping_carts(customer_id, cart_id) VALUES (#{customer_id}, #{cart_id})
+    </insert>
+
+    <select id="hasCartItem" resultType="CartItem">
+        SELECT cart_items.cart_id, cart_items.cart_itemid, cart_items.product_id, cart_items.quantity FROM cart_items, shopping_carts
+        WHERE shopping_carts.customer_id = #{customer_id} AND cart_items.cart_id = shopping_carts.cart_id AND cart_items.product_id = #{product_id}
     </select>
 
 </mapper>

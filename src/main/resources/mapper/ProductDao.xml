@@ -9,11 +9,11 @@
 <mapper namespace="com.willshuhua.adibioshop.dao.ProductDao">
 
     <select id="queryAllProduct" resultType="Product">
-        SELECT product_id, product_groupid, name, price, description FROM products
+        SELECT product_id, product_groupid, product_name, unit_price, description FROM products
     </select>
 
     <select id="queryProductByProductId" resultType="Product">
-        SELECT product_id, product_groupid, name, price, description FROM products WHERE product_id = #{productId}
+        SELECT product_id, product_groupid, product_name, unit_price, description FROM products WHERE product_id = #{productId}
     </select>
 
 </mapper>

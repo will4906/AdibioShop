@@ -90,19 +90,7 @@ CREATE TABLE order_infos
     order_itemid VARCHAR(255) NOT NULL,
     order_infoid VARCHAR(255) NOT NULL,
     product_id VARCHAR(255) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    gender VARCHAR(5) NOT NULL,
-    age NUMERIC NOT NULL,
-    country VARCHAR(255) NOT NULL,
-    province VARCHAR(255) NOT NULL,
-    city VARCHAR(255) NOT NULL,
-    district VARCHAR(255) NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    phone VARCHAR(255) NOT NULL,
-    has_diabetic INT NOT NULL,
-    is_pregnant INT NOT NULL,
-    height NUMERIC,
-    weight NUMERIC,
+    patient_infoid VARCHAR(255) NOT NULL,
     CONSTRAINT order_infos_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT order_infos_infoid_unique UNIQUE (order_infoid)
 );
@@ -142,41 +130,29 @@ CREATE TABLE products
     row_id SERIAL,
     product_id VARCHAR(255) NOT NULL,
     product_groupid VARCHAR(255) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    price decimal NOT NULL,
+    product_name VARCHAR(255) NOT NULL,
+    unit_price decimal NOT NULL,
     description TEXT,
     CONSTRAINT products_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT products_productid_unique UNIQUE(product_id),
-    CONSTRAINT products_name_unique UNIQUE(name)
+    CONSTRAINT products_name_unique UNIQUE(product_name)
 );
 
 -- 描述购物车内存储的患者订单信息
-DROP TABLE IF EXISTS cart_cache_info CASCADE;
+DROP TABLE IF EXISTS cart_patient_infos CASCADE;
 CREATE TABLE cart_patient_infos 
 (
     row_id SERIAL,
     cart_itemid VARCHAR(255) NOT NULL,
     cart_patient_infoid VARCHAR(255) NOT NULL,
     product_id VARCHAR(255) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    gender VARCHAR(5) NOT NULL,
-    age NUMERIC NOT NULL,
-    country VARCHAR(255) NOT NULL,
-    province VARCHAR(255) NOT NULL,
-    city VARCHAR(255) NOT NULL,
-    district VARCHAR(255) NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    phone VARCHAR(255) NOT NULL,
-    has_diabetic INT NOT NULL,
-    is_pregnant INT NOT NULL,
-    height NUMERIC,
-    weight NUMERIC,
+    patient_infoid VARCHAR(255) NOT NULL,
     CONSTRAINT cart_patient_infos_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT cart_patient_infos_unique UNIQUE (cart_patient_infoid)
 );
 
 -- 描述购物车信息
-DROP TABLE IF EXISTS shopping_cart CASCADE;
+DROP TABLE IF EXISTS shopping_carts CASCADE;
 CREATE TABLE shopping_carts 
 (
     row_id SERIAL,

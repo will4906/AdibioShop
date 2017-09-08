@@ -5,7 +5,9 @@
 package com.willshuhua.adibioshop.service.impl;
 
 import com.willshuhua.adibioshop.dao.CustomerDao;
+import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.entity.PatientInfo;
 import com.willshuhua.adibioshop.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,4 +31,15 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer queryCustomerByOpenId(String openId) {
         return customerDao.queryCustomerByOpenId(openId);
     }
+
+    @Override
+    public PatientInfo hasPatientInfo(PatientInfo patientInfo) {
+        return customerDao.hasPatientInfo(patientInfo);
+    }
+
+    @Override
+    public void createPatientInfo(PatientInfo patientInfo) {
+        customerDao.createPatientInfo(patientInfo);
+    }
+
 }

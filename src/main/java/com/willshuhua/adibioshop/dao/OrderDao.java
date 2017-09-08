@@ -28,4 +28,5 @@ public interface OrderDao {
     void updateOrderStatus(@Param("orderId") String orderId, @Param("status") String status);
 
     List<Map<String,Object>> queryOrderInfoByOrderId(@Param("orderId") String orderId);
+
 }

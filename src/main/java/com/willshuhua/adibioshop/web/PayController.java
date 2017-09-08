@@ -10,6 +10,7 @@ import com.willshuhua.adibioshop.dto.template.TemplateBack;
 import com.willshuhua.adibioshop.dto.template.WechatTemplate;
 import com.willshuhua.adibioshop.dto.wechat_pay.*;
 import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.entity.PatientInfo;
 import com.willshuhua.adibioshop.entity.Product;
 import com.willshuhua.adibioshop.entity.order.Order;
 import com.willshuhua.adibioshop.entity.order.OrderEvent;
@@ -100,7 +101,7 @@ public class PayController {
         SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
         String orderId = String.valueOf(idWorker.nextId());
 
-        Order order = new Order(orderId, customer.getCustomer_id(), product.getPrice(), OrderStatus.CREATION, null);
+        Order order = new Order(orderId, customer.getCustomer_id(), product.getUnit_price(), OrderStatus.CREATION, null);
         OrderEvent orderEvent = new OrderEvent(UUID.randomUUID().toString(), orderId, new Date(), OrderStatus.CREATION, customer.getCustomer_id(), null);
         OrderItem orderItem = new OrderItem(orderId, UUID.randomUUID().toString(), productId, 1);
 //      TODO:这是一段冗长的配置，日后会想想是否有什么更好地方式。
@@ -108,24 +109,36 @@ public class PayController {
         orderInfo.setOrder_itemid(orderItem.getOrder_itemid());
         orderInfo.setOrder_infoid(UUID.randomUUID().toString());
         orderInfo.setProduct_id(patientDetail.getProduct_id());
-        orderInfo.setName(patientDetail.getName());
-        orderInfo.setGender(patientDetail.getGender());
-        orderInfo.setAge(Float.valueOf(patientDetail.getAge()));
-        orderInfo.setCountry("CHINA");
-        orderInfo.setProvince(patientDetail.getProvince());
-        orderInfo.setCity(patientDetail.getCity());
-        orderInfo.setDistrict(patientDetail.getDistrict());
-        orderInfo.setAddress(patientDetail.getAddress());
-        orderInfo.setPhone(patientDetail.getPhone());
-        orderInfo.setHas_diabetic(Integer.valueOf(patientDetail.getHas_diabetic()));
-        orderInfo.setIs_pregnant(Integer.valueOf(patientDetail.getIs_pregnant()));
+
+        PatientInfo patientInfo = new PatientInfo();
+        patientInfo.setCustomer_id(customer.getCustomer_id());
+        patientInfo.setName(patientDetail.getName());
+        patientInfo.setGender(patientDetail.getGender());
+        patientInfo.setAge(Float.valueOf(patientDetail.getAge()));
+        patientInfo.setCountry("CHINA");
+        patientInfo.setProvince(patientDetail.getProvince());
+        patientInfo.setCity(patientDetail.getCity());
+        patientInfo.setDistrict(patientDetail.getDistrict());
+        patientInfo.setAddress(patientDetail.getAddress());
+        patientInfo.setPhone(patientDetail.getPhone());
+        patientInfo.setHas_diabetic(Integer.valueOf(patientDetail.getHas_diabetic()));
+        patientInfo.setIs_pregnant(Integer.valueOf(patientDetail.getIs_pregnant()));
         if (!(patientDetail.getHeight() == null || patientDetail.getHeight().equals("null") || patientDetail.getHeight().equals(""))){
-            orderInfo.setHeight(Float.valueOf(patientDetail.getHeight()));
+            patientInfo.setHeight(Float.valueOf(patientDetail.getHeight()));
         }
         if (!(patientDetail.getWeight() == null || patientDetail.getWeight().equals("null") || patientDetail.getWeight().equals(""))){
-            orderInfo.setWeight(Float.valueOf(patientDetail.getWeight()));
+            patientInfo.setWeight(Float.valueOf(patientDetail.getWeight()));
         }
 
+        PatientInfo hasPatient = customerService.hasPatientInfo(patientInfo);
+        if (hasPatient != null){
+            patientInfo = hasPatient;
+        }else {
+            patientInfo.setPatient_infoid(UUID.randomUUID().toString());
+            customerService.createPatientInfo(patientInfo);
+        }
+
+        orderInfo.setPatient_infoid(patientInfo.getPatient_infoid());
         orderService.createOrder(order, orderInfo, orderEvent, orderItem);
 
         UnifiedOrder unifiedOrder = new UnifiedOrder();
@@ -133,9 +146,9 @@ public class PayController {
         String appId = wechatProperties.getAppid();
         String muh_id = wechatProperties.getMch_id();
         String nonce_str = Encryption.md5(UUID.randomUUID().toString());
-        String body = wechatProperties.getMerchant() + "-" + product.getName();
+        String body = wechatProperties.getMerchant() + "-" + product.getProduct_name();
         String out_trade_no = order.getOrder_id();
-        String total_fee = product.getPrice().multiply(new BigDecimal(100)).toBigInteger().toString();
+        String total_fee = product.getUnit_price().multiply(new BigDecimal(100)).toBigInteger().toString();
         String spbill_create_ip = request.getRemoteAddr();
         String notify_url = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/wechat_pay_notify";
         String trade_type = "JSAPI";

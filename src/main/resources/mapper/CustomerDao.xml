@@ -18,4 +18,18 @@
         SELECT customer_id, telphone, email, wechat_id, register_time FROM customers WHERE wechat_id = #{openId}
     </select>
 
+    <select id="hasPatientInfo" resultType="PatientInfo">
+        SELECT customer_id, patient_infoid, name, gender, age, country, province, city, district, address, phone, has_diabetic, is_pregnant, height, weight
+        FROM patient_infos AS pi
+        WHERE
+        pi.name = #{name} AND pi.gender = #{gender} AND pi.age = #{age} AND pi.country = #{country} AND pi.province = #{province} AND
+        pi.city = #{city} AND pi.district = #{district} AND pi.address = #{address} AND pi.phone = #{phone} AND pi.has_diabetic = #{has_diabetic} AND
+        pi.is_pregnant = #{is_pregnant} AND customer_id = #{customer_id}
+    </select>
+
+    <insert id="createPatientInfo">
+        INSERT INTO patient_infos(customer_id, patient_infoid, name, gender, age, country, province, city, district, address, phone, has_diabetic, is_pregnant, height, weight)
+        VALUES (#{customer_id}, #{patient_infoid}, #{name}, #{gender}, #{age}, #{country}, #{province}, #{city}, #{district}, #{address}, #{phone}, #{has_diabetic}, #{is_pregnant}, #{height}, #{weight})
+    </insert>
+
 </mapper>
