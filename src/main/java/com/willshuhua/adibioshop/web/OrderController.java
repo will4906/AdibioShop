@@ -1,6 +1,8 @@
 package com.willshuhua.adibioshop.web;
 
+import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.service.CustomerService;
 import com.willshuhua.adibioshop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,9 @@ import javax.servlet.http.HttpSession;
 public class OrderController {
 
     @Autowired
-    OrderService orderService;
+    private OrderService orderService;
+    @Autowired
+    private CustomerService customerService;
 
     @RequestMapping(value = "/my_order", method = RequestMethod.GET)
     public ModelAndView myOrder(HttpServletRequest request, HttpSession httpSession){
@@ -34,10 +38,4 @@ public class OrderController {
         return orderService.queryOrderInfoByOrderId(orderId);
     }
 
-    @RequestMapping(value = "/patient_infos", method = RequestMethod.GET)
-    @ResponseBody
-    public Object patientInfos(HttpSession httpSession){
-        Customer customer = (Customer)httpSession.getAttribute("customer");
-        return null;
-    }
 }

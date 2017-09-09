@@ -27,7 +27,7 @@
         VALUES (#{cart_id}, #{cart_itemid}, #{product_id}, #{quantity})
     </insert>
 
-    <select id="queryShoppingCart">
+    <select id="queryShoppingCart" resultType="ShoppingCart">
         SELECT customer_id, cart_id FROM shopping_carts WHERE customer_id = #{customer_id}
     </select>
 

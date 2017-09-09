@@ -8,6 +8,8 @@ import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.PatientInfo;
 
+import java.util.List;
+
 /**
  * Created by will on 2017/8/19.
  */
@@ -19,5 +21,12 @@ public interface CustomerService {
 
     PatientInfo hasPatientInfo(PatientInfo patientInfo);
 
+    PatientInfo hasPatientInfoId(String patientInfoId);
+
     void createPatientInfo(PatientInfo patientInfo);
+
+    List<PatientInfo> queryAllCustomerPatientInfos(String customer_id);
+
+    void deletePatientInfo(String patient_infoid);
+
 }

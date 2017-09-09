@@ -53,7 +53,8 @@ CREATE TABLE patient_infos
     height NUMERIC,
     weight NUMERIC,
     CONSTRAINT patient_infos_rowid_pk PRIMARY KEY (row_id),
-    CONSTRAINT patient_infos_infoid_unique UNIQUE (patient_infoid)
+    CONSTRAINT patient_infos_infoid_unique UNIQUE (patient_infoid),
+    CONSTRAINT patient_infos_unique UNIQUE (customer_id, name, gender, age, country, city, district, address, phone, has_diabetic, is_pregnant)
 );
 -- 描述订单基本信息
 DROP TABLE IF EXISTS orders CASCADE;

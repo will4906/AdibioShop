@@ -21,7 +21,7 @@ public class CartController {
     @Autowired
     CartService cartService;
 
-    @RequestMapping(value = "/add_cart", method = RequestMethod.POST)
+    @RequestMapping(value = "/add_cart", method = RequestMethod.GET)
     @ResponseBody
     public Object addCart(HttpSession httpSession, @ModelAttribute("PatientDetail")PatientDetail patientDetail){
         Customer customer = (Customer)httpSession.getAttribute("customer");
@@ -55,9 +55,9 @@ public class CartController {
         return new Result(Result.OK, queryCartItem);
     }
 
-    @RequestMapping(value = "/show_cart", method = RequestMethod.GET)
+    @RequestMapping(value = "/show_cart_info", method = RequestMethod.GET)
     @ResponseBody
-    public Object showCart(HttpSession httpSession){
+    public Object showCartInfo(HttpSession httpSession){
         Customer customer = (Customer)httpSession.getAttribute("customer");
         if (customer == null){
             return new Result(Result.ERR, "Can't find the customer");

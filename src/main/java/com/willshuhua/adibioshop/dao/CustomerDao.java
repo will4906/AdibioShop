@@ -10,6 +10,8 @@ import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.PatientInfo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface CustomerDao{
 
     void createCustomerAccount(Customer customer);
@@ -18,5 +20,11 @@ public interface CustomerDao{
 
     PatientInfo hasPatientInfo(PatientInfo patientInfo);
 
+    PatientInfo hasPatientInfoId(String patient_infoid);
+
     void createPatientInfo(PatientInfo patientInfo);
+
+    List<PatientInfo> queryAllCustomerPatientInfos(@Param("customer_id") String customer_id);
+
+    void deletePatientInfo(@Param("patient_infoid")String patient_infoid);
 }

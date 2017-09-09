@@ -1,0 +1,44 @@
+FORMAT: 1A
+
+# adibioshop
+
+adibioshop is a wechat shop for adibio.
+
+# Get Shopping Cart's Infomation [/show_cart_info]
+
+## GET
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "result": "ok",
+                "errMsg": "",
+                "parm": [
+                    {
+                        "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                        "cart_itemid": "123",
+                        "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365",
+                        "product_name": "糖尿病早期筛查",
+                        "unit_price": 0.01,
+                        "quantity": 123
+                    },
+                    {
+                        "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                        "cart_itemid": "432",
+                        "product_id": "83f7c071-7858-4e3f-b000-3c011db15e41",
+                        "product_name": "肾病早期筛查",
+                        "unit_price": 0.02,
+                        "quantity": 432
+                    },
+                    {
+                        "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                        "cart_itemid": "234",
+                        "product_id": "27e21552-3127-4b9d-8c79-6c791a22b3ec",
+                        "product_name": "中风早期筛查",
+                        "unit_price": 0.03,
+                        "quantity": 234
+                    }
+                ]
+            }

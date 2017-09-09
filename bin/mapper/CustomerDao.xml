@@ -27,8 +27,22 @@
         pi.is_pregnant = #{is_pregnant} AND customer_id = #{customer_id}
     </select>
 
+    <select id="hasPatientInfoId" resultType="PatientInfo">
+        SELECT customer_id, patient_infoid, name, gender, age, country, province, city, district, address, phone, has_diabetic, is_pregnant, height, weight
+        FROM patient_infos AS pi
+        WHERE
+        pi.patient_infoid = #{patient_infoid}
+    </select>
+
     <insert id="createPatientInfo">
-        INSERT INTO patient_infos()
+        INSERT INTO patient_infos(customer_id, patient_infoid, name, gender, age, country, province, city, district, address, phone, has_diabetic, is_pregnant, height, weight)
+        VALUES (#{customer_id}, #{patient_infoid}, #{name}, #{gender}, #{age}, #{country}, #{province}, #{city}, #{district}, #{address}, #{phone}, #{has_diabetic}, #{is_pregnant}, #{height}, #{weight})
     </insert>
+
+    <select id="queryAllCustomerPatientInfos" resultType="PatientInfo">
+        SELECT customer_id, patient_infoid, name, gender, age, country, province, city, district, address, phone, has_diabetic, is_pregnant, height, weight
+        FROM patient_infos
+        WHERE patient_infos.customer_id = #{customer_id}
+    </select>
 
 </mapper>

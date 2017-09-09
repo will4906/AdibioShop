@@ -37,9 +37,9 @@
     <select id="queryOrderInfoByOrderId" resultType="java.util.Map">
         SELECT
         orders.order_id, orders.price, orders.status, orders.description,
-        products.name,
+        products.product_name,
         order_items.order_itemid, order_items.product_id, order_items.quantity,
-        oi.order_infoid, oi.name, oi.gender, oi.age, oi.country, oi.province, oi.city, oi.district, oi.address, oi.phone, oi.has_diabetic, oi.is_pregnant, oi.height, oi.weight
+        oi.order_infoid
         FROM
         orders, order_items, order_infos AS oi, products
         WHERE
