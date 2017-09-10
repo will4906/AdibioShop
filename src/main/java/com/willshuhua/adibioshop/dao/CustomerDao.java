@@ -9,9 +9,11 @@ import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.PatientInfo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface CustomerDao{
 
     void createCustomerAccount(Customer customer);

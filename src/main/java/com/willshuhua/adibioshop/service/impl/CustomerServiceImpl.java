@@ -9,6 +9,7 @@ import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.PatientInfo;
 import com.willshuhua.adibioshop.service.CustomerService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+    private Logger logger = Logger.getLogger(CustomerServiceImpl.class);
 
     @Autowired
     private CustomerDao customerDao;
@@ -45,8 +47,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void createPatientInfo(PatientInfo patientInfo) {
-        customerDao.createPatientInfo(patientInfo);
+    public boolean createPatientInfo(PatientInfo patientInfo) {
+        try {
+            customerDao.createPatientInfo(patientInfo);
+            return true;
+        }catch (Exception e){
+            logger.error(e.toString());
+            return false;
+        }
     }
 
     @Override

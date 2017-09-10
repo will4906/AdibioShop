@@ -131,11 +131,7 @@ public class PayController {
             patientInfo = hasPatient;
         }else {
             patientInfo.setPatient_infoid(UUID.randomUUID().toString());
-            try {
-                customerService.createPatientInfo(patientInfo);
-            }catch (Exception e){
-                logger.error(e.toString());
-            }
+            customerService.createPatientInfo(patientInfo);
         }
 
         orderInfo.setPatient_infoid(patientInfo.getPatient_infoid());

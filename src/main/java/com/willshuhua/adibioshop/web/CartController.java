@@ -1,11 +1,15 @@
 package com.willshuhua.adibioshop.web;
 
+import com.google.gson.Gson;
+import com.willshuhua.adibioshop.dto.cart.AddCartItem;
 import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.entity.PatientInfo;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
 import com.willshuhua.adibioshop.entity.cart.ShoppingCart;
 import com.willshuhua.adibioshop.service.CartService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,25 +22,30 @@ import java.util.UUID;
 @Controller
 public class CartController {
 
+    private Logger logger = Logger.getLogger(CartController.class);
+
     @Autowired
     CartService cartService;
 
-    @RequestMapping(value = "/add_cart", method = RequestMethod.GET)
+    @RequestMapping(value = "/add_cart", method = RequestMethod.POST)
     @ResponseBody
-    public Object addCart(HttpSession httpSession, @ModelAttribute("PatientDetail")PatientDetail patientDetail){
-        Customer customer = (Customer)httpSession.getAttribute("customer");
-        if (customer == null){
-            return new Result(Result.ERR, "can't find the customer");
-        }
-        CartItem cartItem = cartService.hasCartItem(customer.getCustomer_id(), patientDetail.getProduct_id());
+    public Object addCart(HttpSession httpSession, @RequestBody AddCartItem addCartItem){
+        logger.info(addCartItem);
+//        Customer customer = (Customer)httpSession.getAttribute("customer");
+//        if (customer == null){
+//            return new Result(Result.ERR, "can't find the customer");
+//        }
+        String customerId = "60df649c-51c8-4d1d-b02c-47d44d4b7355";
+        PatientInfo patientInfo = addCartItem.getPatientInfo();
+//        patientInfo.setCustomer_id(customer.getCustomer_id());
+        patientInfo.setCustomer_id(customerId);
+        patientInfo.setCountry("CHINA");
+        CartItem cartItem = cartService.addCartItem(addCartItem);
         if (cartItem == null){
-            ShoppingCart shoppingCart = cartService.queryShoppingCart(customer.getCustomer_id());
-            cartItem = new CartItem(shoppingCart.getCart_id(), UUID.randomUUID().toString(), patientDetail.getProduct_id(), 1);
-            cartService.insertCartItem(cartItem);
-        }else {
-            cartService.addCartItemQuantity(cartItem.getCart_id());
+            return new Result(Result.ERR, "cart item is error");
         }
         return new Result(Result.OK, cartItem);
+//        return new Result(Result.OK);
     }
 
     @RequestMapping(value = "/reduce_cart_item", method = RequestMethod.POST)

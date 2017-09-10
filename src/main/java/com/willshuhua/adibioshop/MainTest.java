@@ -1,7 +1,11 @@
 package com.willshuhua.adibioshop;
 
+import com.google.gson.Gson;
+import com.willshuhua.adibioshop.dto.cart.AddCartItem;
 import com.willshuhua.adibioshop.dto.wechat_pay.ReturnPayNotify;
+import com.willshuhua.adibioshop.entity.PatientInfo;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
+import org.apache.log4j.Logger;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -9,26 +13,40 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class MainTest {
 
+    private static Logger logger = Logger.getLogger(MainTest.class);
     public static void main(String[] args) throws Exception {
-        List<Integer> cartItemList = new ArrayList<>();
-        cartItemList.add(1);
-        cartItemList.add(2);
-        cartItemList.add(3);
-        cartItemList.add(4);
-        cartItemList.add(5);
+        AddCartItem addCartItem = new AddCartItem();
+        String customerId = "60df649c-51c8-4d1d-b02c-47d44d4b7355";
+        PatientInfo patientInfo = new PatientInfo();
+        patientInfo.setCustomer_id(customerId);
+        patientInfo.setPatient_infoid(UUID.randomUUID().toString());
+        patientInfo.setName("张三");
+        patientInfo.setAge(20);
+        patientInfo.setGender("M");
+        patientInfo.setPhone("13829610228");
+        patientInfo.setCountry("CHINA");
+        patientInfo.setProvince("广东省");
+        patientInfo.setCity("深圳市");
+        patientInfo.setDistrict("南山区");
+        patientInfo.setAddress("深圳大学");
+        patientInfo.setHas_diabetic(0);
+        patientInfo.setIs_pregnant(0);
 
-        int i = 0;
-        for (i = 0; i < cartItemList.size(); i ++){
-            int cartItem = cartItemList.get(i);
-            if (cartItem == 8){
-                break;
-            }
-        }
-        if (i == cartItemList.size()){
-            System.out.println("iiiii");
-        }
+        CartItem cartItem = new CartItem();
+        cartItem.setQuantity(1);
+        cartItem.setCart_id("8b077e8d-2881-47fa-90dc-210f273afeaa");
+        cartItem.setCart_itemid("68e5c479-43cc-4cd4-b67a-2094481e8e6d");
+        String product_id = "bda342a2-27c0-4cb1-bed3-11a786391365";
+        cartItem.setProduct_id(product_id);
+        addCartItem.setCartItem(cartItem);
+        addCartItem.setPatientInfo(patientInfo);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(addCartItem);
+        logger.info(json);
     }
 }

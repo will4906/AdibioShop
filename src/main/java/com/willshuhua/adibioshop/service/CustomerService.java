@@ -23,7 +23,7 @@ public interface CustomerService {
 
     PatientInfo hasPatientInfoId(String patientInfoId);
 
-    void createPatientInfo(PatientInfo patientInfo);
+    boolean createPatientInfo(PatientInfo patientInfo);
 
     List<PatientInfo> queryAllCustomerPatientInfos(String customer_id);
 

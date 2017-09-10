@@ -1,6 +1,9 @@
 package com.willshuhua.adibioshop.service;
 
+import com.willshuhua.adibioshop.dto.cart.AddCartItem;
+import com.willshuhua.adibioshop.entity.PatientInfo;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
+import com.willshuhua.adibioshop.entity.cart.CartPatientInfo;
 import com.willshuhua.adibioshop.entity.cart.ItemProduct;
 import com.willshuhua.adibioshop.entity.cart.ShoppingCart;
 import org.apache.ibatis.annotations.Param;
@@ -13,7 +16,7 @@ public interface CartService {
 
     void addCartItemQuantity(String cartItemId);
 
-    void insertCartItem(CartItem cartItem);
+    CartItem addCartItem(AddCartItem addCartItem);
 
     CartItem reduceCartItem(CartItem cartItem);
 

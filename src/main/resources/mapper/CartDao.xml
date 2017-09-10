@@ -27,6 +27,11 @@
         VALUES (#{cart_id}, #{cart_itemid}, #{product_id}, #{quantity})
     </insert>
 
+    <insert id="insertCartPatientInfo">
+        INSERT INTO cart_patient_infos(cart_itemid, cart_patient_infoid, product_id, patient_infoid)
+        VALUES (#{cart_itemid}, #{cart_patient_infoid}, #{product_id}, #{patient_infoid})
+    </insert>
+
     <select id="queryShoppingCart" resultType="ShoppingCart">
         SELECT customer_id, cart_id FROM shopping_carts WHERE customer_id = #{customer_id}
     </select>
@@ -38,6 +43,10 @@
     <select id="hasCartItem" resultType="CartItem">
         SELECT cart_items.cart_id, cart_items.cart_itemid, cart_items.product_id, cart_items.quantity FROM cart_items, shopping_carts
         WHERE shopping_carts.customer_id = #{customer_id} AND cart_items.cart_id = shopping_carts.cart_id AND cart_items.product_id = #{product_id}
+    </select>
+
+    <select id="getCartItem" resultType="CartItem">
+        SELECT cart_id, cart_itemid, product_id, quantity FROM cart_items WHERE cart_itemid = #{cart_itemid}
     </select>
 
 </mapper>
