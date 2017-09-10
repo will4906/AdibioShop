@@ -88,7 +88,7 @@ adibioshop is a wechat shop for adibio.
                 "parm": {
                     "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
                     "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
-                    "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365/",
+                    "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365",
                     "quantity": 1
                 }
             }
@@ -97,4 +97,94 @@ adibioshop is a wechat shop for adibio.
             {
                 "result": "err",
                 "errMsg": "can't find the cartItem"
+            }
+
+# 减少购物车项目 [/reduce_cart_item]
+
+## POST
++ Request (application/json)
+
+    + Body
+
+            {
+                "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
+                "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365",
+                "quantity": 1
+            }
+
++ Response 200 (application/json)
+
+    + Body
+            {
+                "result": "ok",
+                "errMsg": "",
+                "parm": {
+                    "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                    "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
+                    "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365/",
+                    "quantity": 3
+                }
+            }
+
+# 查询购物车项目对应的患者信息
+
+## POST
+
++ Request (application/json)
+    + Body
+
+            {
+                "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
+                "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365",
+                "quantity": 2
+            }
+
++ Response 200 (application/json)
+
+    + Body
+            {
+                "result": "ok",
+                "errMsg": "",
+                "parm": [
+                    {
+                        "is_pregnant": 0,
+                        "has_diabetic": 0,
+                        "country": "CHINA",
+                        "address": "你好",
+                        "gender": "M",
+                        "city": "北京市",
+                        "weight": 0,
+                        "cart_patient_infoid": "899fa698-62c6-40ed-bf92-be97fd60ff99",
+                        "province": "北京",
+                        "phone": "13000000000",
+                        "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365",
+                        "district": "东城区",
+                        "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
+                        "name": "李四",
+                        "patient_infoid": "9e62c589-cc2e-485c-bae0-a52e9fcfebeb",
+                        "age": 20,
+                        "height": 0
+                    },
+                    {
+                        "is_pregnant": 0,
+                        "has_diabetic": 0,
+                        "country": "CHINA",
+                        "address": "深圳大学",
+                        "gender": "M",
+                        "city": "深圳市",
+                        "weight": 0,
+                        "cart_patient_infoid": "a242f238-ee15-414a-9856-28b4acb25e24",
+                        "province": "广东省",
+                        "phone": "13000000000",
+                        "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365/",
+                        "district": "南山区",
+                        "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
+                        "name": "张三",
+                        "patient_infoid": "dfdb7bd8-efea-4c0a-8877-3a41a8e93529",
+                        "age": 20,
+                        "height": 0
+                    }
+                ]
             }

@@ -49,4 +49,18 @@
         SELECT cart_id, cart_itemid, product_id, quantity FROM cart_items WHERE cart_itemid = #{cart_itemid}
     </select>
 
+    <delete id="deleteCartItem">
+        DELETE FROM cart_items WHERE cart_itemid = #{cart_itemid}
+    </delete>
+
+    <select id="queryCartPatientInfos" resultType="java.util.Map">
+        SELECT cpi.cart_itemid, cpi.cart_patient_infoid, cpi.product_id, cpi.patient_infoid, pi.name, pi.age, pi.gender, pi.country, pi.province, pi.city, pi.district, pi.address,
+            pi.phone, pi.is_pregnant, pi.has_diabetic, pi.height, pi.weight
+        FROM cart_patient_infos AS cpi, patient_infos AS pi
+        WHERE
+            cpi.cart_itemid = #{cart_itemid}
+        AND
+            cpi.patient_infoid = pi.patient_infoid
+    </select>
+
 </mapper>

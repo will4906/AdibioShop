@@ -11,49 +11,104 @@
 <script data-th-src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
     <script type="text/javascript" th:inline="javascript">
         var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
-        var paypath = context + '/add_cart';
-        $.ajax({
-            cache: true,
-            type: "POST",
-            url: paypath,
-            dataType:"json",
-            data: JSON.stringify({
-                "cartItem": {
+        function requestAddCartItem() {
+            var paypath = context + '/add_cart';
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: paypath,
+                dataType:"json",
+                data: JSON.stringify({
+                    "cartItem": {
+                        "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                        "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
+                        "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365/",
+                        "quantity": 1
+                    },
+                    "patientInfo": {
+                        "customer_id": "60df649c-51c8-4d1d-b02c-47d44d4b7355",
+//                        "patient_infoid": "9e62c589-cc2e-485c-bae0-a52e9fcfebeb",
+                        "name": "张三",
+                        "gender": "M",
+                        "age": 20.0,
+                        "country": "CHINA",
+                        "province": "广东省",
+                        "city": "深圳市",
+                        "district": "南山区",
+                        "address": "深圳大学",
+                        "phone": "13829610228",
+                        "has_diabetic": 0,
+                        "is_pregnant": 0,
+                        "height": 0.0,
+                        "weight": 0.0
+                    }
+                }),
+                contentType: "application/json",
+                async: false,
+                error: function (request) {
+//                alert(request);
+                    alert("Connection error");
+                },
+                success: function (data) {
+                    if (data.result === 'err'){
+                        alert(data.errMsg);
+                    }
+                }
+            })
+        }
+        function requestReduceCartItem() {
+            var reducePath = context + '/reduce_cart_item';
+            $.ajax({
+                type: "POST",
+                url: reducePath,
+                dataType:"json",
+                data: JSON.stringify({
                     "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
                     "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
-                    "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365",
+                    "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365/",
                     "quantity": 1
-                },
-                "patientInfo": {
-                    "customer_id": "60df649c-51c8-4d1d-b02c-47d44d4b7355",
-                    "patient_infoid": "9e62c589-cc2e-485c-bae0-a52e9fcfebeb",
-                    "name": "张三",
-                    "gender": "M",
-                    "age": 20.0,
-                    "country": "CHINA",
-                    "province": "广东省",
-                    "city": "深圳市",
-                    "district": "南山区",
-                    "address": "深圳大学",
-                    "phone": "13829610228",
-                    "has_diabetic": 0,
-                    "is_pregnant": 0,
-                    "height": 0.0,
-                    "weight": 0.0
-                }
-            }),
-            contentType: "application/json",
-            async: false,
-            error: function (request) {
+                }),
+                contentType: "application/json",
+                async: false,
+                error: function (request) {
 //                alert(request);
-                alert("Connection error");
-            },
-            success: function (data) {
-                if (data.result === 'err'){
-                    alert(data.errMsg);
+                    alert("Connection error");
+                },
+                success: function (data) {
+                    if (data.result === 'err'){
+                        alert(data.errMsg);
+                    }
                 }
-            }
-        })
+            })
+        }
+        function requestCartPatientInfos() {
+            var reducePath = context + '/cart_patient_infos';
+            $.ajax({
+                type: "POST",
+                url: reducePath,
+                dataType:"json",
+                data: JSON.stringify({
+                    "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                    "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
+                    "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365/",
+                    "quantity": 1
+                }),
+                contentType: "application/json",
+                async: false,
+                error: function (request) {
+//                alert(request);
+                    alert("Connection error");
+                },
+                success: function (data) {
+                    if (data.result === 'err'){
+                        alert(data.errMsg);
+                    }
+                }
+            })
+        }
+//        requestReduceCartItem();
+//        requestAddCartItem();
+        requestCartPatientInfos();
     </script>
 </body>
 </html>

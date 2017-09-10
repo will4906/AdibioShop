@@ -9,6 +9,7 @@ import com.willshuhua.adibioshop.entity.cart.ShoppingCart;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CartService {
 
@@ -25,4 +26,6 @@ public interface CartService {
     void createShoppingCart(ShoppingCart shoppingCart);
 
     CartItem hasCartItem(String customer_id, String product_id);
+
+    List<Map<String, Object>> queryCartPatientInfos(CartItem cartItem);
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -47,7 +48,6 @@ public class CartServiceImpl implements CartService{
         String product_id = cartItem.getProduct_id();
         PatientInfo patientInfo = addCartItem.getPatientInfo();
 
-        logger.info(patientInfo);
 //        解析patientInfo
         String patient_infoid = patientInfo.getPatient_infoid();
         if (patient_infoid == null || patient_infoid.equals("")){
@@ -70,7 +70,6 @@ public class CartServiceImpl implements CartService{
 //        解析cartItem
         if (cartItemId != null){
             cartItem = cartDao.getCartItem(cartItemId);
-            logger.info(cartItem);
             if (cartItem != null){
                 cartDao.updateCartItemQuantity(cartItemId, cartItem.getQuantity() + 1);
                 cartDao.insertCartPatientInfo(new CartPatientInfo(cartItemId, UUID.randomUUID().toString(), product_id, patientInfo.getPatient_infoid()));
@@ -80,19 +79,25 @@ public class CartServiceImpl implements CartService{
                 cartDao.insertCartItem(cartItem);
                 cartDao.insertCartPatientInfo(new CartPatientInfo(cartItem.getCart_itemid(), UUID.randomUUID().toString(), product_id, patientInfo.getPatient_infoid()));
             }
-            logger.info(cartItem);
         }else {
             ShoppingCart shoppingCart = cartDao.queryShoppingCart(patientInfo.getCustomer_id());
             cartItem = new CartItem(shoppingCart.getCart_id(), UUID.randomUUID().toString(), product_id, 1);
             cartDao.insertCartItem(cartItem);
             cartDao.insertCartPatientInfo(new CartPatientInfo(cartItem.getCart_itemid(), UUID.randomUUID().toString(), product_id, patientInfo.getPatient_infoid()));
-            logger.info(cartItem);
         }
+        cartItem.setQuantity(cartItem.getQuantity() + 1);
         return cartItem;
     }
 
+    @Transactional
     @Override
     public CartItem reduceCartItem(CartItem cartItem) {
+        CartItem cartItem1 = cartDao.getCartItem(cartItem.getCart_itemid());
+        if (cartItem1 != null){
+            cartItem = cartItem1;
+        }else {
+            return null;
+        }
         int quantity = cartItem.getQuantity();
         if (quantity > 1){
             cartDao.updateCartItemQuantity(cartItem.getCart_itemid(), quantity - 1);
@@ -116,6 +121,18 @@ public class CartServiceImpl implements CartService{
     @Override
     public CartItem hasCartItem(String customer_id, String product_id) {
         return cartDao.hasCartItem(customer_id, product_id);
+    }
+
+    @Transactional
+    @Override
+    public List<Map<String, Object>> queryCartPatientInfos(CartItem cartItem) {
+        CartItem cartItem1 = cartDao.getCartItem(cartItem.getCart_itemid());
+        if (cartItem1 != null){
+            cartItem = cartItem1;
+        }else {
+            return null;
+        }
+        return cartDao.queryCartPatientInfos(cartItem);
     }
 
 }

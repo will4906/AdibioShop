@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface CartDao {
@@ -29,5 +30,7 @@ public interface CartDao {
     CartItem hasCartItem(@Param("customer_id")String customer_id, @Param("product_id")String product_id);
 
     CartItem getCartItem(@Param("cart_itemid")String cart_itemid);
+
+    List<Map<String, Object>> queryCartPatientInfos(CartItem cartItem);
 
 }
