@@ -12,6 +12,7 @@ import com.willshuhua.adibioshop.dto.wechat_pay.*;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.PatientInfo;
 import com.willshuhua.adibioshop.entity.Product;
+import com.willshuhua.adibioshop.entity.cart.CartItem;
 import com.willshuhua.adibioshop.entity.order.Order;
 import com.willshuhua.adibioshop.entity.order.OrderEvent;
 import com.willshuhua.adibioshop.entity.order.OrderInfo;
@@ -199,6 +200,17 @@ public class PayController {
         logger.info(orderEvent);
         logger.info(orderInfo);
 
+        return new Result(Result.ERR, "Have some errors!");
+    }
+
+    @RequestMapping(value = "/buy_cart_selects", method = RequestMethod.POST)
+    @ResponseBody
+    public Object buyCartSelects(HttpSession httpSession, @RequestBody List<CartItem> cartItemList){
+//        Customer customer = (Customer)httpSession.getAttribute("customer");
+//        if (customer == null){
+//            return new Result(Result.ERR, "Can't find the customer");
+//        }
+        logger.info(cartItemList);
         return new Result();
     }
 

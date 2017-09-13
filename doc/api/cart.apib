@@ -4,6 +4,15 @@ FORMAT: 1A
 
 adibioshop is a wechat shop for adibio.
 
+# 获取购物车页面 [/shopping_cart]
+
+## GET
+
++ Response 200 (text/html)
+
+    + Body
+            直接获取购物车页面，没有json数据
+            
 # 获取购物车各项基础信息 [/show_cart_info]
 
 ## GET
@@ -185,6 +194,51 @@ adibioshop is a wechat shop for adibio.
                         "patient_infoid": "dfdb7bd8-efea-4c0a-8877-3a41a8e93529",
                         "age": 20,
                         "height": 0
+                    }
+                ]
+            }
+
+# 购买购物车选中的商品 [/buy_cart_selects]
+
+## POST 
+
++ Request (application/json)
+
+    + Body
+            [
+                {
+                    "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                    "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
+                    "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365/",
+                    "quantity": 1
+                }, {
+                    "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                    "cart_itemid": "432",
+                    "product_id": "83f7c071-7858-4e3f-b000-3c011db15e41",
+                    "quantity": 1
+                }, {
+                    "cart_id": "8b077e8d-2881-47fa-90dc-210f273afeaa",
+                    "cart_itemid": "234",
+                    "product_id": "27e21552-3127-4b9d-8c79-6c791a22b3ec",
+                    "quantity": 1
+                }
+            ]
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "result": "ok",
+                "errMsg": "",
+                "parm": [
+                    {
+                        "appId":"1111",
+                        "timeStamp":"2222",
+                        "nonceStr":"3333",
+                        "package_sign_cut":"4444",
+                        "signType":"5555",
+                        "paySign":"6666"
                     }
                 ]
             }

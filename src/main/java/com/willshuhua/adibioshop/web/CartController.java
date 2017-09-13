@@ -29,14 +29,14 @@ public class CartController {
     @ResponseBody
     public Object addCart(HttpSession httpSession, @RequestBody AddCartItem addCartItem){
         logger.info(addCartItem);
-//        Customer customer = (Customer)httpSession.getAttribute("customer");
-//        if (customer == null){
-//            return new Result(Result.ERR, "can't find the customer");
-//        }
-        String customerId = "60df649c-51c8-4d1d-b02c-47d44d4b7355";
+        Customer customer = (Customer)httpSession.getAttribute("customer");
+        if (customer == null){
+            return new Result(Result.ERR, "can't find the customer");
+        }
+//        String customerId = "60df649c-51c8-4d1d-b02c-47d44d4b7355";
         PatientInfo patientInfo = addCartItem.getPatientInfo();
-//        patientInfo.setCustomer_id(customer.getCustomer_id());
-        patientInfo.setCustomer_id(customerId);
+        patientInfo.setCustomer_id(customer.getCustomer_id());
+//        patientInfo.setCustomer_id(customerId);
         patientInfo.setCountry("CHINA");
         CartItem cartItem = cartService.addCartItem(addCartItem);
         if (cartItem == null){
@@ -72,10 +72,10 @@ public class CartController {
     @RequestMapping(value = "/cart_patient_infos", method = RequestMethod.POST)
     @ResponseBody
     public Object cartPatientInfo(HttpSession httpSession, @RequestBody CartItem cartItem){
-//        Customer customer = (Customer)httpSession.getAttribute("customer");
-//        if (customer == null){
-//            return new Result(Result.ERR, "Can't find the customer");
-//        }
+        Customer customer = (Customer)httpSession.getAttribute("customer");
+        if (customer == null){
+            return new Result(Result.ERR, "Can't find the customer");
+        }
         List<Map<String, Object>> cartPatientInfos = cartService.queryCartPatientInfos(cartItem);
         if (cartPatientInfos == null){
             return new Result(Result.ERR, "can't find the cart_item");
