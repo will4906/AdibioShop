@@ -123,6 +123,11 @@ public class CartServiceImpl implements CartService{
         return cartDao.hasCartItem(customer_id, product_id);
     }
 
+    @Override
+    public CartItem getCartItem(String cart_itemid) {
+        return cartDao.getCartItem(cart_itemid);
+    }
+
     @Transactional
     @Override
     public List<Map<String, Object>> queryCartPatientInfos(CartItem cartItem) {

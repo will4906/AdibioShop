@@ -34,6 +34,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
+    public void createOrder(Order order, List<OrderInfo> orderInfoList, OrderEvent orderEvent, List<OrderItem> orderItemList) {
+        orderDao.createOrder(order);
+        for (OrderItem orderItem : orderItemList){
+            orderDao.createOrderItem(orderItem);
+        }
+        orderDao.createOrderEvent(orderEvent);
+        for (OrderInfo orderInfo : orderInfoList){
+            orderDao.createOrderInfo(orderInfo);
+        }
+    }
+
+    @Transactional
+    @Override
     public void changeOrderStatus(OrderEvent orderEvent) {
         orderDao.createOrderEvent(orderEvent);
         orderDao.updateOrderStatus(orderEvent.getOrder_id(), orderEvent.getEvent_title());

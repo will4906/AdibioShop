@@ -16,6 +16,8 @@ public interface OrderService {
 
     void createOrder(Order order, OrderInfo orderInfo, OrderEvent orderEvent, OrderItem orderItem);
 
+    void createOrder(Order order, List<OrderInfo> orderInfoList, OrderEvent orderEvent, List<OrderItem> orderItemList);
+
     void changeOrderStatus(OrderEvent orderEvent);
 
     List<Map<String,Object>> queryOrderInfoByOrderId(String orderId);

@@ -27,5 +27,7 @@ public interface CartService {
 
     CartItem hasCartItem(String customer_id, String product_id);
 
+    CartItem getCartItem(String cart_itemid);
+
     List<Map<String, Object>> queryCartPatientInfos(CartItem cartItem);
 }

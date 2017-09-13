@@ -20,6 +20,7 @@ import com.willshuhua.adibioshop.entity.order.OrderItem;
 import com.willshuhua.adibioshop.properties.WechatProperties;
 import com.willshuhua.adibioshop.retrofit.RetrofitManager;
 import com.willshuhua.adibioshop.retrofit.wechat.WechatRequest;
+import com.willshuhua.adibioshop.service.CartService;
 import com.willshuhua.adibioshop.service.CustomerService;
 import com.willshuhua.adibioshop.service.OrderService;
 import com.willshuhua.adibioshop.service.ProductService;
@@ -41,7 +42,9 @@ import retrofit2.Retrofit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -60,6 +63,8 @@ public class PayController {
     private ProductService productService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private CartService cartService;
     @Autowired
     private WechatProperties wechatProperties;
     @Autowired
@@ -138,14 +143,76 @@ public class PayController {
         orderInfo.setPatient_infoid(patientInfo.getPatient_infoid());
         orderService.createOrder(order, orderInfo, orderEvent, orderItem);
 
+//        UnifiedOrder unifiedOrder = new UnifiedOrder();
+//
+//        String appId = wechatProperties.getAppid();
+//        String muh_id = wechatProperties.getMch_id();
+//        String nonce_str = Encryption.md5(UUID.randomUUID().toString());
+//        String body = wechatProperties.getMerchant() + "-" + product.getProduct_name();
+//        String out_trade_no = order.getOrder_id();
+//        String total_fee = product.getUnit_price().multiply(new BigDecimal(100)).toBigInteger().toString();
+//        String spbill_create_ip = request.getRemoteAddr();
+//        String notify_url = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/wechat_pay_notify";
+//        String trade_type = "JSAPI";
+//        String openid = customer.getWechat_id();
+//
+//        unifiedOrder.setAppid(appId);
+//        unifiedOrder.setMch_id(muh_id);
+//        unifiedOrder.setNonce_str(nonce_str);
+//        unifiedOrder.setBody(body);
+//        unifiedOrder.setOut_trade_no(out_trade_no);
+//        unifiedOrder.setTotal_fee(total_fee);
+//        unifiedOrder.setSpbill_create_ip(spbill_create_ip);
+//        unifiedOrder.setNotify_url(notify_url);
+//        unifiedOrder.setTrade_type(trade_type);
+//        unifiedOrder.setOpenid(openid);
+//        //计算sign
+//        SortedMap<String, String> sortedMap = BeanUtil.beanToMap(unifiedOrder);
+//        if (sortedMap == null){
+//            return new Result(Result.ERR, "Can't parse the order.");
+//        }
+//        String sign = WechatTool.generateMD5PaySign(sortedMap, wechatProperties.getApikey());
+//        unifiedOrder.setSign(sign);
+//
+//        Retrofit retrofit = retrofitManager.getXmlRetrofit();
+//        WechatRequest wechatRequest = retrofit.create(WechatRequest.class);
+//
+//        Call<UnifiedOrderBack> unifiedOrderBackCall = wechatRequest.requestUnifiedOrder(unifiedOrder);
+//        Response<UnifiedOrderBack> backResponse = unifiedOrderBackCall.execute();
+//        UnifiedOrderBack unifiedOrderBack = backResponse.body();
+//
+//        JsPayParm jsPayParm = new JsPayParm();
+//        if (unifiedOrderBack != null){
+//            jsPayParm.setAppId(wechatProperties.getAppid());
+//            jsPayParm.setPackage_sign_cut("prepay_id=" + unifiedOrderBack.getPrepay_id());
+//            jsPayParm.setNonceStr(Encryption.md5(UUID.randomUUID().toString()));
+//            jsPayParm.setTimeStamp(String.valueOf(new Date().getTime() / 1000));
+//            jsPayParm.setSignType("MD5");
+//
+//            //计算sign
+//            SortedMap<String, String> jsSortMap = BeanUtil.beanToMap(jsPayParm);
+//            if (jsSortMap == null){
+//                return new Result(Result.ERR, "Can't parse the order.");
+//            }
+//            String paySign = WechatTool.generateMD5PaySign(jsSortMap, wechatProperties.getApikey());
+//            jsPayParm.setPaySign(paySign);
+//
+//            return new Result(Result.OK, jsPayParm);
+//        }
+        return notifyUnifiedOrder(request, order, product.getProduct_name(), customer);
+
+//        return new Result(Result.ERR, "Have some errors!");
+    }
+
+    private Result notifyUnifiedOrder(HttpServletRequest request, Order order, String orderName, Customer customer) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
         UnifiedOrder unifiedOrder = new UnifiedOrder();
 
         String appId = wechatProperties.getAppid();
         String muh_id = wechatProperties.getMch_id();
         String nonce_str = Encryption.md5(UUID.randomUUID().toString());
-        String body = wechatProperties.getMerchant() + "-" + product.getProduct_name();
+        String body = wechatProperties.getMerchant() + "-" + orderName;
         String out_trade_no = order.getOrder_id();
-        String total_fee = product.getUnit_price().multiply(new BigDecimal(100)).toBigInteger().toString();
+        String total_fee = order.getPrice().multiply(new BigDecimal(100)).toBigInteger().toString();
         String spbill_create_ip = request.getRemoteAddr();
         String notify_url = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/wechat_pay_notify";
         String trade_type = "JSAPI";
@@ -193,25 +260,54 @@ public class PayController {
             jsPayParm.setPaySign(paySign);
 
             return new Result(Result.OK, jsPayParm);
+        }else {
+            return new Result(Result.ERR, "Happened some errors!");
         }
 
-        logger.info(order);
-        logger.info(orderItem);
-        logger.info(orderEvent);
-        logger.info(orderInfo);
-
-        return new Result(Result.ERR, "Have some errors!");
+//        return new Result();
     }
 
     @RequestMapping(value = "/buy_cart_selects", method = RequestMethod.POST)
     @ResponseBody
-    public Object buyCartSelects(HttpSession httpSession, @RequestBody List<CartItem> cartItemList){
-//        Customer customer = (Customer)httpSession.getAttribute("customer");
-//        if (customer == null){
-//            return new Result(Result.ERR, "Can't find the customer");
-//        }
+    public Object buyCartSelects(HttpServletRequest request, HttpSession httpSession, @RequestBody List<CartItem> cartItemList) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
+        Customer customer = (Customer)httpSession.getAttribute("customer");
+        if (customer == null){
+            return new Result(Result.ERR, "Can't find the customer");
+        }
+
+        Order order = new Order();
+        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
+        String orderId = String.valueOf(idWorker.nextId());
+        order.setOrder_id(orderId);
+        order.setCustomer_id(customer.getCustomer_id());
+        order.setStatus(OrderStatus.CREATION);
+
+        OrderEvent orderEvent = new OrderEvent(UUID.randomUUID().toString(), orderId, new Date(), OrderStatus.CREATION, customer.getCustomer_id(), null);
+
+        List<OrderInfo> orderInfoList = new ArrayList<>();
+        List<OrderItem> orderItemList = new ArrayList<>();
+
+        BigDecimal wholePrice = new BigDecimal(0);
+        for (CartItem cartItem : cartItemList){
+            cartItem = cartService.getCartItem(cartItem.getCart_itemid());
+            if (cartItem == null){
+                return new Result(Result.ERR, "Can't find CartItem!");
+            }
+            List<Map<String, Object>> cartPatientInfoList = cartService.queryCartPatientInfos(cartItem);
+            OrderItem orderItem = new OrderItem(order.getOrder_id(), UUID.randomUUID().toString(), cartItem.getProduct_id(), cartItem.getQuantity());
+            orderItemList.add(orderItem);
+            Product product = productService.queryProductByProductId(cartItem.getProduct_id());
+            BigDecimal unit_price = product.getUnit_price();
+            wholePrice = wholePrice.add(unit_price.multiply(new BigDecimal(cartItem.getQuantity())));
+            for (Map map : cartPatientInfoList){
+                OrderInfo orderInfo = new OrderInfo(orderItem.getOrder_itemid(), UUID.randomUUID().toString(), cartItem.getProduct_id(), (String) map.get("patient_infoid"));
+                orderInfoList.add(orderInfo);
+            }
+        }
+        order.setPrice(wholePrice);
+        orderService.createOrder(order, orderInfoList, orderEvent, orderItemList);
         logger.info(cartItemList);
-        return new Result();
+        return notifyUnifiedOrder(request, order, "批量检测", customer);
     }
 
     @RequestMapping(value = "/wechat_pay_notify", method = RequestMethod.POST)
