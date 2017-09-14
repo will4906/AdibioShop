@@ -205,6 +205,7 @@ public class PayController {
     }
 
     private Result notifyUnifiedOrder(HttpServletRequest request, Order order, String orderName, Customer customer) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
+//        TODO:还得做用户取消支付的删除订单，和超时未支付的订单取消
         UnifiedOrder unifiedOrder = new UnifiedOrder();
 
         String appId = wechatProperties.getAppid();

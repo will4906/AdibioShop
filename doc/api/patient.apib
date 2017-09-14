@@ -1,0 +1,53 @@
+FORMAT: 1A
+
+# adibioshop
+
+adibioshop is a wechat shop for adibio.
+
+# 获取customer拥有的患者信息[/patient_infos]
+
+## GET 
+
++ Response 200 (application/json)
+
+    + Body
+            {
+                "result": "ok",
+                "errMsg": "",
+                "parm": [
+                    {
+                        "customer_id": "60df649c-51c8-4d1d-b02c-47d44d4b7355",
+                        "patient_infoid": "9e62c589-cc2e-485c-bae0-a52e9fcfebeb",
+                        "name": "张三",
+                        "gender": "M",
+                        "age": 20.0,
+                        "country": "CHINA",
+                        "province": "北京",
+                        "city": "北京市",
+                        "district": "东城区",
+                        "address": "你好",
+                        "phone": "13000000000",
+                        "has_diabetic": 0,
+                        "is_pregnant": 0,
+                        "height": 0.0,
+                        "weight": 0.0
+                    },
+                    {
+                        "customer_id": "60df649c-51c8-4d1d-b02c-47d44d4b7355",
+                        "patient_infoid": "dfdb7bd8-efea-4c0a-8877-3a41a8e93529",
+                        "name": "李四",
+                        "gender": "M",
+                        "age": 20.0,
+                        "country": "CHINA",
+                        "province": "广东省",
+                        "city": "深圳市",
+                        "district": "南山区",
+                        "address": "深圳大学",
+                        "phone": "13000000000",
+                        "has_diabetic": 0,
+                        "is_pregnant": 0,
+                        "height": 0.0,
+                        "weight": 0.0
+                    }
+                ]
+            }
