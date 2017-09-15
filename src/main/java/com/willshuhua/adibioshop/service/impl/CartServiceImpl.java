@@ -91,13 +91,18 @@ public class CartServiceImpl implements CartService{
 
     @Transactional
     @Override
-    public CartItem reduceCartItem(CartItem cartItem) {
-        CartItem cartItem1 = cartDao.getCartItem(cartItem.getCart_itemid());
-        if (cartItem1 != null){
-            cartItem = cartItem1;
+    public CartItem reduceCartItem(CartPatientInfo cartPatientInfo) {
+        CartPatientInfo cartPatientInfo1 = cartDao.getCartPatientInfo(cartPatientInfo.getCart_patient_infoid());
+        if (cartPatientInfo1 != null){
+            cartPatientInfo = cartPatientInfo1;
         }else {
             return null;
         }
+        CartItem cartItem = cartDao.getCartItem(cartPatientInfo.getCart_itemid());
+        if (cartItem == null){
+            return null;
+        }
+        cartDao.deleteCartPatientInfo(cartPatientInfo);
         int quantity = cartItem.getQuantity();
         if (quantity > 1){
             cartDao.updateCartItemQuantity(cartItem.getCart_itemid(), quantity - 1);

@@ -63,4 +63,13 @@
             cpi.patient_infoid = pi.patient_infoid
     </select>
 
+    <select id="getCartPatientInfo" resultType="CartPatientInfo">
+        SELECT cart_itemid, cart_patient_infoid, product_id, patient_infoid FROM cart_patient_infos
+        WHERE cart_patient_infos.cart_patient_infoid = #{cart_patient_infoid}
+    </select>
+
+    <delete id="deleteCartPatientInfo">
+        DELETE FROM cart_patient_infos WHERE cart_patient_infos.cart_patient_infoid = #{cart_patient_infoid}
+    </delete>
+
 </mapper>

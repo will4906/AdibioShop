@@ -19,7 +19,7 @@ public interface CartService {
 
     CartItem addCartItem(AddCartItem addCartItem);
 
-    CartItem reduceCartItem(CartItem cartItem);
+    CartItem reduceCartItem(CartPatientInfo cartPatientInfo);
 
     ShoppingCart queryShoppingCart(String customer_id);
 

@@ -47,12 +47,12 @@ public class CartController {
 
     @RequestMapping(value = "/reduce_cart_item", method = RequestMethod.POST)
     @ResponseBody
-    public Object reduceCartItem(HttpSession httpSession, @RequestBody CartItem cartItem){
+    public Object reduceCartItem(HttpSession httpSession, @RequestBody CartPatientInfo cartPatientInfo){
         Customer customer = (Customer)httpSession.getAttribute("customer");
         if (customer == null){
             return new Result(Result.ERR, "can't find the customer");
         }
-        cartItem = cartService.reduceCartItem(cartItem);
+        CartItem cartItem = cartService.reduceCartItem(cartPatientInfo);
         if (cartItem == null){
             return new Result(Result.ERR, "can't find the cart_item");
         }
