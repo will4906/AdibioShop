@@ -5,21 +5,21 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-
-    <link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/open/libs/weui/0.4.3/weui.min.css">
     <meta charset="utf-8">
     <meta name="viewport"
           content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>产品信息</title>
     <link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui.css}"/>
-
+    <script type = "text/javascript" th:src = "@{/jquery-weui/js/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery-weui/js/jquery-weui.min.js}" ></script>
+    <script th:src="@{/AUI/script/aui-tab.js}"></script>
 </head>
 <body>
 <header class="aui-bar aui-bar-nav">选择服务产品</header>
 <!--/*@thymesVar id="productList" type="java.util.List"*/-->
 <div class="aui-content-padded" id="product">
-    <section th:each="product: ${productList}" class="aui-content-padded">
+    <section th:each="product: ${productList}">
         <div class="aui-card-list">
             <a data-th-href="@{'/product_detail?product_id=' + ${product.product_id}}">
                 <!--/*@thymesVar id="name" type="java.lang.String"*/-->
@@ -50,14 +50,44 @@
         <div class="aui-bar-tab-label">我的</div>
     </div>
 </footer>
-<script th:src="@{/AUI/script/aui-tab.js}"></script>
-<script type="text/javascript">
+
+<script type="text/javascript" th:inline="javascript">
+    function onTabChangeToShoppingCart() {
+        var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
+        var cartpath = context + '/shopping_cart';
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: cartpath,
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                $('#product').html(data);
+//                document.getElementById('product').innerHTML =
+            }
+        });
+    }
     var tab = new auiTab({
         element: document.getElementById("footer"),
         index: 1,
         repeatClick: false
     }, function (ret) {
         console.log(ret);
+        var index = ret.index;
+        switch (index){
+            case 1:
+
+                break;
+            case 2:
+                onTabChangeToShoppingCart();
+                break;
+            case 3:
+                break;
+            default:
+                break;
+        }
     });
 </script>
 </body>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" data-th-href="@{/weui/css/weui.min.css}">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/css/index.css}">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui.css}"/>
+</head>
+
+<body>
+<div class="weui-tab">
+    <div id="loadingToast" style="display:none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-loading weui-icon_toast"></i>
+            <p class="weui-toast__content">Loading</p>
+        </div>
+    </div>
+    <div class="weui-tab__panel" id="main">
+        <!--The main panel-->
+    </div>
+    <div class="weui-tabbar">
+        <a href="javascript:onChangeTab(0);" class="weui-tabbar__item weui-bar__item_on" id="tab_item0">
+            <i class="aui-iconfont aui-icon-home weui-tabbar__icon"></i>
+            <p class="weui-tabbar__label">产品</p>
+        </a>
+        <a href="javascript:onChangeTab(1);" class="weui-tabbar__item" id="tab_item1">
+            <i class="aui-iconfont aui-icon-cart weui-tabbar__icon"></i>
+            <p class="weui-tabbar__label">购物车</p>
+        </a>
+        <a href="javascript:onChangeTab(2);" class="weui-tabbar__item" id="tab_item2">
+            <i class="aui-iconfont aui-icon-my weui-tabbar__item"></i>
+            <p class="weui-tabbar__label">我的</p>
+        </a>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    function requestPage(suffix) {
+        $('#loadingToast').show();
+        var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
+        var whole_path = context + suffix;
+        $.ajax({
+            type: "GET",
+            url: whole_path,
+            async: false,
+            error: function (request) {
+                $('#loadingToast').hide();
+                alert("Connection error");
+            },
+            success: function (data) {
+                $('#loadingToast').hide();
+                $('#main').html(data);
+            }
+        });
+    }
+    function onChangeTab(index) {
+        $('.weui-bar__item_on').removeClass('weui-bar__item_on');
+        $('#tab_item' + index.toString()).addClass('weui-bar__item_on');
+        console.log(index);
+        switch (index){
+            case 0:
+                document.title = '首页';
+                requestPage('/product_list');
+                break;
+            case 1:
+                document.title = '购物车';
+                requestPage('/shopping_cart');
+                break;
+            case 2:
+                document.title = '我的';
+                $('#main').html('<h1>Hello My Info</h1>');
+                break;
+        }
+    }
+    requestPage('/product_list');
+</script>
+</body>
+
+</html>

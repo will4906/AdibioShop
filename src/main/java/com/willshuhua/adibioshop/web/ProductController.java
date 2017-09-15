@@ -49,22 +49,25 @@ public class ProductController {
 
     private Logger logger = Logger.getLogger(ProductController.class);
 
-    @RequestMapping(value = "/product_list", method = RequestMethod.GET)
-    public ModelAndView productShow(HttpServletRequest request, HttpSession httpSession) throws IOException {
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public ModelAndView index(HttpServletRequest request, HttpSession httpSession) throws IOException {
         String code = request.getParameter("code");
         String state = request.getParameter("state");
-
         logger.info("code===" + code);
         logger.info(httpSession);
-        ModelAndView modelAndView  = new ModelAndView("product_list");
-
-        List<Product> productList = productService.queryAllProduct();
-        modelAndView.addObject("productList", productList);
-
+        ModelAndView modelAndView  = new ModelAndView("index");
         if (code == null || code.equals("")){
             return modelAndView;
         }
         analyseCustomer(code, httpSession, false);
+        return modelAndView;
+
+    }
+    @RequestMapping(value = "/product_list", method = RequestMethod.GET)
+    public ModelAndView productShow(HttpServletRequest request, HttpSession httpSession) throws IOException {
+        ModelAndView modelAndView  = new ModelAndView("product_list");
+        List<Product> productList = productService.queryAllProduct();
+        modelAndView.addObject("productList", productList);
 
         return modelAndView;
     }

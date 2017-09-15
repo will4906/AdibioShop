@@ -1,64 +1,16 @@
-<!DOCTYPE html>
-<!--
-  ~ Copyright (c) 2017. willshuhua.
-  -->
-
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-
-    <link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/open/libs/weui/0.4.3/weui.min.css">
-    <meta charset="utf-8">
-    <meta name="viewport"
-          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>产品信息</title>
-    <link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui.css}"/>
-
-</head>
-<body>
-<header class="aui-bar aui-bar-nav">选择服务产品</header>
-<!--/*@thymesVar id="productList" type="java.util.List"*/-->
-<div class="aui-content-padded" id="product">
-    <section th:each="product: ${productList}" class="aui-content-padded">
-        <div class="aui-card-list">
-            <a data-th-href="@{'/product_detail?product_id=' + ${product.product_id}}">
-                <!--/*@thymesVar id="name" type="java.lang.String"*/-->
-                <div class="aui-card-list-header" th:text="${product.product_name}">
-                    糖尿病早期筛查
-                </div>
-                <div class="aui-card-list-content-padded">
-                    <img src="">
-                </div>
-                <div class="aui-card-list-footer">
-                    了解更多
-                </div>
-            </a>
-        </div>
-    </section>
-</div>
-<footer class="aui-bar aui-bar-tab" id="footer">
-    <div class="aui-bar-tab-item aui-active" tapmode>
-        <i class="aui-iconfont aui-icon-home"></i>
-        <div class="aui-bar-tab-label">产品</div>
+<section data-th-each="product: ${productList}"  xmlns:th="http://www.thymeleaf.org">
+    <div class="aui-card-list">
+        <a data-th-href="@{'/product_detail?product_id=' + ${product.product_id}}">
+            <!--/*@thymesVar id="name" type="java.lang.String"*/-->
+            <div class="aui-card-list-header" th:text="${product.product_name}">
+                糖尿病早期筛查
+            </div>
+            <div class="aui-card-list-content-padded">
+                <img src="">
+            </div>
+            <div class="aui-card-list-footer">
+                了解更多
+            </div>
+        </a>
     </div>
-    <div class="aui-bar-tab-item" tapmode>
-        <i class="aui-iconfont aui-icon-cart"></i>
-        <div class="aui-bar-tab-label">购物车</div>
-    </div>
-    <div class="aui-bar-tab-item" tapmode>
-        <i class="aui-iconfont aui-icon-my"></i>
-        <div class="aui-bar-tab-label">我的</div>
-    </div>
-</footer>
-<script th:src="@{/AUI/script/aui-tab.js}"></script>
-<script type="text/javascript">
-    var tab = new auiTab({
-        element: document.getElementById("footer"),
-        index: 1,
-        repeatClick: false
-    }, function (ret) {
-        console.log(ret);
-    });
-</script>
-</body>
-</html>
+</section>

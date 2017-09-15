@@ -11,4 +11,5 @@ public class HomeController {
     public String home(){
         return "你好，世界";
     }
+
 }

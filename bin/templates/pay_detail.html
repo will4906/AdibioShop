@@ -144,11 +144,10 @@
         </div>
         <!--/*@thymesVar id="product" type="com.willshuhua.entity.Product"*/-->
         <input type="hidden" th:value="${product.product_id}" name="product_id">
-        <p class="">
+        <div style="display: flex;flex-direction: row">
             <input class="aui-checkbox" type="radio" name="isagree" onclick="agreeClick(this)">
-            <!--<span data-th-text="'本项目仅用于' + ${product.name} + '，所测结果并不代表最终确诊结果。'"></span>-->
-            <p>同意该<a href="#">协议</a>才能购买</p>
-        </p>
+            <p>阅读并同意该协议<a href="#">《协议》</a></p>
+        </div>
     </form>
 </section>
 

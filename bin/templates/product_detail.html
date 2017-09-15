@@ -39,28 +39,88 @@
 </section>
 
 <footer class="aui-bar aui-bar-tab">
-    <div class="aui-btn aui-btn-info aui-bar-tab-item" tapmode id="buy">购买服务</div>
+    <div class="aui-bar-tab-item" tapmode id="add" style="background-color:#0e53a7;">
+
+        <div class="aui-bar-tab-label" style="color: #fff">添加到购物车</div>
+    </div>
+    <div class="aui-bar-tab-item" tapmode id="buy" style="background-color:#00b64f;">
+
+        <div class="aui-bar-tab-label" style="color: #fff">购买</div>
+    </div>
+
 
 </footer>
 
 </body>
+<!--<script type="text/javascript" th:inline="javascript">-->
+    <!--var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/-->
+    <!--var path = /*[[${productId}]]*/-->
+        <!--$("#buy").click(function (e) {-->
+            <!--var dialog = new auiDialog({});-->
+            <!--dialog.alert({-->
+                <!--title: "购买确认",-->
+                <!--msg: '确定购买该服务吗？',-->
+                <!--buttons: ['取消', '确定']-->
+            <!--}, function (ret) {-->
+                <!--if (ret.buttonIndex == 2) {-->
+                    <!--window.location.href = context + "/pay_detail?product_id=" + path;-->
+                <!--}-->
+            <!--});-->
+
+
+        <!--});-->
+<!--</script>-->
+<script type = "text/javascript" src = "http://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/AUI/script/aui-dialog.js}" ></script>
+<script type="text/javascript" th:src="@{/jquery-weui/js/jquery-weui.min.js}" ></script>
 <script type="text/javascript" th:inline="javascript">
     var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/
     var path = /*[[${productId}]]*/
-        $("#buy").click(function (e) {
-            var dialog = new auiDialog({});
-            dialog.alert({
-                title: "购买确认",
-                msg: '确定购买该服务吗？',
-                buttons: ['取消', '确定']
-            }, function (ret) {
+    var product = "";
+
+    $(document).ready(function(){
+        product = GetProduct();			//获得产品名
+
+    });
+
+    //获取产品名
+    function GetProduct(){
+        var urlinfo=window.location.href; //获取当前页面的url
+        var len=urlinfo.length;//获取url的长度
+        var offset=urlinfo.indexOf("?");//设置参数字符串开始的位置
+        var newsidinfo=urlinfo.substr(offset,len)//取出参数字符串 这里会获得类似“id=1”这样的字符串
+        var newsids=newsidinfo.split("=");//对获得的参数字符串按照“=”进行分割
+        var newsid=newsids[1];//得到参数值
+        return newsid;
+    }
+
+    //点击购买
+    $("#buy").click(function(e){
+        var r=confirm("确定购买该服务吗？");
+        if (r===true) {
+            window.location.href = context + "/pay_detail?product_id=" + path;
+        }else{
+
+        }
+
+        /*var dialog = new auiDialog({});
+        dialog.alert({
+            title:"购买确认",
+            msg:'确定购买该服务吗？',
+            buttons:['取消','确定']
+            },function(ret){
                 if (ret.buttonIndex == 2) {
-                    window.location.href = context + "/pay_detail?product_id=" + path;
+                    window.location.href ="./pay_detail.html";
                 }
-            });
+        });*/
 
 
-        });
+    });
+
+    //点击添加到购物车
+    $("#add").click(function(e){
+        console.log("add");
+    });
 </script>
 </html>
 
