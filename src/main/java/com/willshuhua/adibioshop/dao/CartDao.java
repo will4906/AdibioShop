@@ -33,6 +33,8 @@ public interface CartDao {
 
     CartItem getCartItem(@Param("cart_itemid")String cart_itemid);
 
+    CartItem getCartItemByProductId(@Param("product_id")String product_id, @Param("customer_id")String customer_id);
+
     List<Map<String, Object>> queryCartPatientInfos(CartItem cartItem);
 
     CartPatientInfo getCartPatientInfo(String cart_patient_infoid);

@@ -1,0 +1,55 @@
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__bd">
+        <div class="weui-cell">
+            <label class="weui-cell__hd weui-check__label">
+                <input type="checkbox" class="weui-check" name="checkbox" checked="checked">
+                <i class="weui-icon-checked"></i>
+                <input type="hidden" name="cart_info">
+            </label>
+            <div class="weui-cell__bd">
+                <div class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb"
+                             src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505831449&di=bdfe5ce42a5f422a8cc4926dbd8d73a7&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.jsqq.net%2Fuploads%2Fallimg%2F140323%2F1_140323064336_4.jpg">
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title"
+                            style="width:91px;word-wrap:break-word; word-break:normal;font-size: 13px;">产品名</h4>
+                        <div class="weui-media-box__desc">
+                            <p>金额：￥金额</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-cell__ft" style="display:none">
+                <div class="aui-bar aui-bar-btn aui-bar-btn-sm" style="width:72px">
+                    '
+                    <div class="aui-bar-btn-item" name="decrement">
+                        '<i class="aui-iconfont aui-icon-minus"></i>
+                    </div>
+                    <div class="aui-bar-btn-item">
+                        <input type="number" disabled="true" class="aui-input aui-text-center"
+                               value="'+cartData.parm[i].quantity+'">
+                    </div>
+                    <div class="aui-bar-btn-item" name="increment">
+                        <i class="aui-iconfont aui-icon-plus"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui-panel__ft">
+        <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link" name="showPeople">
+            <div class="weui-cell__hd"></div>
+            <div class="weui-cell__bd">检测人</div>
+            <span class="weui-cell__ft"></span>
+        </a>
+        <div class="people-ist" name=people_list style="display: none">
+            <ul name="cart_patient_list">
+            </ul>
+            <div style="display:flex; justify-content:center; margin: 10px auto;">
+                <div class="weui-btn weui-btn_mini weui-btn_primary" name="add">添加检测人</div>
+            </div>
+        </div>
+    </div>
+</div>

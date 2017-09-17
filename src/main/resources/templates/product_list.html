@@ -1,4 +1,4 @@
-<section data-th-each="product: ${productList}"  xmlns:th="http://www.thymeleaf.org">
+<span data-th-each="product: ${productList}"  xmlns:th="http://www.thymeleaf.org">
     <div class="aui-card-list">
         <a data-th-href="@{'/product_detail?product_id=' + ${product.product_id}}">
             <!--/*@thymesVar id="name" type="java.lang.String"*/-->
@@ -13,4 +13,4 @@
             </div>
         </a>
     </div>
-</section>
+</span>

@@ -9,7 +9,7 @@
 <mapper namespace="com.willshuhua.adibioshop.dao.CartDao">
 
     <select id="queryCartForCustomer" resultType="ItemProduct">
-        SELECT cart_items.cart_id, cart_items.cart_itemid, cart_items.product_id, cart_items.quantity, products.product_name, products.unit_price, products.unit_price * cart_items.quantity AS whole_price
+        SELECT cart_items.cart_id, cart_items.cart_itemid, cart_items.product_id, cart_items.quantity, products.product_name, products.unit_price
         FROM cart_items, shopping_carts AS cart, products
         WHERE cart.customer_id = #{customerId}
         AND
@@ -46,29 +46,7 @@
     </select>
 
     <select id="getCartItem" resultType="CartItem">
-        SELECT
-            cart_items.cart_id, cart_items.cart_itemid, cart_items.product_id, cart_items.quantity, products.unit_price * cart_items.quantity AS whole_price
-        FROM
-            cart_items, products
-        WHERE
-            cart_itemid = #{cart_itemid}
-        AND
-            products.product_id = cart_items.product_id
-    </select>
-
-    <select id="getCartItemByProductId" resultType="CartItem">
-        SELECT
-            cart_items.cart_id, cart_items.cart_itemid, cart_items.product_id, cart_items.quantity, products.unit_price * cart_items.quantity AS whole_price
-        FROM
-            cart_items, shopping_carts, products
-        WHERE
-            cart_items.product_id = #{product_id}
-        AND
-            cart_items.cart_id = shopping_carts.cart_id
-        AND
-            shopping_carts.customer_id = #{customer_id}
-          AND
-            products.product_id = cart_items.product_id
+        SELECT cart_id, cart_itemid, product_id, quantity FROM cart_items WHERE cart_itemid = #{cart_itemid}
     </select>
 
     <delete id="deleteCartItem">

@@ -1,0 +1,754 @@
+<span xmlns:th="http://www.thymeleaf.org">
+<section class="" style="margin-bottom:50px; " id=border>
+<div class="weui-cells weui-cells_checkbox" id="content">
+
+
+</div>
+</section>
+
+<section class="templet">
+<div id='cartItem'>
+	<div class="weui-panel weui-panel_access">
+		<div class="weui-panel__bd">
+			<div class="weui-cell">
+				<label class="weui-cell__hd weui-check__label">
+					<input type="checkbox" class="weui-check" name="checkbox" checked="checked">
+					<i class="weui-icon-checked"></i>
+					<input type="hidden" name="cart_info">
+				</label> 
+				<div class="weui-cell__bd">
+					<div class="weui-media-box weui-media-box_appmsg">
+						<div class="weui-media-box__hd">
+							<img class="weui-media-box__thumb"
+                                 src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505831449&di=bdfe5ce42a5f422a8cc4926dbd8d73a7&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.jsqq.net%2Fuploads%2Fallimg%2F140323%2F1_140323064336_4.jpg">
+						</div>
+						<div class="weui-media-box__bd">
+						<h4 class="weui-media-box__title"
+                            style="width:91px;word-wrap:break-word; word-break:normal;font-size: 13px;">
+							<span name="productName">产品名</span>
+						</h4>
+							<div class="weui-media-box__desc">
+								<p>金额：￥<span name="money">123<span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="weui-cell__ft" style="display:none">
+						<div class="aui-bar aui-bar-btn aui-bar-btn-sm" style="width:72px">
+							'<div class="aui-bar-btn-item" name="decrement">
+							'<i class="aui-iconfont aui-icon-minus"></i>
+						</div>
+						<div class="aui-bar-btn-item">
+							<input type="number" disabled="true" class="aui-input aui-text-center"
+                                   value="'+cartData.parm[i].quantity+'">
+						</div>
+						<div class="aui-bar-btn-item" name="increment">
+							<i class="aui-iconfont aui-icon-plus"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="weui-panel__ft">
+			<a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link" name="showPeople">
+				<div class="weui-cell__hd"></div>
+				<div class="weui-cell__bd">检测人</div>
+				<span class="weui-cell__ft"></span>
+			</a>
+			<div class="people-ist" name=people_list style="display: none">
+				<ul name="cart_patient_list">
+				</ul>
+				<div style="display:flex; justify-content:center; margin: 10px auto;">
+					<div class="weui-btn weui-btn_mini weui-btn_primary" name="add">添加检测人</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="cartPatientItem">
+	<li class="weui-cell weui-cell_link">
+		<input type="hidden" name="cart_patient_info">
+		<div class="weui-cell__bd"><span name="patientName">检测人姓名</span></div>
+		<div class="weui-cell__ft">
+			<i class="weui-icon-cancel" name="delete_patient"></i>
+		</div>
+	</li>
+</div>
+
+<div id="customerPatientItem">
+	<div class="weui-cell" name='selectPatientItem'>
+		<div class="weui-cell__bd">
+			<span name="patientName">检测人</span>
+		</div>
+		<div class="weui-cell__ft" name="selectAdd">添加</div>
+		<input type="hidden" name="selectPatientInfo">
+	</div>
+</div>
+
+</section>
+
+<section>
+	<div id="pop_select" class="weui-popup__container popup-bottom" style="z-index: 999; ">
+		<div class="weui-popup__overlay"></div>
+		<div class="weui-popup__modal">
+			<div class="toolbar">
+				<div class="toolbar-inner">
+					<a href="javascript:;" class="picker-button close-popup">关闭</a>
+					<h1 class="title">添加检测人</h1>
+				</div>
+			</div>
+			<div class="modal-content">
+				<div class="weui-cells" id="selectPatientList">
+					<!--拥有的检测人信息-->
+				</div>
+				<div class="weui-btn weui-btn_mini weui-btn_primary close-popup"
+                     style="display:flex; justify-content:center;width: 40%; margin: 0.4em auto;">添加新的检测人</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="pop_write" class="weui-popup__container " style="z-index: 999; ">
+		<div class="weui-popup__overlay"></div>
+		<div class="weui-popup__modal">
+			<section>
+				<form id="payinfo_form" name="inform" onchange="changed()" oninput="changed()">
+				<h1>测试页面未写数据发送</h1>
+					<div class="aui-content aui-margin-b-15">
+						<ul class="aui-list aui-from-list">
+							<li class="aui-list-header">填写信息（必填）</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">*姓名:</div>
+									<div class="aui-list-item-input">
+										<input type="text" placeholder="姓名" name="name">
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">*性别:</div>
+									<div class="aui-list-item-input">
+										<label><input class="aui-radio" type="radio" name="gender" value="M"
+                                                      checked="true">男</label>
+										<label><input class="aui-radio" type="radio" name="gender" value="F">女</label>
+
+										</div>
+									</div>
+								</li>
+								<li class="aui-list-item">
+									<div class="aui-list-item-inner">
+										<div class="aui-list-item-label">*年龄:</div>
+										<div class="aui-list-item-input">
+											<input type="number" placeholder="年龄" name="age">
+										</div>
+									</div>
+								</li>
+								<li class="aui-list-item">
+									<div class="aui-list-item-inner">
+										<div class="aui-list-item-label">*邮寄地址:</div>
+										<div class="aui-list-item-input">
+											<input type="text" name="province" class="weui-input" value=""
+                                                   id="city-picker">
+										</div>
+									</div>
+								</li>
+								<li class="aui-list-item">
+									<div class="aui-list-item-inner">
+										<div class="aui-list-item-label"></div>
+										<div class="aui-list-item-input">
+											<input type="text" placeholder="详细地址" name="address">
+										</div>
+									</div>
+								</li>
+								<li class="aui-list-item">
+									<div class="aui-list-item-inner">
+										<div class="aui-list-item-label">*联系电话:</div>
+										<div class="aui-list-item-input">
+											<input type="number" placeholder="电话" name="phone">
+										</div>
+									</div>
+								</li>
+
+								<li class="aui-list-item" style="display: none">
+									<div class="aui-list-item-inner">
+										<div class="aui-list-item-label">*是否怀孕:</div>
+										<div class="aui-list-item-input">
+											<label><input class="aui-radio" type="radio" name="is_pregnant" value="1">是</label>
+											<label><input class="aui-radio" type="radio" name="is_pregnant" value="0"
+                                                          checked="true">否</label>
+										</div>
+									</div>
+								</li>
+								<li class="aui-list-item">
+									<div class="" style="display: flex;flex-direction: row;">
+										<div class="">*是否有糖尿病史:</div>
+										<div class="" style="">
+											<label><input class="aui-radio" type="radio" name="has_diabetic" value="1">是</label>
+											<label><input class="aui-radio" type="radio" name="has_diabetic" value="0"
+                                                          checked="true">否</label>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					<div class="aui-content aui-margin-b-15">
+						<ul class="aui-list aui-from-list">
+							<li class="aui-list-header">其他信息（选题）</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">身高:</div>
+									<div class="aui-list-item-input">
+										<input type="number" placeholder="身高（cm）" name="height">
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">体重:</div>
+									<div class="aui-list-item-input">
+										<input type="number" placeholder="体重（kg）" name="weight">
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</form>
+				<div class="weui-btn weui-btn_primary close-popup">确认</div>
+			</section>
+		</div>
+	</div>
+</section>
+
+<footer class="aui-bar aui-bar-tab"> 
+
+	<div class="weui-btn weui-btn_primary aui-bar-tab-item" onclick="Buy()" tapmode>购买</div>
+	
+</footer>
+
+    <!--<script type="text/javascript" src="./jquery-weui/js/jquery-weui.min.js"></script>-->
+
+<script type="text/javascript" th:inline="javascript">
+	 var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
+
+     var cartData = {};
+
+     var unit_price = [];
+
+     $(document).ready(InitAll());
+
+     function InitAll() {
+         GetCartData();
+         DrawCart();
+         init();
+     }
+
+     //获取customer拥有的患者信息
+     function GetPatientInfo() {
+         var path = context + '/patient_infos';
+
+         var patientInfo = {};
+
+         /*$.ajax({
+                     cache: true,
+                     type: "GET",
+                     url: path,
+                        data:'获取customer拥有的患者信息';
+                     dataType:json,
+                     async: false,
+                     error: function (request) {
+                         //错误
+                         patientInfo = 'error';
+                     },
+                     success: function (data) {
+                         patientInfo = data;
+
+                     }
+                 });*/
+         patientInfo = {
+             "result": "ok",
+             "errMsg": "",
+             "parm": [
+                 {
+                     "customer_id": "60df649c-51c8-4d1d-b02c-47d44d4b7355",
+                     "patient_infoid": "9e62c589-cc2e-485c-bae0-a52e9fcfebeb",
+                     "name": "张三",
+                     "gender": "M",
+                     "age": 20.0,
+                     "country": "CHINA",
+                     "province": "北京",
+                     "city": "北京市",
+                     "district": "东城区",
+                     "address": "你好",
+                     "phone": "13000000000",
+                     "has_diabetic": 0,
+                     "is_pregnant": 0,
+                     "height": 0.0,
+                     "weight": 0.0
+                 },
+                 {
+                     "customer_id": "60df649c-51c8-4d1d-b02c-47d44d4b7355",
+                     "patient_infoid": "dfdb7bd8-efea-4c0a-8877-3a41a8e93529",
+                     "name": "李四",
+                     "gender": "M",
+                     "age": 20.0,
+                     "country": "CHINA",
+                     "province": "广东省",
+                     "city": "深圳市",
+                     "district": "南山区",
+                     "address": "深圳大学",
+                     "phone": "13000000000",
+                     "has_diabetic": 0,
+                     "is_pregnant": 0,
+                     "height": 0.0,
+                     "weight": 0.0
+                 }
+             ]
+         };
+         return patientInfo;
+     }
+
+     //获取购物车信息
+     function GetCartData() {
+         var path = context + '/show_cart_info';
+         //获取购物车信息
+         $.ajax({
+             cache: true,
+             type: "GET",
+             url: path,
+             dataType: json,
+             async: false,
+             error: function (request) {
+                 //错误
+                 console.log("Connection error");
+             },
+             success: function (data) {
+                 console.log(data);
+                 cartData = data
+             }
+         });
+//	        cartData = {
+//	        	"result":"ok",
+//	        	"errMsg":"",
+//	        	"parm":[
+//	        	{
+//	        		"cart_id":"",
+//	        		"cart_itemid":"1230",
+//	        		"product_id":"32132146-4564-56465",
+//	        		"product_name":"糖尿病早期筛查",
+//	        		"unit_price":0.01,
+//	        		"quantity":2
+//	        	},
+//	        	{
+//	        		"cart_id":"",
+//	        		"cart_itemid":"1230",
+//	        		"product_id":"32132146-4564-56465",
+//	        		"product_name":"肾病早期筛查",
+//	        		"unit_price":0.01,
+//	        		"quantity":2
+//	        	}
+//	        	]
+//	        };
+     }
+
+     //画出购物车
+     function DrawCart() {
+         $('#content').empty();
+         var cartTemplet;
+         if (cartData.result == "ok") {
+             for (var i = 0; i < cartData.parm.length; i++) {
+                 unit_price[cartData.parm[i].product_name] = cartData.parm[i].unit_price;
+                 $('#cartItem').find('span[name=productName]').html(cartData.parm[i].product_name);
+                 $('#cartItem').find('span[name=money]').html(cartData.parm[i].unit_price * cartData.parm[i].quantity);
+                 cartTemplet = $('#cartItem').clone();
+                 //html += cartTemplet;
+                 $('#content').append(cartTemplet);
+             }
+             BindCartInfo();
+         } else {
+             alert('获取购物车信息失败');
+         }
+     }
+
+     //画出购物车对应的检测人
+     function DrawCartPatient(obj) {
+         var cartInfo = obj.parent().prev().find("input:hidden").data();
+         var req = {};
+         var cartPatientTemplet;
+         req.cart_id = cartInfo.cart_id;
+         req.cart_itemid = cartInfo.cart_itemid;
+         req.product_id = cartInfo.product_id;
+         req.quantity = cartInfo.quantity;
+         var cartPatient = GetCartPatient(req);
+
+         //清空列表
+         $("ul[name=cart_patient_list]").empty();
+         if (cartPatient.result == "ok") {
+             //draw
+             for (var i = 0; i < cartPatient.parm.length; i++) {
+                 $('#cartPatientItem').find('span[name=patientName]').html(cartPatient.parm[i].name);
+                 $("ul[name=cart_patient_list]").append($('#cartPatientItem').clone());
+             }
+             //绑定数据
+             BindCartPatient(obj.next(), cartPatient);
+             //获取当前购物车项目信息
+             var cartItem = obj.parents('div.weui-panel').find('input[name=cart_info]').data();
+             //点击刪除检测人
+             ClickDelPatient(cartItem);
+         }
+     }
+
+     //查询购物车项目对应的患者信息
+     function GetCartPatient(req) {
+         var patientInfo;
+         var path = context + "";
+         /*$.ajax({
+                     cache: true,
+                     type: "POST",
+                     url: path,
+                     data:req,
+                     dataType:json,
+                     async: false,
+                     error: function (request) {
+
+                     },
+                     success: function (data) {
+                         patientInfo = data
+                     }
+                 });*/
+         patientInfo = {
+             "result": "ok",
+             "errMsg": "",
+             "parm": [
+                 {
+                     "is_pregnant": 0,
+                     "has_diabetic": 0,
+                     "country": "CHINA",
+                     "address": "你好",
+                     "gender": "M",
+                     "city": "北京市",
+                     "weight": 0,
+                     "cart_patient_infoid": "899fa698-62c6-40ed-bf92-be97fd60ff99",
+                     "province": "北京",
+                     "phone": "13000000000",
+                     "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365",
+                     "district": "东城区",
+                     "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
+                     "name": "李四",
+                     "patient_infoid": "9e62c589-cc2e-485c-bae0-a52e9fcfebeb",
+                     "age": 20,
+                     "height": 0
+                 },
+                 {
+                     "is_pregnant": 0,
+                     "has_diabetic": 0,
+                     "country": "CHINA",
+                     "address": "深圳大学",
+                     "gender": "M",
+                     "city": "深圳市",
+                     "weight": 0,
+                     "cart_patient_infoid": "a242f238-ee15-414a-9856-28b4acb25e24",
+                     "province": "广东省",
+                     "phone": "13000000000",
+                     "product_id": "bda342a2-27c0-4cb1-bed3-11a786391365/",
+                     "district": "南山区",
+                     "cart_itemid": "68e5c479-43cc-4cd4-b67a-2094481e8e6d",
+                     "name": "张三",
+                     "patient_infoid": "dfdb7bd8-efea-4c0a-8877-3a41a8e93529",
+                     "age": 20,
+                     "height": 0
+                 }
+             ]
+         };
+         return patientInfo;
+
+     }
+
+     //绑定购物车检测人信息
+     function BindCartPatient(obj, patientInfo) {
+         obj.find('input:hidden').each(function (index, el) {
+             $(this).data(patientInfo.parm[index]);
+         });
+     }
+
+     //购物车数据绑定
+     function BindCartInfo() {
+         $("input[name=cart_info]").each(function (index) {
+             $(this).data(cartData.parm[index]);
+         });
+     }
+
+     //初始化个别事件
+     function init() {
+         //点击数量框减少按钮
+         $('div[name=decrement]').click(function Decrement(e) {
+             var priceNode = $(this).parent().parent().prev().find("p");
+             var countNode = $(this).next().children();
+             if (parseInt(countNode.val()) > 1) {
+                 var unit_price = GetUnitPrice($(this).parent().parent().prev().find("h4").text());
+                 countNode.val(parseInt(countNode.val()) - 1);
+                 /*$.ajax({
+                 });*/
+                 priceNode.text("金额：￥" + (unit_price * countNode.val()));
+             } else {
+                 //订单数等于0 删除
+                 $.confirm({
+                     title: '确认删除',
+                     text: '确认删除该订单吗？',
+                     onOK: function () {
+                         //点击确认
+                         /*$.ajax({
+
+                         });*/
+                         priceNode.parent().parent().remove();
+                     },
+                     onCancel: function () {
+                         //点击取消
+
+                     }
+                 });
+             }
+         });
+
+         //点击数量框增加按钮
+         $('div[name=increment]').click(function Increment(e) {
+             var priceNode = $(this).parent().parent().prev().find("p");
+             var countNode = $(this).prev().children();
+             if (countNode.val() < 9) {
+                 var unit_price = GetUnitPrice($(this).parent().parent().prev().find("h4").text());
+                 countNode.val(parseInt(countNode.val()) + 1);
+                 priceNode.text("金额：￥" + (unit_price * countNode.val()));
+             }
+         });
+
+         //弹出检测人框
+         $('a[name=showPeople]').click(function (e) {
+
+             //画出检测人框
+             DrawCartPatient($(this));
+             $(this).next().slideDown();
+
+             e.stopPropagation();
+         });
+
+
+         //收回检测人框
+         $(document).click(function (e) {
+             $('div[name=people_list]').slideUp();
+         });
+
+         //点击添加检测人
+         $("div[name=add]").click(function (e) {
+             //弹出已保存的人名单，无保存的填写信息
+             var patientInfo = GetPatientInfo();
+
+             //获取当前购物车项目信息
+             var cartItem = $(this).parents('div.weui-panel').find('input[name=cart_info]').data();
+             if (patientInfo.result == 'ok' && patientInfo.parm.length > 0) {
+                 //弹出检测人选择框
+                 DrawSelectPatient($('#selectPatientList'), patientInfo);
+                 $("#pop_select").popup();
+                 SelectAdd(cartItem);
+
+             } else if (patientInfo.result == "error") {
+                 alert('获取信息错误！');
+             } else {
+                 //弹出全屏的信息填写框
+
+                 $("#pop_write").popup();
+             }
+             e.stopPropagation();
+         });
+     }
+
+     //画出选择检测人
+     function DrawSelectPatient(obj, patientData) {
+         var selectPatientTemplet;
+         obj.empty();
+         for (var i = 0; i < patientData.parm.length; i++) {
+             $("#customerPatientItem").find('span[name=patientName]').html(patientData.parm[i].name);
+             selectPatientTemplet = $("#customerPatientItem").clone();
+             obj.append(selectPatientTemplet);
+         }
+         BindSelectPatient(obj, patientData);
+     }
+
+     //点击刪除检测人
+     function ClickDelPatient(cartItem) {
+         var req = {
+             "cart_itemid": "",
+             "cart_patient_infoid": "",
+             "product_id": "",
+             "patient_infoid": ""
+         };
+
+         $('i[name=delete_patient]').click(function (e) {
+             var patientInfo = $(this).parent().prevAll('input:hidden').data();
+             req.cart_itemid = cartItem.cart_itemid;
+             req.cart_patient_infoid = patientInfo.cart_patient_infoid;
+             req.product_id = cartItem.product_id;
+             req.patient_infoid = patientInfo.patient_infoid;
+             DeleteCartPatientInfo(req);
+             InitAll();
+             e.stopPropagation();
+         });
+     }
+
+     //发送删除患者信息
+     function DeleteCartPatientInfo(req) {
+         var path = context + "/reduce_cart_item";
+         /*$.ajax({
+             cache: true,
+             type: "POST",
+             url: path,
+             data: req,
+             async: false,
+             error: function (request) {
+                 alert("Connection error");
+             },
+             success: function (data) {
+
+             }
+         });*/
+     }
+
+     //select列表点击添加
+     function SelectAdd(cartItem) {
+         var req = {};
+         req.cartItem = {};
+         req.cartItem.cart_id = cartItem.cart_id;
+         req.cartItem.cart_itemid = cartItem.cart_itemid;
+         req.cartItem.product_id = cartItem.product_id;
+         req.cartItem.quantity = 1;
+         $('div[name=selectAdd').click(function (e) {
+             req.patientInfo = $(this).next().data();
+             AddCartPatient(req);
+             $.closePopup();
+             InitAll();
+         })
+     }
+
+     //发送增加数量
+     function AddCartPatient(req) {
+         var path = context + '/add_cart';
+         console.log(req);
+         /*$.ajax({
+                     cache: true,
+                     type: "POST",
+                     url: path,
+                        data:req;
+                     dataType:json,
+                     async: false,
+                     error: function (request) {
+
+                     },
+                     success: function (data) {
+
+                     }
+                 });*/
+     }
+
+     //绑定select列表检测人信息
+     function BindSelectPatient(obj, patientInfo) {
+         obj.find('input:hidden').each(function (index) {
+             $(this).data(patientInfo.parm[index]);
+         })
+     }
+
+     //获得单价
+     function GetUnitPrice(product) {
+         return unit_price[product];
+     }
+
+     //购买
+     function Buy() {
+         var reqBuy = [];
+         var temp = {};
+         console.log("buy");
+         $('input[name="checkbox"]:checked').each(function (index) {
+             console.log(index, $(this).nextAll('input:hidden').data());
+             /*var itemInfo = $(this).nextAll('input:hidden').data();
+             temp.cart_id = itemInfo.cart_id;
+             temp.cart_itemid = itemInfo.cart_itemid;
+             temp.product_id = itemInfo.product_id;
+             temp.quantity = itemInfo.quantity;
+             console.log(itemInfo);
+             reqBuy.push(itemInfo);*/
+         });
+         //console.log(reqBuy);
+
+         /*$.ajax({
+             cache: true,
+             type: "POST",
+             url: ,
+             data: ,
+             async: false,
+             error: function (request) {
+                 alert("Connection error");
+             },
+             success: function (data) {
+
+             }
+         });*/
+     }
+</script>
+<style type="text/css">
+	.templet {
+        display: none;
+    }
+
+    .people-list {
+        margin-left: 10px;
+
+    }
+
+    .input-number {
+        width: 80px;
+        padding: 0 12px;
+        vertical-align: top;
+        text-align: center;
+        outline: none;
+    }
+
+    .input-number,
+    .input-number-decrement,
+    .input-number-increment {
+        border: 1px solid #dddddd;
+        height: 40px;
+        user-select: none;
+    }
+
+    .input-number-decrement,
+    .input-number-increment {
+        display: inline-block;
+        width: 30px;
+        line-height: 38px;
+        background: #f1f1f1;
+        color: #444444;
+        text-align: center;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .input-number-decrement:active,
+    .input-number-increment:active {
+        background: #dddddd;
+    }
+
+    .input-number-decrement {
+        border-right: none;
+        border-radius: 0px 0 0 0px;
+    }
+
+    .input-number-increment {
+        border-left: none;
+        border-radius: 0 0px 0px 0;
+    }
+
+    .count-eare {
+        display: flex;
+        flex-direction: row;
+        width: 100px;
+    }
+</style>
+</span>

@@ -40,15 +40,11 @@
 
 <footer class="aui-bar aui-bar-tab">
     <div class="aui-bar-tab-item" tapmode id="add" style="background-color:#0e53a7;">
-
         <div class="aui-bar-tab-label" style="color: #fff">添加到购物车</div>
     </div>
     <div class="aui-bar-tab-item" tapmode id="buy" style="background-color:#00b64f;">
-
         <div class="aui-bar-tab-label" style="color: #fff">购买</div>
     </div>
-
-
 </footer>
 
 </body>
@@ -57,7 +53,8 @@
 <script type="text/javascript" th:src="@{/jquery-weui/js/jquery-weui.min.js}" ></script>
 <script type="text/javascript" th:inline="javascript">
     var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/
-    var path = /*[[${productId}]]*/
+    var product_id = /*[[${productId}]]*/;
+    var path = context + "/pay_detail?product_id=" + product_id;
     var product = "";
 
     $(document).ready(function(){
@@ -77,7 +74,7 @@
     }
     //点击购买
     $("#buy").click(function(e){
-        window.location.href = context + "/pay_detail?product_id=" + path;
+        window.location.href = path;
 	});
     
     //点击添加到购物车

@@ -2,8 +2,10 @@ package com.willshuhua.adibioshop.service.impl;
 
 import com.willshuhua.adibioshop.dao.CartDao;
 import com.willshuhua.adibioshop.dao.CustomerDao;
+import com.willshuhua.adibioshop.dao.ProductDao;
 import com.willshuhua.adibioshop.dto.cart.AddCartItem;
 import com.willshuhua.adibioshop.entity.PatientInfo;
+import com.willshuhua.adibioshop.entity.Product;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
 import com.willshuhua.adibioshop.entity.cart.CartPatientInfo;
 import com.willshuhua.adibioshop.entity.cart.ItemProduct;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +30,8 @@ public class CartServiceImpl implements CartService{
     CartDao cartDao;
     @Autowired
     CustomerDao customerDao;
+    @Autowired
+    ProductDao productDao;
 
     @Override
     public List<ItemProduct> queryCartForCustomer(String customerId) {
@@ -47,6 +52,11 @@ public class CartServiceImpl implements CartService{
         String cartItemId = cartItem.getCart_itemid();
         String product_id = cartItem.getProduct_id();
         PatientInfo patientInfo = addCartItem.getPatientInfo();
+
+        Product product = productDao.queryProductByProductId(product_id);
+        if (product == null){
+            return null;
+        }
 
 //        解析patientInfo
         String patient_infoid = patientInfo.getPatient_infoid();
@@ -73,6 +83,7 @@ public class CartServiceImpl implements CartService{
             if (cartItem != null){
                 cartDao.updateCartItemQuantity(cartItemId, cartItem.getQuantity() + 1);
                 cartDao.insertCartPatientInfo(new CartPatientInfo(cartItemId, UUID.randomUUID().toString(), product_id, patientInfo.getPatient_infoid()));
+                cartItem.setQuantity(cartItem.getQuantity() + 1);
             }else {
                 ShoppingCart shoppingCart = cartDao.queryShoppingCart(patientInfo.getCustomer_id());
                 cartItem = new CartItem(shoppingCart.getCart_id(), UUID.randomUUID().toString(), product_id, 1);
@@ -80,12 +91,22 @@ public class CartServiceImpl implements CartService{
                 cartDao.insertCartPatientInfo(new CartPatientInfo(cartItem.getCart_itemid(), UUID.randomUUID().toString(), product_id, patientInfo.getPatient_infoid()));
             }
         }else {
-            ShoppingCart shoppingCart = cartDao.queryShoppingCart(patientInfo.getCustomer_id());
-            cartItem = new CartItem(shoppingCart.getCart_id(), UUID.randomUUID().toString(), product_id, 1);
-            cartDao.insertCartItem(cartItem);
-            cartDao.insertCartPatientInfo(new CartPatientInfo(cartItem.getCart_itemid(), UUID.randomUUID().toString(), product_id, patientInfo.getPatient_infoid()));
+            CartItem cartItem1 = cartDao.getCartItemByProductId(cartItem.getProduct_id(), patientInfo.getCustomer_id());
+            if (cartItem1 == null){
+                ShoppingCart shoppingCart = cartDao.queryShoppingCart(patientInfo.getCustomer_id());
+                cartItem = new CartItem(shoppingCart.getCart_id(), UUID.randomUUID().toString(), product_id, 1);
+                cartDao.insertCartItem(cartItem);
+                cartDao.insertCartPatientInfo(new CartPatientInfo(cartItem.getCart_itemid(), UUID.randomUUID().toString(), product_id, patientInfo.getPatient_infoid()));
+                cartItem.setWhole_price(new BigDecimal(cartItem.getQuantity()).multiply(product.getUnit_price()));
+            }else {
+                cartItem = cartItem1;
+                cartDao.updateCartItemQuantity(cartItem.getCart_itemid(), cartItem.getQuantity() + 1);
+                cartDao.insertCartPatientInfo(new CartPatientInfo(cartItem.getCart_itemid(), UUID.randomUUID().toString(), product_id, patientInfo.getPatient_infoid()));
+                cartItem.setQuantity(cartItem.getQuantity() + 1);
+            }
+
         }
-        cartItem.setQuantity(cartItem.getQuantity() + 1);
+
         return cartItem;
     }
 

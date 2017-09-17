@@ -16,5 +16,6 @@ public class ItemProduct {
     private String product_id;
     private String product_name;
     private BigDecimal unit_price;
+    private BigDecimal whole_price;
     private int quantity;
 }

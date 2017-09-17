@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class PatientController {
@@ -51,5 +52,22 @@ public class PatientController {
         }
         customerService.deletePatientInfo(patient_infoid);
         return new Result(Result.OK);
+    }
+
+    @RequestMapping(value = "/add_patient_info", method = RequestMethod.POST)
+    public Object addPatientInfo(HttpSession httpSession, @RequestBody PatientInfo patientInfo){
+        Customer customer = (Customer)httpSession.getAttribute("customer");
+        if (customer == null){
+            return new Result(Result.ERR, "can't find the customer");
+        }
+        patientInfo.setCountry("CHINA");
+        PatientInfo patientInfo1 = customerService.hasPatientInfo(patientInfo);
+        if (patientInfo1 == null){
+            patientInfo.setCustomer_id(customer.getCustomer_id());
+            patientInfo.setPatient_infoid(UUID.randomUUID().toString());
+            customerService.createPatientInfo(patientInfo);
+            return new Result(Result.OK, patientInfo);
+        }
+        return new Result(Result.ERR, "repeat", patientInfo1);
     }
 }

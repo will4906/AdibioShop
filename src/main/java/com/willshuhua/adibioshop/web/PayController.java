@@ -142,66 +142,7 @@ public class PayController {
 
         orderInfo.setPatient_infoid(patientInfo.getPatient_infoid());
         orderService.createOrder(order, orderInfo, orderEvent, orderItem);
-
-//        UnifiedOrder unifiedOrder = new UnifiedOrder();
-//
-//        String appId = wechatProperties.getAppid();
-//        String muh_id = wechatProperties.getMch_id();
-//        String nonce_str = Encryption.md5(UUID.randomUUID().toString());
-//        String body = wechatProperties.getMerchant() + "-" + product.getProduct_name();
-//        String out_trade_no = order.getOrder_id();
-//        String total_fee = product.getUnit_price().multiply(new BigDecimal(100)).toBigInteger().toString();
-//        String spbill_create_ip = request.getRemoteAddr();
-//        String notify_url = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/wechat_pay_notify";
-//        String trade_type = "JSAPI";
-//        String openid = customer.getWechat_id();
-//
-//        unifiedOrder.setAppid(appId);
-//        unifiedOrder.setMch_id(muh_id);
-//        unifiedOrder.setNonce_str(nonce_str);
-//        unifiedOrder.setBody(body);
-//        unifiedOrder.setOut_trade_no(out_trade_no);
-//        unifiedOrder.setTotal_fee(total_fee);
-//        unifiedOrder.setSpbill_create_ip(spbill_create_ip);
-//        unifiedOrder.setNotify_url(notify_url);
-//        unifiedOrder.setTrade_type(trade_type);
-//        unifiedOrder.setOpenid(openid);
-//        //计算sign
-//        SortedMap<String, String> sortedMap = BeanUtil.beanToMap(unifiedOrder);
-//        if (sortedMap == null){
-//            return new Result(Result.ERR, "Can't parse the order.");
-//        }
-//        String sign = WechatTool.generateMD5PaySign(sortedMap, wechatProperties.getApikey());
-//        unifiedOrder.setSign(sign);
-//
-//        Retrofit retrofit = retrofitManager.getXmlRetrofit();
-//        WechatRequest wechatRequest = retrofit.create(WechatRequest.class);
-//
-//        Call<UnifiedOrderBack> unifiedOrderBackCall = wechatRequest.requestUnifiedOrder(unifiedOrder);
-//        Response<UnifiedOrderBack> backResponse = unifiedOrderBackCall.execute();
-//        UnifiedOrderBack unifiedOrderBack = backResponse.body();
-//
-//        JsPayParm jsPayParm = new JsPayParm();
-//        if (unifiedOrderBack != null){
-//            jsPayParm.setAppId(wechatProperties.getAppid());
-//            jsPayParm.setPackage_sign_cut("prepay_id=" + unifiedOrderBack.getPrepay_id());
-//            jsPayParm.setNonceStr(Encryption.md5(UUID.randomUUID().toString()));
-//            jsPayParm.setTimeStamp(String.valueOf(new Date().getTime() / 1000));
-//            jsPayParm.setSignType("MD5");
-//
-//            //计算sign
-//            SortedMap<String, String> jsSortMap = BeanUtil.beanToMap(jsPayParm);
-//            if (jsSortMap == null){
-//                return new Result(Result.ERR, "Can't parse the order.");
-//            }
-//            String paySign = WechatTool.generateMD5PaySign(jsSortMap, wechatProperties.getApikey());
-//            jsPayParm.setPaySign(paySign);
-//
-//            return new Result(Result.OK, jsPayParm);
-//        }
         return notifyUnifiedOrder(request, order, product.getProduct_name(), customer);
-
-//        return new Result(Result.ERR, "Have some errors!");
     }
 
     private Result notifyUnifiedOrder(HttpServletRequest request, Order order, String orderName, Customer customer) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
@@ -390,7 +331,6 @@ public class PayController {
                 logger.warn(t);
             }
         });
-
         return result;
     }
 

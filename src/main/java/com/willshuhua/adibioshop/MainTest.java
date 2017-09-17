@@ -20,14 +20,15 @@ public class MainTest {
 
     private static Logger logger = Logger.getLogger(MainTest.class);
     public static void main(String[] args) throws Exception {
-        JsPayParm jsPayParm = new JsPayParm("1111","2222","3333","4444","5555","6666");
+        System.out.println(UUID.randomUUID().toString());
+//        JsPayParm jsPayParm = new JsPayParm("1111","2222","3333","4444","5555","6666");
 //        List<CartItem> cartItemList = new ArrayList<>();
 //        cartItemList.add(new CartItem("12", "12", "32", 1));
 //        cartItemList.add(new CartItem("12", "12", "32", 1));
 //        cartItemList.add(new CartItem("12", "12", "32", 1));
-        Gson gson = new Gson();
-        String gsonCartList = gson.toJson(jsPayParm);
-        logger.info(gsonCartList);
+//        Gson gson = new Gson();
+//        String gsonCartList = gson.toJson(jsPayParm);
+//        logger.info(gsonCartList);
 //        AddCartItem addCartItem = new AddCartItem();
 //        String customerId = "60df649c-51c8-4d1d-b02c-47d44d4b7355";
 //        PatientInfo patientInfo = new PatientInfo();

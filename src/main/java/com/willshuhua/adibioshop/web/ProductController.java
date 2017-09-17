@@ -51,15 +51,24 @@ public class ProductController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpSession httpSession) throws IOException {
-        String code = request.getParameter("code");
-        String state = request.getParameter("state");
-        logger.info("code===" + code);
-        logger.info(httpSession);
+//        String code = request.getParameter("code");
+//        String state = request.getParameter("state");
+//        logger.info("code===" + code);
+//        logger.info(httpSession);
+//        ModelAndView modelAndView  = new ModelAndView("index");
+//        if (code == null || code.equals("")){
+//            return modelAndView;
+//        }
+//        analyseCustomer(code, httpSession, false);
+
+
+//        调试
+        Customer customer = new Customer();
+        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
+        customer.setWechat_id("owNVIwQFSY-BxMyKi10bqi_6761w");
+        httpSession.setAttribute("customer", customer);
+
         ModelAndView modelAndView  = new ModelAndView("index");
-        if (code == null || code.equals("")){
-            return modelAndView;
-        }
-        analyseCustomer(code, httpSession, false);
         return modelAndView;
 
     }
@@ -134,6 +143,9 @@ public class ProductController {
         logger.info("openid===" + openId);
         if (openId == null || openId.equals("")){
             openId = ops.get("code." + code);
+        }
+        if (openId == null){
+            return null;
         }
         ops.set("code." + code, openId,60, TimeUnit.SECONDS);
         Customer customer = customerService.queryCustomerByOpenId(openId);
