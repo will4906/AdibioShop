@@ -9,13 +9,13 @@
 <mapper namespace="com.willshuhua.adibioshop.dao.CustomerDao">
 
     <insert id="createCustomerAccount" parameterType="Customer">
-        INSERT INTO customers(customer_id, telphone, email, wechat_id, register_time)
+        INSERT INTO customers(customer_id, telphone, email, openid, register_time)
         VALUES
-        (#{customer_id}, #{telphone}, #{email}, #{wechat_id}, #{register_time})
+        (#{customer_id}, #{telphone}, #{email}, #{openid}, #{register_time})
     </insert>
 
     <select id="queryCustomerByOpenId" resultType="Customer">
-        SELECT customer_id, telphone, email, wechat_id, register_time FROM customers WHERE wechat_id = #{openId}
+        SELECT customer_id, telphone, email, openid, register_time FROM customers WHERE openid = #{openId}
     </select>
 
     <select id="hasPatientInfo" resultType="PatientInfo">

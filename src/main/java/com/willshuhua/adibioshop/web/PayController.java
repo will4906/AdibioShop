@@ -74,15 +74,44 @@ public class PayController {
 
     @RequestMapping(value = "/pay_success", method = RequestMethod.GET)
     public String paySuccess(){
-        return "pay_success";
+        return "/pay/pay_success";
     }
 
     @RequestMapping(value = "/pay_fail", method = RequestMethod.GET)
     public String payFail(){
-        return "pay_fail";
+        return "/pay/pay_fail";
     }
 
     @RequestMapping(value = "/direct_pay", method = RequestMethod.POST)
+    @ResponseBody
+    public Object directPay(HttpServletRequest request, HttpSession httpSession, @RequestParam("patient_infoid")String patientInfoId, @RequestParam("product_id")String productId) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
+        Customer customer = (Customer) httpSession.getAttribute("customer");
+        if (patientInfoId == null || productId == null){
+            return new Result(Result.ERR, "the parameter is error!");
+        }
+        Product product = productService.queryProductByProductId(productId);
+        PatientInfo patientInfo = customerService.hasPatientInfoId(patientInfoId);
+        if (product == null || patientInfo == null){
+            return new Result(Result.ERR, "the parameter is error!");
+        }
+        //配置订单
+        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
+        String orderId = String.valueOf(idWorker.nextId());
+        Order order = new Order(orderId, customer.getCustomer_id(), product.getUnit_price(), OrderStatus.CREATION, null);
+        OrderEvent orderEvent = new OrderEvent(UUID.randomUUID().toString(), orderId, new Date(), OrderStatus.CREATION, customer.getCustomer_id(), null);
+        OrderItem orderItem = new OrderItem(orderId, UUID.randomUUID().toString(), productId, 1);
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setOrder_itemid(orderItem.getOrder_itemid());
+        orderInfo.setOrder_infoid(UUID.randomUUID().toString());
+        orderInfo.setProduct_id(productId);
+        orderInfo.setPatient_infoid(patientInfo.getPatient_infoid());
+        orderService.createOrder(order, orderInfo, orderEvent, orderItem);
+        return notifyUnifiedOrder(request, order, product.getProduct_name(), customer);
+    }
+
+    /*
+    *
+    * @RequestMapping(value = "/direct_pay", method = RequestMethod.POST)
     @ResponseBody
     public Object payEvent(@ModelAttribute("patientDetail")PatientDetail patientDetail, HttpServletRequest request, HttpSession httpSession) throws Exception {
         logger.info(patientDetail);
@@ -144,6 +173,8 @@ public class PayController {
         orderService.createOrder(order, orderInfo, orderEvent, orderItem);
         return notifyUnifiedOrder(request, order, product.getProduct_name(), customer);
     }
+    * */
+
 
     private Result notifyUnifiedOrder(HttpServletRequest request, Order order, String orderName, Customer customer) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
 //        TODO:还得做用户取消支付的删除订单，和超时未支付的订单取消
@@ -158,7 +189,7 @@ public class PayController {
         String spbill_create_ip = request.getRemoteAddr();
         String notify_url = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/wechat_pay_notify";
         String trade_type = "JSAPI";
-        String openid = customer.getWechat_id();
+        String openid = customer.getOpenid();
 
         unifiedOrder.setAppid(appId);
         unifiedOrder.setMch_id(muh_id);
@@ -283,7 +314,7 @@ public class PayController {
         orderService.changeOrderStatus(orderEvent);
 
         WechatTemplate wechatTemplate = new WechatTemplate();
-        wechatTemplate.setTouser(customer.getWechat_id());
+        wechatTemplate.setTouser(customer.getOpenid());
         wechatTemplate.setTemplate_id(TemplateId.CHECKOUT_SUCCESS);
         wechatTemplate.setUrl(request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/order_info?order_id=" + wechatPayBack.getOut_trade_no());
         Map<String, Map<String, String>> data = new HashMap<>();

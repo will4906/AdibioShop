@@ -1,0 +1,44 @@
+<span xmlns:th="http://www.thymeleaf.org">
+    <div class="weui-cells__title">用户信息</div>
+<div class="weui-cells">
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><img data-th-src="${wechat_info.headimgurl}" alt="用户头像"
+                                        style="width:70px;margin-right:5px;display:block">
+        </div>
+        <div class="weui-cell__bd">
+            <p></p>
+        </div>
+        <div class="weui-cell__ft"><h3 data-th-text="${wechat_info.nickname}"></h3></div>
+    </div>
+</div>
+<div class="weui-cells__title"></div>
+<div class="weui-cells">
+    <a class="weui-cell weui-cell_access" href="javascript:;">
+        <div class="weui-cell__bd">
+            <p>检测人管理</p>
+        </div>
+        <div class="weui-cell__ft"></div>
+    </a>
+    <a class="weui-cell weui-cell_access" data-th-href="@{/my_order}">
+        <div class="weui-cell__bd">
+            <p>订单信息</p>
+        </div>
+        <div class="weui-cell__ft"></div>
+    </a>
+    <a class="weui-cell weui-cell_access" href="javascript:;">
+        <div class="weui-cell__bd">
+            <p>用户反馈</p>
+        </div>
+        <div class="weui-cell__ft"></div>
+    </a>
+    <a class="weui-cell weui-cell_access" href="javascript:;">
+        <div class="weui-cell__bd">
+            <p>关于我们</p>
+        </div>
+        <div class="weui-cell__ft"></div>
+    </a>
+</div>
+<div class="weui-footer" style="position:absolute; bottom: 70px; width:100%; align-items: center;">
+    <p class="weui-footer__text">version: v1.0</p>
+</div>
+</span>

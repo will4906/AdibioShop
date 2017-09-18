@@ -7,30 +7,36 @@ CREATE TABLE customers
     customer_id VARCHAR(255) NOT NULL,
     telphone VARCHAR(255),
     email VARCHAR(255),
-    wechat_id VARCHAR(255),
+    openid VARCHAR(255),
     register_time TIMESTAMP(0) NOT NULL,
     CONSTRAINT customers_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT customers_customerid_unique UNIQUE(customer_id),
     CONSTRAINT customers_telphone_unigue UNIQUE(telphone),
     CONSTRAINT customers_email_unigue UNIQUE(email),
-    CONSTRAINT customers_wechatid_unigue UNIQUE(wechat_id)
+    CONSTRAINT customers_openid_unigue UNIQUE(openid)
 );
 
 -- 描述用户微信相关信息，这个暂时不用
--- CREATE TABLE customer_wechats
--- (
---     row_id SERIAL,
---     customer_id VARCHAR(255) NOT NULL,
---     wechat_id VARCHAR(255) NOT NULL,
---     refresh_token VARCHAR(255) NOT NULL,
---     retoken_time TIMESTAMP(0) NOT NULL,
---     nickname VARCHAR(255) NOT NULL,
---     sex INT NOT NULL,
---     province VARCHAR(255) NOT NULL,
---     city VARCHAR(255) NOT NULL,
---     province VARCHAR(255) NOT NULL,
---     headimgurl VARCHAR(255) NOT NULL
--- );
+DROP TABLE IF EXISTS customer_wechats CASCADE;
+CREATE TABLE customer_wechats
+(
+    row_id SERIAL,
+    customer_id VARCHAR(255) NOT NULL,
+    openid VARCHAR(255) NOT NULL,
+    refresh_token VARCHAR(255),
+    retoken_time TIMESTAMP(0),
+    nickname VARCHAR(255),
+    sex INT,
+    province VARCHAR(255),
+    city VARCHAR(255),
+    country VARCHAR(255),
+    headimgurl VARCHAR(255),
+    privilege JSON,
+    unionid VARCHAR(255),
+    CONSTRAINT wechats_rowid_pk PRIMARY KEY (row_id),
+    CONSTRAINT wechats_customer_id_unique UNIQUE (customer_id),
+    CONSTRAINT wechats_openid_unique UNIQUE (openid)
+);
 
 -- 患者描述信息
 DROP TABLE IF EXISTS patient_infos CASCADE;

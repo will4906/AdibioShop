@@ -7,6 +7,7 @@ package com.willshuhua.adibioshop.dao;
 
 import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.entity.CustomerWechat;
 import com.willshuhua.adibioshop.entity.PatientInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -29,4 +30,10 @@ public interface CustomerDao{
     List<PatientInfo> queryAllCustomerPatientInfos(@Param("customer_id") String customer_id);
 
     void deletePatientInfo(@Param("patient_infoid")String patient_infoid);
+
+    void createCustomerWechat(CustomerWechat customerWechat);
+
+    void updateCustomerWechat(CustomerWechat customerWechat);
+
+    CustomerWechat getCustomerWechat(@Param("customer_id")String customer_id);
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.willshuhua.adibioshop.dto.cart.AddCartItem;
 import com.willshuhua.adibioshop.dto.wechat_pay.JsPayParm;
 import com.willshuhua.adibioshop.dto.wechat_pay.ReturnPayNotify;
+import com.willshuhua.adibioshop.entity.CustomerWechat;
 import com.willshuhua.adibioshop.entity.PatientInfo;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
 import org.apache.log4j.Logger;
@@ -20,7 +21,11 @@ public class MainTest {
 
     private static Logger logger = Logger.getLogger(MainTest.class);
     public static void main(String[] args) throws Exception {
-        System.out.println(UUID.randomUUID().toString());
+        String temp = "{\"openid\":\"owNVIwdLGp07zeIjYZSlZTFDPak8\",\"nickname\":\"树华\",\"sex\":1,\"language\":\"zh_CN\",\"city\":\"深圳\",\"province\":\"广东\",\"country\":\"中国\",\"headimgurl\":\"http:\\/\\/wx.qlogo.cn\\/mmopen\\/vi_32\\/DYAIOgq83eoe2CG5B2YAM7Jib7CarDROfwY8EkEmnRjCMQb6BPYiaZQbYFQV70Fn9ASey9NLVBibl1POqmrrjeB8g\\/0\",\"privilege\":[]}";
+        Gson gson = new Gson();
+        CustomerWechat customerWechat = gson.fromJson(temp, CustomerWechat.class);
+        logger.info(customerWechat);
+//        System.out.println(UUID.randomUUID().toString());
 //        JsPayParm jsPayParm = new JsPayParm("1111","2222","3333","4444","5555","6666");
 //        List<CartItem> cartItemList = new ArrayList<>();
 //        cartItemList.add(new CartItem("12", "12", "32", 1));

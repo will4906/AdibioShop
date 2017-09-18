@@ -15,10 +15,9 @@ public class CustomerInterceptor implements HandlerInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
-        if (!uri.contains("index")){
+        if (!uri.contains("/index")){
             HttpSession httpSession = request.getSession();
             Customer customer = (Customer) httpSession.getAttribute("customer");
-            logger.info(customer);
             if (customer == null){
                 throw new Exception("Cant't find customer!");
             }

@@ -29,7 +29,7 @@ public class OrderController {
 //        if (customer == null){
 
 //        }
-        return new ModelAndView("my_order");
+        return new ModelAndView("/info/my_order");
     }
 
     @RequestMapping(value = "/order_info", method = RequestMethod.GET)

@@ -1,7 +1,9 @@
 package com.willshuhua.adibioshop.web;
 
 import com.willshuhua.adibioshop.dto.access.Authorization;
+import com.willshuhua.adibioshop.dto.info.SnsapiUserinfo;
 import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.entity.CustomerWechat;
 import com.willshuhua.adibioshop.entity.Product;
 import com.willshuhua.adibioshop.entity.cart.ShoppingCart;
 import com.willshuhua.adibioshop.properties.WechatProperties;
@@ -51,30 +53,30 @@ public class ProductController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpSession httpSession) throws IOException {
-//        String code = request.getParameter("code");
-//        String state = request.getParameter("state");
-//        logger.info("code===" + code);
-//        logger.info(httpSession);
-//        ModelAndView modelAndView  = new ModelAndView("index");
-//        if (code == null || code.equals("")){
-//            return modelAndView;
-//        }
-//        analyseCustomer(code, httpSession, false);
+        String code = request.getParameter("code");
+        String state = request.getParameter("state");
+        logger.info("code===" + code);
+        logger.info(httpSession);
+        ModelAndView modelAndView  = new ModelAndView("index");
+        if (code == null || code.equals("")){
+            return modelAndView;
+        }
+        analyseCustomer(code, httpSession, false);
 
 
 //        调试
-        Customer customer = new Customer();
-        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
-        customer.setWechat_id("owNVIwQFSY-BxMyKi10bqi_6761w");
-        httpSession.setAttribute("customer", customer);
+//        Customer customer = new Customer();
+//        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
+//        customer.setOpenid("owNVIwQFSY-BxMyKi10bqi_6761w");
+//        httpSession.setAttribute("customer", customer);
 
-        ModelAndView modelAndView  = new ModelAndView("index");
+//        ModelAndView modelAndView  = new ModelAndView("index");
         return modelAndView;
 
     }
     @RequestMapping(value = "/product_list", method = RequestMethod.GET)
     public ModelAndView productShow(HttpServletRequest request, HttpSession httpSession) throws IOException {
-        ModelAndView modelAndView  = new ModelAndView("product_list");
+        ModelAndView modelAndView  = new ModelAndView("/product/product_list");
         List<Product> productList = productService.queryAllProduct();
         modelAndView.addObject("productList", productList);
 
@@ -84,7 +86,7 @@ public class ProductController {
     @RequestMapping(value = "/product_detail", method = RequestMethod.GET)
     public ModelAndView productDetail(HttpServletRequest request){
         String productId = request.getParameter("product_id");
-        ModelAndView modelAndView = new ModelAndView("product_detail");
+        ModelAndView modelAndView = new ModelAndView("/product/product_detail");
         modelAndView.addObject("productId", productId);
         return modelAndView;
     }
@@ -134,6 +136,24 @@ public class ProductController {
             Customer customer = bindCustomer(ops, authorization, code);
             if (customer != null){
                 httpSession.setAttribute("customer", customer);
+                Call<CustomerWechat> wechatCall = wechatRequest.requestWechatInfo(authorization.getAccess_token(), customer.getOpenid(), "zh_CN");
+                wechatCall.enqueue(new Callback<CustomerWechat>() {
+                    @Override
+                    public void onResponse(Call<CustomerWechat> call, Response<CustomerWechat> response) {
+                        CustomerWechat customerWechat = response.body();
+                        logger.info(customerWechat);
+                        if (customerWechat == null || customerWechat.getOpenid() == null){
+                            return;
+                        }
+                        customerWechat.setCustomer_id(customer.getCustomer_id());
+                        customerService.addOrUpdateWechatInfo(customerWechat);
+                    }
+
+                    @Override
+                    public void onFailure(Call<CustomerWechat> call, Throwable t) {
+                        logger.error(t);
+                    }
+                });
             }
         }
     }
@@ -153,7 +173,7 @@ public class ProductController {
             Customer createCus = new Customer();
             String customerId = UUID.randomUUID().toString();
             createCus.setCustomer_id(customerId);
-            createCus.setWechat_id(openId);
+            createCus.setOpenid(openId);
             createCus.setRegister_time(new Date());
             customerService.createCustomerAccount(createCus);
             customer = createCus;

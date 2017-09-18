@@ -6,10 +6,12 @@ package com.willshuhua.adibioshop.retrofit.wechat;
 
 import com.willshuhua.adibioshop.dto.access.AccessToken;
 import com.willshuhua.adibioshop.dto.access.Authorization;
+import com.willshuhua.adibioshop.dto.info.SnsapiUserinfo;
 import com.willshuhua.adibioshop.dto.template.TemplateBack;
 import com.willshuhua.adibioshop.dto.template.WechatTemplate;
 import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrder;
 import com.willshuhua.adibioshop.dto.wechat_pay.UnifiedOrderBack;
+import com.willshuhua.adibioshop.entity.CustomerWechat;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -27,4 +29,8 @@ public interface WechatRequest {
 
     @POST("/pay/unifiedorder")
     Call<UnifiedOrderBack> requestUnifiedOrder(@Body UnifiedOrder unifiedOrder);
+
+    @GET("/sns/userinfo")
+//    Call<String> requestWechatInfo(@Query("access_token") String access_token, @Query("openid") String openid, @Query("lang") String lang);
+    Call<CustomerWechat> requestWechatInfo(@Query("access_token") String access_token, @Query("openid") String openid, @Query("lang") String lang);
 }

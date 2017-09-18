@@ -6,6 +6,7 @@ package com.willshuhua.adibioshop.service;
 
 import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.entity.CustomerWechat;
 import com.willshuhua.adibioshop.entity.PatientInfo;
 
 import java.util.List;
@@ -29,4 +30,7 @@ public interface CustomerService {
 
     void deletePatientInfo(String patient_infoid);
 
+    void addOrUpdateWechatInfo(CustomerWechat customerWechat);
+
+    CustomerWechat getCustomerWechat(String customer_id);
 }

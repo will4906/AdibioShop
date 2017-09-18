@@ -21,9 +21,6 @@ public class PatientController {
     @RequestMapping(value = "/patient_infos", method = RequestMethod.GET)
     public Object patientInfos(HttpSession httpSession){
         Customer customer = (Customer)httpSession.getAttribute("customer");
-        if (customer == null){
-            return new Result(Result.ERR, "can't find the customer");
-        }
         List<PatientInfo> patientInfoList = customerService.queryAllCustomerPatientInfos(customer.getCustomer_id());
         return new Result(Result.OK, patientInfoList);
     }
@@ -31,9 +28,6 @@ public class PatientController {
     @RequestMapping(value = "/update_patient_info", method = RequestMethod.POST)
     public Object updatePatientInfo(HttpSession httpSession, @ModelAttribute("patientInfo")PatientInfo patientInfo){
         Customer customer = (Customer)httpSession.getAttribute("customer");
-        if (customer == null){
-            return new Result(Result.ERR, "can't find the customer");
-        }
         PatientInfo targetPatientInfo = customerService.hasPatientInfoId(patientInfo.getPatient_infoid());
         if (targetPatientInfo != null){
             patientInfo.setCustomer_id(customer.getCustomer_id());
@@ -47,9 +41,6 @@ public class PatientController {
     @RequestMapping(value = "/delete_patient_info", method = RequestMethod.POST)
     public Object deletePatientInfo(HttpSession httpSession, @RequestParam("patient_infoid")String patient_infoid){
         Customer customer = (Customer)httpSession.getAttribute("customer");
-        if (customer == null){
-            return new Result(Result.ERR, "can't find the customer");
-        }
         customerService.deletePatientInfo(patient_infoid);
         return new Result(Result.OK);
     }
@@ -57,9 +48,6 @@ public class PatientController {
     @RequestMapping(value = "/add_patient_info", method = RequestMethod.POST)
     public Object addPatientInfo(HttpSession httpSession, @RequestBody PatientInfo patientInfo){
         Customer customer = (Customer)httpSession.getAttribute("customer");
-        if (customer == null){
-            return new Result(Result.ERR, "can't find the customer");
-        }
         patientInfo.setCountry("CHINA");
         PatientInfo patientInfo1 = customerService.hasPatientInfo(patientInfo);
         if (patientInfo1 == null){

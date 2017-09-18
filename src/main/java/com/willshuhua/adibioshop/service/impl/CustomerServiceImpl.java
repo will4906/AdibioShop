@@ -7,11 +7,13 @@ package com.willshuhua.adibioshop.service.impl;
 import com.willshuhua.adibioshop.dao.CustomerDao;
 import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.entity.CustomerWechat;
 import com.willshuhua.adibioshop.entity.PatientInfo;
 import com.willshuhua.adibioshop.service.CustomerService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -66,5 +68,22 @@ public class CustomerServiceImpl implements CustomerService {
     public void deletePatientInfo(String patient_infoid) {
         customerDao.deletePatientInfo(patient_infoid);
     }
+
+    @Transactional
+    @Override
+    public void addOrUpdateWechatInfo(CustomerWechat customerWechat) {
+        CustomerWechat wechat = customerDao.getCustomerWechat(customerWechat.getCustomer_id());
+        if (wechat == null){
+            customerDao.createCustomerWechat(customerWechat);
+        }else {
+            customerDao.updateCustomerWechat(customerWechat);
+        }
+    }
+
+    @Override
+    public CustomerWechat getCustomerWechat(String customer_id) {
+        return customerDao.getCustomerWechat(customer_id);
+    }
+
 
 }

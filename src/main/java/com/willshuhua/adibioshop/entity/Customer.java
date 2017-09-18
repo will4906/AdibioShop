@@ -15,7 +15,7 @@ public class Customer {
     private String customer_id;
     private String telphone;
     private String email;
-    private String wechat_id;
+    private String openid;
     private Date register_time;
 
 }

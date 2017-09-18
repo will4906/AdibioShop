@@ -3,7 +3,7 @@
   ~ Copyright (c) 2017. willshuhua.
   -->
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" style="height: 100%">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
@@ -18,13 +18,17 @@
 	<title>我的订单</title>
 	
 </head>
+<body style="height: 100%">
 	<header class="aui-bar aui-bar-nav" id="navbar">
 		<div class="aui-tab" id="tab">
-		    <div class="aui-tab-item aui-active">已完成</div>
-		    <div class="aui-tab-item">处理中</div>
+		    <div class="aui-tab-item aui-active">全部</div>
+		    <div class="aui-tab-item">待付款</div>
+            <div class="aui-tab-item">处理中</div>
+            <div class="aui-tab-item">已完成</div>
+            <div class="aui-tab-item">已取消</div>
 		</div>
 	</header>
-	<section class="aui-content-padded aui-refresh-content">
+	<section class="aui-content-padded aui-refresh-content" style="height: 100%;">
 		<div id="done" style="display: none">
 			<div class="aui-card-list" >
 		        <div class="aui-card-list-header">已完成</div>
@@ -66,10 +70,6 @@
 		</div>
 	   
 	</section>
-		 
-	</section>
-
-<h1>此页面仅供测试，暂未添加后台数据！摘要数据请到公众号中查看。</h1>
 </body>
 
 <script type="text/javascript">
