@@ -1,19 +1,20 @@
 package com.willshuhua.adibioshop.web;
 
+import com.willshuhua.adibioshop.define.order.OrderType;
 import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.entity.order.MyOrder;
+import com.willshuhua.adibioshop.entity.order.OrderQuery;
 import com.willshuhua.adibioshop.service.CustomerService;
 import com.willshuhua.adibioshop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class OrderController {
@@ -24,15 +25,43 @@ public class OrderController {
     private CustomerService customerService;
 
     @RequestMapping(value = "/my_order", method = RequestMethod.GET)
-    public ModelAndView myOrder(HttpServletRequest request, HttpSession httpSession){
-//        Customer customer = (Customer)httpSession.getAttribute("customer");
-//        if (customer == null){
-
-//        }
+    public ModelAndView myOrder(){
         return new ModelAndView("/info/my_order");
     }
 
-    @RequestMapping(value = "/order_info", method = RequestMethod.GET)
+    @RequestMapping(value = "/user_init_orders", method = RequestMethod.GET)
+    @ResponseBody
+    public Object userInitOrders(HttpSession httpSession, @RequestParam("type")String type){
+        Customer customer = (Customer)httpSession.getAttribute("customer");
+        OrderQuery orderQuery = new OrderQuery();
+        orderQuery.setCustomer_id(customer.getCustomer_id());
+        orderQuery.setLimit(10);
+        List<MyOrder> myOrderList = orderService.getTopServeralOrders(orderQuery, type);
+        return new Result(Result.OK, myOrderList);
+    }
+
+    @RequestMapping(value = "/type_orders", method = RequestMethod.GET)
+    @ResponseBody
+    public Object typeOrders(HttpSession httpSession, @RequestParam("type")String type){
+        Customer customer = (Customer)httpSession.getAttribute("customer");
+        switch (type){
+            case OrderType.ALL:
+                break;
+            case OrderType.UNPAID:
+                break;
+            case OrderType.PROCESSING:
+                break;
+            case OrderType.FINISHED:
+                break;
+            case OrderType.CANCELED:
+                break;
+            default:
+                return new Result(Result.ERR, "The type is error");
+        }
+        return new Result();
+    }
+
+    @RequestMapping(value = "/order_detail", method = RequestMethod.GET)
     @ResponseBody
     public Object orderInfo(@RequestParam("order_id")String orderId){
         return orderService.queryOrderInfoByOrderId(orderId);

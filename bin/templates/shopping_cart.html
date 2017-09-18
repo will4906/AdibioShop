@@ -1,90 +1,836 @@
-<span xmlns:th="http://www.thymeleaf.org">
-    <div class="weui-cells weui-cells_checkbox" id="content" style="height:calc(100% - 50px); top:0; overflow: scroll">
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
 
-    </div>
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+ <!--
+   <link rel="stylesheet" type="text/css" href="./AUI/css/aui.css" />
 
-    <span style="display: none;">
-        <div id='cartItem'>
-            <div class="weui-panel weui-panel_access">
-                <div class="weui-panel__bd">
-                    <div class="weui-cell">
-                        <label class="weui-cell__hd weui-check__label">
-                            <input type="checkbox" class="weui-check" name="checkbox" checked="checked">
-                            <i class="weui-icon-checked"></i>
-                            <input type="hidden" name="cart_info">
-                        </label> 
-                        <div class="weui-cell__bd">
-                            <div class="weui-media-box weui-media-box_appmsg">
-                                <div class="weui-media-box__hd">
-                                    <img class="weui-media-box__thumb"
-                                         src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505831449&di=bdfe5ce42a5f422a8cc4926dbd8d73a7&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.jsqq.net%2Fuploads%2Fallimg%2F140323%2F1_140323064336_4.jpg">
-                                </div>
-                                <div class="weui-media-box__bd">
-                                <h4 class="weui-media-box__title"
-                                    style="width:91px;word-wrap:break-word; word-break:normal;font-size: 13px;">
-                                    <span name="productName">产品名</span>
-                                </h4>
-                                    <div class="weui-media-box__desc">
-                                        <p>金额：￥<span name="money">123</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="weui-panel__ft">
-                    <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link" name="showPeople">
-                        <div class="weui-cell__hd"></div>
-                        <div class="weui-cell__bd">检测人</div>
-                        <span class="weui-cell__ft"></span>
-                    </a>
-                    <div class="people-ist" name=people_list style="display: none">
-                        <ul name="cart_patient_list">
-                        </ul>
-                        <div style="display:flex; justify-content:center; margin: 10px auto;">
-                            <div class="weui-btn weui-btn_mini weui-btn_primary" name="add">添加检测人</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </span>
+    <link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
+
+    <link rel="stylesheet" href="./jquery-weui/css/jquery-weui.css">
+-->
     
-    <div class="weui-btn weui-btn_primary" onclick="Buy()" style="position:fixed; bottom: 50px; width: 100%">购买</div>
+   <!-- <link data-th-href="@{/jquery-weui/css/jquery-weui.min.css}" rel="stylesheet"> -->
 
-    <script type="text/javascript" th:src="@{/js/cart.js}"></script>
-    <script type="text/javascript" th:inline="javascript">
-        function requestData(suffix, successFunc) {
-            var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
-            var path = context + suffix;
-            $.ajax({
-                url: path,
-                type: "GET",
-                async: true,
-                error: function (request) {
-                    alert("Connection error");
-                    $('#loadingToast').hide();
-                },
-                success: function (data) {
-                    successFunc(data);
+
+	
+	<title>购物车</title>
+
+</head>
+
+<body>
+
+<section class="" style="margin-bottom:5rem; " id=border>
+
+<div class="weui-cells weui-cells_checkbox"  id="content">
+
+
+</div>
+
+
+
+
+
+</section>
+
+<section class="templet">
+<div id='cartItem'>
+	<div class="weui-panel weui-panel_access" >
+		<div class="weui-panel__bd">
+			<div class="weui-cell">
+				<label class="weui-cell__hd weui-check__label">
+					<input type="checkbox" class="weui-check" name="checkbox" checked="checked">
+					<i class="weui-icon-checked"></i>
+					<input type="hidden" name="cart_info">
+				</label> 
+				<div class="weui-cell__bd">
+					<div class="weui-media-box weui-media-box_appmsg">
+						<div class="weui-media-box__hd">
+							<img class="weui-media-box__thumb" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505831449&di=bdfe5ce42a5f422a8cc4926dbd8d73a7&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.jsqq.net%2Fuploads%2Fallimg%2F140323%2F1_140323064336_4.jpg">
+						</div>
+						<div class="weui-media-box__bd">
+						<h4 class="weui-media-box__title" style="width:91px;word-wrap:break-word; word-break:normal;font-size: 13px;">
+							<span name="productName">产品名</span>
+						</h4>
+							<div class="weui-media-box__desc">
+								<p>金额：￥<span name="money">123<span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="weui-cell__ft" style="display:none">
+						<div class="aui-bar aui-bar-btn aui-bar-btn-sm" style="width:72px">
+							'<div class="aui-bar-btn-item" name="decrement">
+							'<i class="aui-iconfont aui-icon-minus"></i>
+						</div>
+						<div class="aui-bar-btn-item">
+							<input type="number" disabled="true" class="aui-input aui-text-center" value="'+cartData.parm[i].quantity+'" >
+						</div>
+						<div class="aui-bar-btn-item" name="increment">
+							<i class="aui-iconfont aui-icon-plus"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="weui-panel__ft">
+			<a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link" name="showPeople">
+				<div class="weui-cell__hd"></div>
+				<div class="weui-cell__bd">检测人</div>
+				<span class="weui-cell__ft"></span>
+			</a>
+			<div class="people-ist" name=people_list style="display: none">
+				<ul name="cart_patient_list">
+				</ul>
+				<div style="display:flex; justify-content:center; margin: 10px auto;">
+					<div class="weui-btn weui-btn_mini weui-btn_primary" name="add" id='addPatient'>添加检测人</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="cartPatientItem">
+	<li class="weui-cell weui-cell_link">
+		<input type="hidden" name="cart_patient_info">
+		<div class="weui-cell__bd"><span name="patientName">检测人姓名</span></div>
+		<div class="weui-cell__ft" >
+			<i class="weui-icon-cancel" name="delete_patient"></i>
+		</div>
+	</li>
+</div>
+
+<div id="customerPatientItem">
+	<div class="weui-cell" name='selectPatientItem'>
+		<div class="weui-cell__bd">
+			<span name="patientName">检测人</span>
+		</div>
+		<div class="weui-cell__ft" name="selectAdd">添加</div>
+		<input type="hidden" name="selectPatientInfo">
+	</div>
+</div>
+
+</section>
+
+<section>
+	<div id="pop_select" class="weui-popup__container popup-bottom weui-popup-overlay" style=" z-index: 999; ">
+		<div class="weui-popup__overlay"></div>
+		<div class="weui-popup__modal">
+			<div class="toolbar">
+				<div class="toolbar-inner">
+					<a href="javascript:;" class="picker-button close-popup">关闭</a>
+					<h1 class="title">添加检测人</h1>
+				</div>
+			</div>
+			<div class="modal-content">
+				<div class="weui-cells" id="selectPatientList">
+					<!--拥有的检测人信息-->
+				</div>
+				<div class="weui-btn weui-btn_mini weui-btn_primary " style="display:flex; justify-content:center;width: 40%; margin: 0.4em auto;" id='addNewPatient' name='add'>添加新的检测人</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="pop_write" class="weui-popup__container weui-popup-overlay" style="z-index: 999; ">
+		<div class="weui-popup__overlay"></div>
+		<div class="weui-popup__modal">
+			<section >
+				<form id="payinfo_form" name="inform" onchange="changed()" oninput="changed()">
+				
+					<div class="aui-content aui-margin-b-15">
+						<ul class="aui-list aui-from-list">
+							<li class="aui-list-header">填写信息（必填）</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">*姓名:</div>
+									<div class="aui-list-item-input">
+										<input type="text" placeholder="姓名" name="name">
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">*性别:</div>
+									<div class="aui-list-item-input">
+										<label><input class="aui-radio" type="radio" name="gender" value="M"
+											checked="true">男</label>
+										<label><input class="aui-radio" type="radio" name="gender" value="F">女</label>
+
+										</div>
+									</div>
+								</li>
+								<li class="aui-list-item">
+									<div class="aui-list-item-inner">
+										<div class="aui-list-item-label">*年龄:</div>
+										<div class="aui-list-item-input">
+											<input type="number" placeholder="年龄" name="age">
+										</div>
+									</div>
+								</li>
+								<li class="aui-list-item">
+									<div class="aui-list-item-inner">
+										<div class="aui-list-item-label">*邮寄地址:</div>
+										<div class="aui-list-item-input">
+											<input type="text" name="province" class="weui-input" value="" id="city-picker">
+										</div>
+									</div>
+								</li>
+								<li class="aui-list-item">
+									<div class="aui-list-item-inner">
+										<div class="aui-list-item-label"></div>
+										<div class="aui-list-item-input">
+											<input type="text" placeholder="详细地址" name="address">
+										</div>
+									</div>
+								</li>
+								<li class="aui-list-item">
+									<div class="aui-list-item-inner">
+										<div class="aui-list-item-label">*联系电话:</div>
+										<div class="aui-list-item-input">
+											<input type="number" placeholder="电话" name="phone">
+										</div>
+									</div>
+								</li>
+
+								<li class="aui-list-item" style="display: none">
+									<div class="aui-list-item-inner">
+										<div class="aui-list-item-label">*是否怀孕:</div>
+										<div class="aui-list-item-input">
+											<label><input class="aui-radio" type="radio" name="is_pregnant" value="1">是</label>
+											<label><input class="aui-radio" type="radio" name="is_pregnant" value="0"
+												checked="true">否</label>
+										</div>
+									</div>
+								</li>
+								<li class="aui-list-item">
+				                    <div class="aui-list-item-inner" style="display: flex;flex-direction: row;justify-content: left;">
+				                        <div class="">*是否有糖尿病史:</div>
+				                        <div class="" style="margin-left: 1em;">
+				                            <label><input class="aui-radio" type="radio" name="has_diabetic" value="1">是</label>
+				                            <label><input class="aui-radio" type="radio" name="has_diabetic" value="0"
+				                                          checked="true">否</label>
+
+				                        </div>
+				                    </div>
+				                </li>
+							</ul>
+						</div>
+					<div class="aui-content aui-margin-b-15">
+						<ul class="aui-list aui-from-list">
+							<li class="aui-list-header">其他信息（选题）</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">身高:</div>
+									<div class="aui-list-item-input">
+										<input type="number" placeholder="身高（cm）" name="height">
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">体重:</div>
+									<div class="aui-list-item-input">
+										<input type="number" placeholder="体重（kg）" name="weight">
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<!--&lt;!&ndash;/*@thymesVar id="product" type="com.willshuhua.entity.Product"*/&ndash;&gt;-->
+					<!--<input type="hidden" th:value="${product.product_id}" name="product_id">-->
+					<div class="aui-content aui-margin-b-15">
+						<ul class="aui-list aui-from-list">
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div style="display: flex;flex-direction: row">
+										<input class="aui-checkbox" type="radio" name="isagree" onclick="agreeClick(this)">
+										<p>阅读并同意该协议<a href="#">《协议》</a></p>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</form>
+				<div class="block">
+					<div class="Mask" id="mask"></div>
+					<div class="weui-btn weui-btn_primary" style="position: absolute;top: 0px;" id='patientInfoConfirm'>确认</div>
+				</div>
+				
+			</section>
+		</div>
+	</div>
+</section>
+
+<footer class="aui-bar aui-bar-tab" style="bottom: 2.25rem">
+
+	<div class="weui-btn weui-btn_primary aui-bar-tab-item"  onclick="Buy()" tapmode>购买</div>
+	
+</footer>
+
+<!--
+
+<script data-th-src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+-->
+
+<!--
+<script type = "text/javascript" src = "./jquery-3.2.1/jquery-3.2.1.min.js"></script> 
+
+<script type="text/javascript" src="./jquery-weui/js/jquery-weui.min.js"></script>
+
+<script src="./jquery-weui/js/city-picker.min.js"></script>
+-->
+
+<script type="text/javascript" th:inline="javascript">
+    var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
+    //var context = window.location.hostname;
+     var cartData={};
+
+	var unit_price=[];
+
+    function InitAll(){
+        GetCartData();
+    }
+    $(document).ready(InitAll());
+    //点击添加已有检测人或者添加新的检测人
+
+
+	//获取customer拥有的患者信息
+	function GetPatientInfo(cartItem){
+		var path = context + '/patient_infos';
+
+		var patientInfo = {};
+        $.showLoading();
+		$.ajax({
+		            cache: true,
+		            type: "GET",
+		            url: path,
+		           	data:'获取customer拥有的患者信息',
+                    dataType:"json",
+                    contentType: "application/json",
+		            async: true,
+		            error: function (request) {
+		                //错误
+		                patientInfo = 'error';
+		            },
+		            success: function (data) {
+                        $.hideLoading();
+						patientInfo = data;
+                        if(patientInfo.result=='ok'){
+                            //弹出检测人选择框
+                            DrawSelectPatient($('#selectPatientList'),patientInfo);
+                            $("#pop_select").popup();
+                            SelectAdd(cartItem);
+
+
+                        }else{
+                            alert('获取信息错误！');
+                        }
+		                
+		            }
+		        });
+
+	}
+
+	//获取购物车信息
+	function GetCartData(){
+	    cartData = {};
+        var path = context + '/show_cart_info';
+			//获取购物车信息
+        $.showLoading();
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: path,
+            contentType: "application/json",
+            dataType:'json',
+            async: true,
+            error: function (request) {
+                //错误
+            },
+            success: function (data) {
+                $.hideLoading();
+                cartData = data;
+                DrawCart();
+            }
+        });
+    }
+	//画出购物车  
+    function DrawCart(){
+    	$('#content').empty();
+    	var cartTemplet;
+        var isExist;
+        var productID = [];
+    	if (cartData.result=="ok") {
+    		for (var i = 0; i < cartData.parm.length ; i++) {
+    		    isExist = 0;
+                for(var j=0;j<productID.length;j++ ){
+                    if(productID[j]==cartData.parm[i].product_id){
+                        isExist = 1;
+                    }
                 }
+                if(isExist == 0){
+                    productID.push(cartData.parm[i].product_id);
+                    $('#cartItem').find('span[name=productName]').text(cartData.parm[i].product_name);
+                    $('#cartItem').find('span[name=money]').text(cartData.parm[i].whole_price);
+                    $('#cartItem').find('input:hidden[name=cart_info]').attr('id',cartData.parm[i].product_id);
+                    cartTemplet = $('#cartItem').find('div.weui-panel').clone();
+                    $('#content').append(cartTemplet);
+                    $('#content').find('#'+cartData.parm[i].product_id).data(cartData.parm[i]);
+                }
+    		}
+            PopSelect();
+            AddClickEven()
+    		//BindCartInfo();
+    	}else{
+    		alert('获取购物车信息失败');
+    	}
+    }
+    //注册弹出选择框事件
+    function  PopSelect() {
+        //弹出检测人框
+        $('a[name=showPeople]').click(function(e){
+            if($(this).is('.isShow')){
+                $('div[name=people_list]').slideUp();
+                $(this).removeClass('isShow');
+            }else{
+                //获得检测人信息，画出检测人框
+                GetCartPatient($(this));
+                $(this).next().slideDown();
+                $(this).addClass('isShow');
+            }
+        });
+    }
+
+    //注册点击添加检测人事件
+    function  AddClickEven() {
+        $("div[name=add]").click(function(e){
+            if ($(this).attr('id')=="addPatient") {
+                //弹出已保存的人名单，无保存的填写信息
+                //获取当前购物车项目信息
+                var cartItem = $(this).parents('div.weui-panel').find('input[name=cart_info]').data();
+                var patientInfo = GetPatientInfo(cartItem);
+            }else{
+                //弹出全屏的信息填写框
+                PatientInfoConfirm();
+                $("#pop_write").popup();
+            }
+        });
+    }
+	//画出购物车对应的检测人
+	function DrawCartPatient(obj,patientInfo){
+		//清空列表
+        obj.next().find("ul[name=cart_patient_list]").empty();
+        //draw
+        for (var i = 0; i < patientInfo.parm.length; i++) {
+            $('#cartPatientItem').find('span[name=patientName]').text(patientInfo.parm[i].name);
+            obj.next().find("ul[name=cart_patient_list]").append($('#cartPatientItem').find('li').clone());
+        }
+        //绑定数据
+        BindCartPatient(obj.next(),patientInfo);
+        //获取当前购物车项目信息
+        var cartItem = obj.parents('div.weui-panel').find('input[name=cart_info]').data();
+        //点击刪除检测人
+        ClickDelPatient(cartItem);
+	}
+
+	//查询购物车项目对应的患者信息
+	function GetCartPatient(cartItem){
+	    var cartInfo = cartItem.parent().prev().find("input:hidden[name=cart_info]").data();
+        var req = {};
+        req.cart_id = cartInfo.cart_id;
+        req.cart_itemid = cartInfo.cart_itemid;
+        req.product_id = cartInfo.product_id;
+        req.quantity = cartInfo.quantity;
+		var patientInfo;
+		var path = context + "/cart_patient_infos";
+        $.showLoading();
+		$.ajax({
+		            cache: true,
+		            type: "POST",
+		            url: path,
+		            data:JSON.stringify(req),
+		            dataType:"json",
+                    contentType: "application/json",
+		            async: true,
+		            error: function (request) {
+		                
+		            },
+		            success: function (data) {
+                        $.hideLoading();
+		                if(data.result=='ok'){
+                            patientInfo = data;
+                            DrawCartPatient(cartItem,patientInfo);
+                        }else{
+                            alert('获取该购物车项目对应的检测人信息失败');
+                        }
+		            }
+		        });
+	}
+	//绑定购物车检测人信息
+	function BindCartPatient(obj,patientInfo){
+	    if(patientInfo.parm.length>0){
+            obj.find('input:hidden').each(function(index,el){
+                $(this).data(patientInfo.parm[index]);
+            });
+        }
+	}
+
+	//画出选择检测人
+	function DrawSelectPatient(obj,patientData){
+		var selectPatientTemplet;
+		obj.empty();
+		for(var i=0;i<patientData.parm.length;i++){
+			$("#customerPatientItem").find('span[name=patientName]').text(patientData.parm[i].name);
+			selectPatientTemplet = $("#customerPatientItem").clone();
+			obj.append(selectPatientTemplet);
+		}
+		BindSelectPatient(obj,patientData);
+		
+
+
+	}
+	//点击刪除检测人
+	function ClickDelPatient(cartItem){
+		var req = {};
+
+		$('i[name=delete_patient]').click(function(e){
+				var patientInfo  = $(this).parent().prevAll('input:hidden').data();
+				req.cart_itemid = cartItem.cart_itemid;
+				req.cart_patient_infoid = patientInfo.cart_patient_infoid;
+				req.product_id = cartItem.product_id;
+				req.patient_infoid = patientInfo.patient_infoid;
+				DeleteCartPatientInfo(req);
+
+
+			});
+	}
+			
+	
+	//发送删除患者信息
+	function DeleteCartPatientInfo(req){
+		var path = context + "/reduce_cart_item";
+        $.showLoading();
+		$.ajax({
+            cache: true,
+            type: "POST",
+            url: path,
+            data: JSON.stringify(req),
+            dataType:"json",
+            contentType: "application/json",
+            async: true,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                $.hideLoading();
+                if(data.result=='ok'){
+                    InitAll();
+
+                }else{
+                    alert('删除失败');
+                }
+                
+            }
+        });
+	}
+
+	//select列表点击添加检测人
+	function SelectAdd(cartItem){
+		var req = {};
+		req.cartItem = {};
+		req.cartItem.cart_id = cartItem.cart_id;
+		req.cartItem.cart_itemid = cartItem.cart_itemid;
+		req.cartItem.product_id = cartItem.product_id;
+		req.cartItem.quantity = 1;
+		$('div[name=selectAdd').click(function(e){
+			req.patientInfo = $(this).next().data();
+			AddCartPatient(req);
+			$.closePopup();
+			InitAll();
+
+		})
+	}
+	
+	//发送增加数量
+	function AddCartPatient(req){
+		var path = context + '/add_cart';
+        $.showLoading();
+		$.ajax({
+				cache: true,
+				type: "POST",
+				url: path,
+				data:JSON.stringify(req),
+                dataType:"json",
+                contentType: "application/json",
+				async: true,
+				error: function (request) {
+
+				},
+				success: function (data) {
+                    $.hideLoading();
+
+				}
+			});
+	}
+
+	//绑定select列表检测人信息
+	function BindSelectPatient(obj,patientInfo){
+	    if(patientInfo.parm.length>0){
+            obj.find('input:hidden').each(function(index){
+                $(this).data(patientInfo.parm[index]);
             })
         }
-        function parseCartItem(result) {
-            $('#content').empty();
-            var cartTemplet;
-            for (var i = 0; i < result.parm.length; i++) {
-                $('#cartItem').find('span[name=productName]').html(result.parm[i].product_name);
-                $('#cartItem').find('span[name=money]').html(result.parm[i].unit_price * result.parm[i].quantity);
 
-                cartTemplet = $('#cartItem').clone();
-                cartTemplet.attr('id', 'cart_item' + i.toString);
-                $('#content').append(cartTemplet);
-            }
-            console.log(result.parm);
+	}
+
+   
+
+	//购买
+
+	function Buy(){
+		var path  = context + '/buy_cart_selects';
+		var reqBuy = [];
+		$('input[name="checkbox"]:checked').each(function(index){ 
+			
+			reqBuy.push($(this).nextAll('input:hidden').data());
+			delete reqBuy.product_name;
+			delete reqBuy.unit_price;
+		}); 
+		reqBuy.pop();
+		
+		if (reqBuy!='') {
+            $.showLoading();
+			$.ajax({
+	            cache: true,
+	            type: "POST",
+	            url: path,
+	            data: JSON.stringify(reqBuy),
+                dataType:"json",
+                contentType: "application/json",
+	            async: false,
+	            error: function (request) {
+                    $.hideLoading();
+	                alert("购买失败");
+	            },
+	            success: function (data) {
+                    $.hideLoading();
+	                if(data.result=='ok'){
+						//支付
+	                }
+	            }
+	        });
+		}
+		
+    }
+
+	//弹出的检测人信息填写页面代码
+
+	 //呼出省市选择器
+    $("#city-picker").cityPicker({
+        showDistrict: true
+    });
+
+
+    //radio按钮取消/选定
+    var aflag = true;
+    function agreeClick(id) {
+        id.checked = aflag;
+        aflag = !aflag;
+        changed();
+    }
+
+    //启用/禁用蒙版
+    function Mask(action){
+        if(action == 'hide'){
+            document.getElementById('mask').style.display="block";
+        }else{
+            document.getElementById('mask').style.display="none";
         }
-        $(document).ready(requestData('/show_cart_info', parseCartItem));
-    </script>
-</span>
+    }
+
+	//启用、禁用按钮
+    function changed() {
+        //阻止input-age内输入e
+        $('input[name=age]').val($('input[name=age]').val().replace(/^[e.]$/, ''));
+        $('input[name=phone]').val($('input[name=phone]').val().replace(/^[e.]$/, ''));
+        //遍历form的元素值
+        var arr = $('form').serializeArray();
+        var data = {};
+        //变成json格式
+        for (var item in arr) {
+            data[arr[item].name] = arr[item].value;
+        }
+        if (data.name == '' || data.name == ' ' || data.age == '' || data.age == ' ' || data.province == "" || data.address == '' || data.address == ' ' || data.phone == '' || data.phone == ' ' || (!data.isagree)) {
+            Mask('hide');
+        } else {
+            
+            Mask('unhide');
+            
+        }
+    }
+
+    function PatientInfoConfirm(){
+    	$('#patientInfoConfirm').click(function(e){
+    		//遍历form的元素值
+	       
+	        var arr = $('form').serializeArray();
+	        var phone = /^[1][3,5,8][0-9]{9}$/;
+	        var data = {};
+	        //变成json格式
+	        for (var item in arr) {
+	            data[arr[item].name] = arr[item].value;
+	        }
+	        //分割省市区
+	        var local = data.province.split(' ');
+	        data.province = local[0];
+	        data.city = local[1];
+	        data.district = local[2];
+
+	         if (data.height=='') {
+	            data.height=0;
+	        }
+	        if (data.weight=='') {
+	            data.weight=0;
+	        }
+
+	        //判断电话是否为手机
+	        if (!phone.test(data.phone)) {
+	            $.confirm({
+				title: '提示',
+				text: '电话格式错误！',
+				onOK: function () {
+			    //点击确认
+			    
+			},
+			onCancel: function () {
+			  	//点击取消
+
+			  }
+			});
+	            
+	        } else {
+	        	//发送新增加检测人
+	        	var path = context + '/add_patient_info';
+                $.showLoading();
+	        	$.ajax({
+		            cache: true,
+		            type: "POST",
+		            url: path,
+		            data: JSON.stringify(data),
+                    dataType:"json",
+                    contentType: "application/json",
+		            async: false,
+		            error: function (request) { 
+		                alert("发送添加新检测人请求失败");
+		            },
+		            success: function (data) {
+                        $.hideLoading();
+		                if(data.result=='ok'){
+		                    alert('添加新检测人成功');
+                        }else{
+                            alert('添加新检测人失败');
+                        }
+		            }
+		        });
+		        $.closePopup();
+	        	
+	        	
+	        }
+    	})
+    }
 
 
+
+</script>
+<style type="text/css">
+	.templet{
+		display: none;
+	}
+
+	.people-list{
+		margin-left: 10px;
+
+	}
+
+	.input-number {
+	  width: 80px;
+	  padding: 0 12px;
+	  vertical-align: top;
+	  text-align: center;
+	  outline: none;
+
+	}
+
+	.input-number,
+	.input-number-decrement,
+	.input-number-increment {
+	  border: 1px solid #dddddd;
+	  height: 40px;
+	  user-select: none;
+	}
+
+	.input-number-decrement,
+	.input-number-increment {
+	  display: inline-block;
+	  width: 30px;
+	  line-height: 38px;
+	  background: #f1f1f1;
+	  color: #444444;
+	  text-align: center;
+	  font-weight: bold;
+	  cursor: pointer;
+	}
+	.input-number-decrement:active,
+	.input-number-increment:active {
+	  background: #dddddd;
+	}
+
+	.input-number-decrement {
+	  border-right: none;
+	  border-radius: 0px 0 0 0px;
+	}
+
+	.input-number-increment {
+	  border-left: none;
+	  border-radius: 0 0px 0px 0;
+	}
+
+	.count-eare{
+		display: flex;
+		flex-direction: row;
+
+		width: 100px;
+		
+
+	}
+
+	 .block {
+        position: relative;
+    }
+
+	.Mask {
+		z-index: 1;
+		position: absolute;
+		width: 100%;
+		height: 2.5rem;
+		top: 0;
+		background-color: #eee;
+		opacity: 0.5
+	}
+
+    .beMask {
+        z-index: 1;
+        position: absolute;
+    }
+</style>
+</body>
+
+
+
+
+
+
+</html>

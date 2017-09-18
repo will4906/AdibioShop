@@ -53,4 +53,67 @@
         AND
         products.product_id = oi.product_id
     </select>
+
+    <select id="getTopServeralOrdersAll" resultType="MyOrder">
+        SELECT
+            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description,
+            order_items.order_itemid, order_items.product_id, order_items.quantity, products.product_name
+        FROM
+            orders, order_items, products
+        WHERE
+            customer_id = #{customer_id}
+            AND
+                orders.order_id = order_items.order_id
+            AND
+                products.product_id = order_items.product_id
+        ORDER BY
+            row_id
+        DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="getTimeToCanceledOrders" resultType="OrderEvent">
+        SELECT order_events.order_eventid, order_events.order_id, order_events.event_title, order_events.event_time
+        FROM orders, order_events
+        WHERE
+            orders.status = 'CREATION'
+            AND orders.customer_id = #{customer_id}
+            AND order_events.order_id = orders.order_id
+            AND now() - INTERVAL '15 minutes' > order_events.event_time
+    </select>
+
+    <select id="getTopServeralOrdersUnpaid" resultType="MyOrder">
+        SELECT
+            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description,
+            order_items.order_itemid, order_items.product_id, order_items.quantity, products.product_name
+        FROM
+            orders, order_items, products
+        WHERE
+            customer_id = #{customer_id}
+            AND
+            orders.order_id = order_items.order_id
+            AND
+            products.product_id = order_items.product_id
+            AND
+            status = #{status}
+        ORDER BY
+            row_id
+        DESC
+        LIMIT #{limit}
+    </select>
+
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

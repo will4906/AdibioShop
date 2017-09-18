@@ -145,9 +145,31 @@
             }
         })
     }
+    function requestPay() {
+        var buyPath = context + '/direct_pay';
+        $.ajax({
+            type: "POST",
+            url: buyPath,
+            data: {
+                "product_id": '1',
+                "patient_infoid": '2'
+            },
+            async: false,
+            error: function (request) {
+//                alert(request);
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.result === 'err') {
+                    alert(data.errMsg);
+                }
+            }
+        })
+    }
 
+    requestPay();
 //    requestBuyCzrtSelects();
-            requestReduceCartItem();
+//            requestReduceCartItem();
     //        requestAddCartItem();
 //    requestCartPatientInfos();
 </script>

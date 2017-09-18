@@ -116,7 +116,7 @@
 </section>
 
 <section>
-	<div id="pop_select" class="weui-popup__container popup-bottom weui-popup-overlay" style="z-index: 999; ">
+	<div id="pop_select" class="weui-popup__container popup-bottom weui-popup-overlay" style=" z-index: 999; ">
 		<div class="weui-popup__overlay"></div>
 		<div class="weui-popup__modal">
 			<div class="toolbar">
@@ -241,10 +241,22 @@
 					</div>
 					<!--&lt;!&ndash;/*@thymesVar id="product" type="com.willshuhua.entity.Product"*/&ndash;&gt;-->
 					<!--<input type="hidden" th:value="${product.product_id}" name="product_id">-->
+					<div class="aui-content aui-margin-b-15">
+						<ul class="aui-list aui-from-list">
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div style="display: flex;flex-direction: row">
+										<input class="aui-checkbox" type="radio" name="isagree" onclick="agreeClick(this)">
+										<p>阅读并同意该协议<a href="#">《协议》</a></p>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
 				</form>
 				<div class="block">
 					<div class="Mask" id="mask"></div>
-					<div class="weui-btn weui-btn_primary" id='patientInfoConfirm'>确认</div>
+					<div class="weui-btn weui-btn_primary" style="position: absolute;top: 0px;" id='patientInfoConfirm'>确认</div>
 				</div>
 				
 			</section>
@@ -278,14 +290,12 @@
 
 	var unit_price=[];
 
-	$(document).ready(InitAll()
-	);
+    function InitAll(){
+        GetCartData();
+    }
+    $(document).ready(InitAll());
+    //点击添加已有检测人或者添加新的检测人
 
-	function InitAll(){
-		GetCartData();
-		DrawCart();
-		init();
-	}
 
 	//获取customer拥有的患者信息
 	function GetPatientInfo(cartItem){
@@ -326,26 +336,27 @@
 
 	//获取购物车信息
 	function GetCartData(){
-	var path = context + '/show_cart_info';
+	    cartData = {};
+        var path = context + '/show_cart_info';
 			//获取购物车信息
-            $.showLoading();
-			$.ajax({
-	            cache: true,
-	            type: "GET",
-	            url: path,
-                contentType: "application/json",
-	            dataType:'json',
-	            async: false,
-	            error: function (request) {
-	                //错误
-	            },
-	            success: function (data) {
-                    $.hideLoading();
-					cartData = data;
-	            }
-	        });
-
-	    }
+        $.showLoading();
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: path,
+            contentType: "application/json",
+            dataType:'json',
+            async: true,
+            error: function (request) {
+                //错误
+            },
+            success: function (data) {
+                $.hideLoading();
+                cartData = data;
+                DrawCart();
+            }
+        });
+    }
 	//画出购物车  
     function DrawCart(){
     	$('#content').empty();
@@ -353,7 +364,6 @@
         var isExist;
         var productID = [];
     	if (cartData.result=="ok") {
-
     		for (var i = 0; i < cartData.parm.length ; i++) {
     		    isExist = 0;
                 for(var j=0;j<productID.length;j++ ){
@@ -370,40 +380,60 @@
                     $('#content').append(cartTemplet);
                     $('#content').find('#'+cartData.parm[i].product_id).data(cartData.parm[i]);
                 }
-
     		}
-    		
+            PopSelect();
+            AddClickEven()
     		//BindCartInfo();
-
-
     	}else{
     		alert('获取购物车信息失败');
     	}
+    }
+    //注册弹出选择框事件
+    function  PopSelect() {
+        //弹出检测人框
+        $('a[name=showPeople]').click(function(e){
+            if($(this).is('.isShow')){
+                $('div[name=people_list]').slideUp();
+                $(this).removeClass('isShow');
+            }else{
+                //获得检测人信息，画出检测人框
+                GetCartPatient($(this));
+                $(this).next().slideDown();
+                $(this).addClass('isShow');
+            }
+        });
+    }
 
+    //注册点击添加检测人事件
+    function  AddClickEven() {
+        $("div[name=add]").click(function(e){
+            if ($(this).attr('id')=="addPatient") {
+                //弹出已保存的人名单，无保存的填写信息
+                //获取当前购物车项目信息
+                var cartItem = $(this).parents('div.weui-panel').find('input[name=cart_info]').data();
+                var patientInfo = GetPatientInfo(cartItem);
+            }else{
+                //弹出全屏的信息填写框
+                PatientInfoConfirm();
+                $("#pop_write").popup();
+            }
+        });
     }
 	//画出购物车对应的检测人
 	function DrawCartPatient(obj,patientInfo){
 		//清空列表
         obj.next().find("ul[name=cart_patient_list]").empty();
-
         //draw
         for (var i = 0; i < patientInfo.parm.length; i++) {
             $('#cartPatientItem').find('span[name=patientName]').text(patientInfo.parm[i].name);
             obj.next().find("ul[name=cart_patient_list]").append($('#cartPatientItem').find('li').clone());
-
         }
-
         //绑定数据
         BindCartPatient(obj.next(),patientInfo);
-
-
         //获取当前购物车项目信息
         var cartItem = obj.parents('div.weui-panel').find('input[name=cart_info]').data();
         //点击刪除检测人
         ClickDelPatient(cartItem);
-			
-			
-
 	}
 
 	//查询购物车项目对应的患者信息
@@ -438,132 +468,15 @@
                         }
 		            }
 		        });
-
-
 	}
 	//绑定购物车检测人信息
 	function BindCartPatient(obj,patientInfo){
 	    if(patientInfo.parm.length>0){
             obj.find('input:hidden').each(function(index,el){
                 $(this).data(patientInfo.parm[index]);
-
             });
         }
-
-
 	}
-
-	
-	//购物车数据绑定
-	/*function BindCartInfo(){
-	    if(cartData.parm.length>0){
-            $("input[name=cart_info]").each(function(index){
-                $(this).data(cartData.parm[index]);
-
-                });
-        }
-
-	
-	}*/
-
-//初始化个别事件
-function init(){
-
-	//点击数量框减少按钮
-	/*$('div[name=decrement]').click(function Decrement(e){
-		var priceNode =  $(this).parent().parent().prev().find("p");
-		var countNode = $(this).next().children();
-		if (parseInt(countNode.val())>1) {
-			
-
-			countNode.val(parseInt(countNode.val())-1);
-			$.ajax({
-
-			});
-			priceNode.text("金额：￥"+(unit_price*countNode.val()));
-		}else{
-			$.confirm({
-				title: '确认删除',
-				text: '确认删除该订单吗？',
-				onOK: function () {
-
-			    $.ajax({
-
-			    });
-			    priceNode.parent().parent().remove();
-			},
-			onCancel: function () {
-			  	//点击取消
-
-			  }
-			});
-			
-		}
-	})*/
-
-
-
-	//点击数量框增加按钮
-	/*$('div[name=increment]').click(function Increment(e){
-		var priceNode =  $(this).parent().parent().prev().find("p");
-		var countNode = $(this).prev().children();
-		if (countNode.val()<9) {
-			var unit_price = GetUnitPrice($(this).parent().parent().prev().find("h4").text());
-			countNode.val(parseInt(countNode.val())+1);
-
-			
-
-			priceNode.text("金额：￥"+(unit_price*countNode.val()));
-		}
-		
-	});*/
-
-	//弹出检测人框
-	$('a[name=showPeople]').click(function(e){
-		if($(this).is('.isShow')){
-            $('div[name=people_list]').slideUp();
-            $(this).removeClass('isShow');
-        }else{
-            //获得检测人信息，画出检测人框
-            GetCartPatient($(this));
-            $(this).next().slideDown();
-            $(this).addClass('isShow');
-        }
-
-
-		
-		e.stopPropagation();
-	});
-
-	
-	//点击整个页面任意地方，收回检测人框
-	$(document).click(function(e){
-
-	});
-	
-	//点击添加已有检测人或者添加新的检测人
-	$("div[name=add]").click(function(e){
-
-		if ($(this).attr('id')=="addPatient") {
-			//弹出已保存的人名单，无保存的填写信息
-
-
-			//获取当前购物车项目信息
-			var cartItem = $(this).parents('div.weui-panel').find('input[name=cart_info]').data();
-
-            var patientInfo = GetPatientInfo(cartItem);
-
-
-		}else{
-
-			//弹出全屏的信息填写框
-			PatientInfoConfirm();
-			$("#pop_write").popup();
-		}
-		
-		e.stopPropagation();
-	});
-}
 
 	//画出选择检测人
 	function DrawSelectPatient(obj,patientData){
@@ -590,8 +503,8 @@ function init(){
 				req.product_id = cartItem.product_id;
 				req.patient_infoid = patientInfo.patient_infoid;
 				DeleteCartPatientInfo(req);
-				InitAll();
-				e.stopPropagation();
+
+
 			});
 	}
 			
@@ -614,6 +527,7 @@ function init(){
             success: function (data) {
                 $.hideLoading();
                 if(data.result=='ok'){
+                    InitAll();
 
                 }else{
                     alert('删除失败');
@@ -719,6 +633,15 @@ function init(){
         showDistrict: true
     });
 
+
+    //radio按钮取消/选定
+    var aflag = true;
+    function agreeClick(id) {
+        id.checked = aflag;
+        aflag = !aflag;
+        changed();
+    }
+
     //启用/禁用蒙版
     function Mask(action){
         if(action == 'hide'){
@@ -740,7 +663,7 @@ function init(){
         for (var item in arr) {
             data[arr[item].name] = arr[item].value;
         }
-        if (data.name == '' || data.name == ' ' || data.age == '' || data.age == ' ' || data.province == "" || data.address == '' || data.address == ' ' || data.phone == '' || data.phone == ' ') {
+        if (data.name == '' || data.name == ' ' || data.age == '' || data.age == ' ' || data.province == "" || data.address == '' || data.address == ' ' || data.phone == '' || data.phone == ' ' || (!data.isagree)) {
             Mask('hide');
         } else {
             
@@ -818,7 +741,9 @@ function init(){
 	        }
     	})
     }
-    
+
+
+
 </script>
 <style type="text/css">
 	.templet{
@@ -882,18 +807,19 @@ function init(){
 
 	}
 
-	 .black {
+	 .block {
         position: relative;
     }
 
-    .Mask {
-        z-index: 2;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: #eee;
-        opacity: 0.5
-    }
+	.Mask {
+		z-index: 1;
+		position: absolute;
+		width: 100%;
+		height: 2.5rem;
+		top: 0;
+		background-color: #eee;
+		opacity: 0.5
+	}
 
     .beMask {
         z-index: 1;

@@ -64,7 +64,8 @@ public class CartController {
     @ResponseBody
     public Object showCartInfo(HttpSession httpSession){
         Customer customer = (Customer)httpSession.getAttribute("customer");
-        return new Result(Result.OK, cartService.queryCartForCustomer(customer.getCustomer_id()));
+        List<ItemProduct> itemProductList = cartService.queryCartForCustomer(customer.getCustomer_id());
+        return new Result(Result.OK, itemProductList);
     }
 
     @RequestMapping(value = "/cart_patient_infos", method = RequestMethod.POST)

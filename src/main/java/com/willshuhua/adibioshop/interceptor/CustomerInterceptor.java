@@ -15,12 +15,16 @@ public class CustomerInterceptor implements HandlerInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
-        if (!uri.contains("/index")){
-            HttpSession httpSession = request.getSession();
-            Customer customer = (Customer) httpSession.getAttribute("customer");
-            if (customer == null){
-                throw new Exception("Cant't find customer!");
+        String[] allowUris = new String[]{"/index", "/message", "/wechat_pay_notify", "/error"};
+        for (String allow : allowUris){
+            if (uri.contains(allow)){
+                return true;
             }
+        }
+        HttpSession httpSession = request.getSession();
+        Customer customer = (Customer) httpSession.getAttribute("customer");
+        if (customer == null){
+            throw new Exception("Cant't find customer!");
         }
         return true;
     }

@@ -4,10 +4,8 @@
 
 package com.willshuhua.adibioshop.dao;
 
-import com.willshuhua.adibioshop.entity.order.Order;
-import com.willshuhua.adibioshop.entity.order.OrderEvent;
-import com.willshuhua.adibioshop.entity.order.OrderInfo;
-import com.willshuhua.adibioshop.entity.order.OrderItem;
+import com.willshuhua.adibioshop.entity.Customer;
+import com.willshuhua.adibioshop.entity.order.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -29,4 +27,18 @@ public interface OrderDao {
 
     List<Map<String,Object>> queryOrderInfoByOrderId(@Param("orderId") String orderId);
 
+    List<OrderEvent> getTimeToCanceledOrders(@Param("customer_id")String customer_id);
+    /**
+     * 查询顶部几个全类型订单
+     * @param orderQuery
+     * @return
+     */
+    List<MyOrder> getTopServeralOrdersAll(OrderQuery orderQuery);
+
+    /**
+     * 查询顶部几个未支付类型订单
+     * @param orderQuery
+     * @return
+     */
+    List<MyOrder> getTopServeralOrdersUnpaid(OrderQuery orderQuery);
 }

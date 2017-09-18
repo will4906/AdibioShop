@@ -22,7 +22,6 @@ public class WechatTool {
             }
         }
         sb.append("key=").append(apiKey);
-        System.out.println(sb.toString());
         return Encryption.md5(sb.toString()).toUpperCase();
     }
 }

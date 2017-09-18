@@ -8,4 +8,6 @@ public class OrderStatus {
 
     public static final String CREATION = "CREATION";
     public static final String PAID = "PAID";
+    public static final String FINISHED = "FINISHED";
+    public static final String CANCELED = "CANCELED";
 }

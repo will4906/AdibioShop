@@ -4,10 +4,7 @@
 
 package com.willshuhua.adibioshop.service;
 
-import com.willshuhua.adibioshop.entity.order.Order;
-import com.willshuhua.adibioshop.entity.order.OrderEvent;
-import com.willshuhua.adibioshop.entity.order.OrderInfo;
-import com.willshuhua.adibioshop.entity.order.OrderItem;
+import com.willshuhua.adibioshop.entity.order.*;
 
 import java.util.List;
 import java.util.Map;
@@ -22,4 +19,11 @@ public interface OrderService {
 
     List<Map<String,Object>> queryOrderInfoByOrderId(String orderId);
 
+    /**
+     * 获取头几个订单
+     * @param orderQuery
+     * @param type
+     * @return
+     */
+    List<MyOrder> getTopServeralOrders(OrderQuery orderQuery, String type);
 }

@@ -53,24 +53,24 @@ public class ProductController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpSession httpSession) throws IOException {
-        String code = request.getParameter("code");
-        String state = request.getParameter("state");
-        logger.info("code===" + code);
-        logger.info(httpSession);
-        ModelAndView modelAndView  = new ModelAndView("index");
-        if (code == null || code.equals("")){
-            return modelAndView;
-        }
-        analyseCustomer(code, httpSession, false);
+//        String code = request.getParameter("code");
+//        String state = request.getParameter("state");
+//        logger.info("code===" + code);
+//        logger.info(httpSession);
+//        ModelAndView modelAndView  = new ModelAndView("index");
+//        if (code == null || code.equals("")){
+//            return modelAndView;
+//        }
+//        analyseCustomer(code, httpSession, false);
 
 
 //        调试
-//        Customer customer = new Customer();
-//        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
-//        customer.setOpenid("owNVIwQFSY-BxMyKi10bqi_6761w");
-//        httpSession.setAttribute("customer", customer);
+        Customer customer = new Customer();
+        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
+        customer.setOpenid("owNVIwQFSY-BxMyKi10bqi_6761w");
+        httpSession.setAttribute("customer", customer);
 
-//        ModelAndView modelAndView  = new ModelAndView("index");
+        ModelAndView modelAndView  = new ModelAndView("index");
         return modelAndView;
 
     }
@@ -84,10 +84,14 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/product_detail", method = RequestMethod.GET)
-    public ModelAndView productDetail(HttpServletRequest request){
+    public ModelAndView productDetail(HttpServletRequest request) throws Exception {
         String productId = request.getParameter("product_id");
         ModelAndView modelAndView = new ModelAndView("/product/product_detail");
-        modelAndView.addObject("productId", productId);
+        Product product = productService.queryProductByProductId(productId);
+        if (product == null){
+            throw new Exception("Can't find the product");
+        }
+        modelAndView.addObject("product", product);
         return modelAndView;
     }
 

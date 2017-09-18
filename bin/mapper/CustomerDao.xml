@@ -45,4 +45,23 @@
         WHERE patient_infos.customer_id = #{customer_id}
     </select>
 
+    <insert id="createCustomerWechat">
+        INSERT INTO
+            customer_wechats(customer_id, openid, refresh_token, retoken_time, nickname, sex, province, city, country, headimgurl, unionid)
+        VALUES
+            (#{customer_id}, #{openid}, #{refresh_token}, #{retoken_time}, #{nickname}, #{sex}, #{province}, #{city}, #{country}, #{headimgurl}, #{unionid})
+    </insert>
+
+    <update id="updateCustomerWechat">
+        UPDATE customer_wechats SET
+            refresh_token = #{refresh_token}, retoken_time = #{retoken_time}, nickname = #{nickname}, sex = #{sex}, province = #{province}, city = #{city},
+            country = #{country}, headimgurl = #{headimgurl}, unionid = #{unionid}
+        WHERE
+            customer_id = #{customer_id}
+    </update>
+
+    <select id="getCustomerWechat" resultType="CustomerWechat">
+        SELECT customer_id, openid, refresh_token, retoken_time, nickname, sex, province, city, country, headimgurl, unionid FROM customer_wechats
+        WHERE customer_wechats.customer_id = #{customer_id}
+    </select>
 </mapper>

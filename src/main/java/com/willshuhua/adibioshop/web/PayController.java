@@ -86,6 +86,8 @@ public class PayController {
     @ResponseBody
     public Object directPay(HttpServletRequest request, HttpSession httpSession, @RequestParam("patient_infoid")String patientInfoId, @RequestParam("product_id")String productId) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
         Customer customer = (Customer) httpSession.getAttribute("customer");
+        logger.info("patient_Infoid===" + patientInfoId);
+        logger.info("product_id===" + productId);
         if (patientInfoId == null || productId == null){
             return new Result(Result.ERR, "the parameter is error!");
         }
@@ -175,74 +177,9 @@ public class PayController {
     }
     * */
 
-
-    private Result notifyUnifiedOrder(HttpServletRequest request, Order order, String orderName, Customer customer) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
-//        TODO:还得做用户取消支付的删除订单，和超时未支付的订单取消
-        UnifiedOrder unifiedOrder = new UnifiedOrder();
-
-        String appId = wechatProperties.getAppid();
-        String muh_id = wechatProperties.getMch_id();
-        String nonce_str = Encryption.md5(UUID.randomUUID().toString());
-        String body = wechatProperties.getMerchant() + "-" + orderName;
-        String out_trade_no = order.getOrder_id();
-        String total_fee = order.getPrice().multiply(new BigDecimal(100)).toBigInteger().toString();
-        String spbill_create_ip = request.getRemoteAddr();
-        String notify_url = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/wechat_pay_notify";
-        String trade_type = "JSAPI";
-        String openid = customer.getOpenid();
-
-        unifiedOrder.setAppid(appId);
-        unifiedOrder.setMch_id(muh_id);
-        unifiedOrder.setNonce_str(nonce_str);
-        unifiedOrder.setBody(body);
-        unifiedOrder.setOut_trade_no(out_trade_no);
-        unifiedOrder.setTotal_fee(total_fee);
-        unifiedOrder.setSpbill_create_ip(spbill_create_ip);
-        unifiedOrder.setNotify_url(notify_url);
-        unifiedOrder.setTrade_type(trade_type);
-        unifiedOrder.setOpenid(openid);
-        //计算sign
-        SortedMap<String, String> sortedMap = BeanUtil.beanToMap(unifiedOrder);
-        if (sortedMap == null){
-            return new Result(Result.ERR, "Can't parse the order.");
-        }
-        String sign = WechatTool.generateMD5PaySign(sortedMap, wechatProperties.getApikey());
-        unifiedOrder.setSign(sign);
-
-        Retrofit retrofit = retrofitManager.getXmlRetrofit();
-        WechatRequest wechatRequest = retrofit.create(WechatRequest.class);
-
-        Call<UnifiedOrderBack> unifiedOrderBackCall = wechatRequest.requestUnifiedOrder(unifiedOrder);
-        Response<UnifiedOrderBack> backResponse = unifiedOrderBackCall.execute();
-        UnifiedOrderBack unifiedOrderBack = backResponse.body();
-
-        JsPayParm jsPayParm = new JsPayParm();
-        if (unifiedOrderBack != null){
-            jsPayParm.setAppId(wechatProperties.getAppid());
-            jsPayParm.setPackage_sign_cut("prepay_id=" + unifiedOrderBack.getPrepay_id());
-            jsPayParm.setNonceStr(Encryption.md5(UUID.randomUUID().toString()));
-            jsPayParm.setTimeStamp(String.valueOf(new Date().getTime() / 1000));
-            jsPayParm.setSignType("MD5");
-
-            //计算sign
-            SortedMap<String, String> jsSortMap = BeanUtil.beanToMap(jsPayParm);
-            if (jsSortMap == null){
-                return new Result(Result.ERR, "Can't parse the order.");
-            }
-            String paySign = WechatTool.generateMD5PaySign(jsSortMap, wechatProperties.getApikey());
-            jsPayParm.setPaySign(paySign);
-
-            return new Result(Result.OK, jsPayParm);
-        }else {
-            return new Result(Result.ERR, "Happened some errors!");
-        }
-
-//        return new Result();
-    }
-
     @RequestMapping(value = "/buy_cart_selects", method = RequestMethod.POST)
     @ResponseBody
-    public Object buyCartSelects(HttpServletRequest request, HttpSession httpSession, @RequestBody List<CartItem> cartItemList) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
+    public Object buyCartSelects2(HttpServletRequest request, HttpSession httpSession, @RequestBody List<CartItem> cartItemList) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
         Customer customer = (Customer)httpSession.getAttribute("customer");
         if (customer == null){
             return new Result(Result.ERR, "Can't find the customer");
@@ -363,6 +300,68 @@ public class PayController {
             }
         });
         return result;
+    }
+
+    private Result notifyUnifiedOrder(HttpServletRequest request, Order order, String orderName, Customer customer) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
+//        TODO:还得做用户取消支付的删除订单，和超时未支付的订单取消
+        UnifiedOrder unifiedOrder = new UnifiedOrder();
+
+        String appId = wechatProperties.getAppid();
+        String muh_id = wechatProperties.getMch_id();
+        String nonce_str = Encryption.md5(UUID.randomUUID().toString());
+        String body = wechatProperties.getMerchant() + "-" + orderName;
+        String out_trade_no = order.getOrder_id();
+        String total_fee = order.getPrice().multiply(new BigDecimal(100)).toBigInteger().toString();
+        String spbill_create_ip = request.getRemoteAddr();
+        String notify_url = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/wechat_pay_notify";
+        String trade_type = "JSAPI";
+        String openid = customer.getOpenid();
+
+        unifiedOrder.setAppid(appId);
+        unifiedOrder.setMch_id(muh_id);
+        unifiedOrder.setNonce_str(nonce_str);
+        unifiedOrder.setBody(body);
+        unifiedOrder.setOut_trade_no(out_trade_no);
+        unifiedOrder.setTotal_fee(total_fee);
+        unifiedOrder.setSpbill_create_ip(spbill_create_ip);
+        unifiedOrder.setNotify_url(notify_url);
+        unifiedOrder.setTrade_type(trade_type);
+        unifiedOrder.setOpenid(openid);
+        //计算sign
+        SortedMap<String, String> sortedMap = BeanUtil.beanToMap(unifiedOrder);
+        if (sortedMap == null){
+            return new Result(Result.ERR, "Can't parse the order.");
+        }
+        String sign = WechatTool.generateMD5PaySign(sortedMap, wechatProperties.getApikey());
+        unifiedOrder.setSign(sign);
+
+        Retrofit retrofit = retrofitManager.getXmlRetrofit();
+        WechatRequest wechatRequest = retrofit.create(WechatRequest.class);
+
+        Call<UnifiedOrderBack> unifiedOrderBackCall = wechatRequest.requestUnifiedOrder(unifiedOrder);
+        Response<UnifiedOrderBack> backResponse = unifiedOrderBackCall.execute();
+        UnifiedOrderBack unifiedOrderBack = backResponse.body();
+
+        JsPayParm jsPayParm = new JsPayParm();
+        if (unifiedOrderBack != null){
+            jsPayParm.setAppId(wechatProperties.getAppid());
+            jsPayParm.setPackage_sign_cut("prepay_id=" + unifiedOrderBack.getPrepay_id());
+            jsPayParm.setNonceStr(Encryption.md5(UUID.randomUUID().toString()));
+            jsPayParm.setTimeStamp(String.valueOf(new Date().getTime() / 1000));
+            jsPayParm.setSignType("MD5");
+
+            //计算sign
+            SortedMap<String, String> jsSortMap = BeanUtil.beanToMap(jsPayParm);
+            if (jsSortMap == null){
+                return new Result(Result.ERR, "Can't parse the order.");
+            }
+            String paySign = WechatTool.generateMD5PaySign(jsSortMap, wechatProperties.getApikey());
+            jsPayParm.setPaySign(paySign);
+
+            return new Result(Result.OK, jsPayParm);
+        }else {
+            return new Result(Result.ERR, "Happened some errors!");
+        }
     }
 
 }
