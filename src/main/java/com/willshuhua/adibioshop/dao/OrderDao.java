@@ -50,4 +50,25 @@ public interface OrderDao {
      * @return
      */
     List<MyOrder> getTopServeralOrdersProcessing(OrderQuery orderQuery);
+
+    /**
+     * 获取具有起始位的部分全部类型订单
+     * @param orderQuery
+     * @return
+     */
+    List<MyOrder> getPartServeralOrdersAll(OrderQuery orderQuery);
+
+    /**
+     * 根据状态查询具有起始位的部分订单
+     * @param orderQuery
+     * @return
+     */
+    List<MyOrder> getPartServeralOrdersByStatus(OrderQuery orderQuery);
+
+    /**
+     * 获取处理中的具有起始位的部分订单
+     * @param orderQuery
+     * @return
+     */
+    List<MyOrder> getPartServeralOrdersProcessing(OrderQuery orderQuery);
 }

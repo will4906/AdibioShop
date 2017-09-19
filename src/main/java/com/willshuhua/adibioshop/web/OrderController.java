@@ -40,12 +40,16 @@ public class OrderController {
         return new Result(Result.OK, myOrderList);
     }
 
-    @RequestMapping(value = "/type_orders", method = RequestMethod.GET)
+    @RequestMapping(value = "/load_more_orders", method = RequestMethod.GET)
     @ResponseBody
-    public Object typeOrders(HttpSession httpSession, @RequestParam("type")String type){
+    public Object typeOrders(HttpSession httpSession, @RequestParam("type")String type, @RequestParam("row_id")long row_id){
         Customer customer = (Customer)httpSession.getAttribute("customer");
-
-        return new Result();
+        OrderQuery orderQuery = new OrderQuery();
+        orderQuery.setRow_id(row_id);
+        orderQuery.setCustomer_id(customer.getCustomer_id());
+        orderQuery.setLimit(10);
+        List<MyOrder> myOrderList = orderService.getPartServeralOrders(orderQuery, type);
+        return new Result(Result.OK, myOrderList);
     }
 
     @RequestMapping(value = "/order_detail", method = RequestMethod.GET)

@@ -20,6 +20,9 @@ public interface OrderService {
     List<Map<String,Object>> queryOrderInfoByOrderId(String orderId);
 
     void setOrderPreviewsToMyOrders(List<MyOrder> myOrderList);
+
+    void cancelOrders(String customer_id);
+
     /**
      * 获取头几个订单
      * @param orderQuery
@@ -29,4 +32,6 @@ public interface OrderService {
     List<MyOrder> getTopServeralOrders(OrderQuery orderQuery, String type);
 
     List<MyOrder> getPartServeralOrders(OrderQuery orderQuery, String type);
+
+
 }

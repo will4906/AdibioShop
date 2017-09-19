@@ -68,23 +68,29 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public void cancelOrders(String customer_id) {
+        List<OrderEvent> orderEventList = orderDao.getTimeToCanceledOrders(customer_id);
+        for (OrderEvent orderEvent : orderEventList) {
+            OrderEvent orderEvent1 = new OrderEvent(UUID.randomUUID().toString(), orderEvent.getOrder_id(),
+                    new Date(orderEvent.getEvent_time().getTime() + 15 * 60 * 1000L), OrderStatus.CANCELED, customer_id, null);
+            changeOrderStatus(orderEvent1);
+        }
+    }
+
     @Transactional
     @Override
     public List<MyOrder> getTopServeralOrders(OrderQuery orderQuery, String type) {
         switch (type) {
             case OrderType.ALL: {
+                cancelOrders(orderQuery.getCustomer_id());
                 List<MyOrder> myOrderList = orderDao.getTopServeralOrdersAll(orderQuery);
                 setOrderPreviewsToMyOrders(myOrderList);
                 return myOrderList;
             }
             case OrderType.UNPAID: {
                 orderQuery.setStatus(OrderStatus.CREATION);
-                List<OrderEvent> orderEventList = orderDao.getTimeToCanceledOrders(orderQuery.getCustomer_id());
-                for (OrderEvent orderEvent : orderEventList) {
-                    OrderEvent orderEvent1 = new OrderEvent(UUID.randomUUID().toString(), orderEvent.getOrder_id(),
-                            new Date(orderEvent.getEvent_time().getTime() + 15 * 60 * 1000L), OrderStatus.CANCELED, orderQuery.getCustomer_id(), null);
-                    changeOrderStatus(orderEvent1);
-                }
+                cancelOrders(orderQuery.getCustomer_id());
                 List<MyOrder> myOrderList = orderDao.getTopServeralOrdersByStatus(orderQuery);
                 setOrderPreviewsToMyOrders(myOrderList);
                 return myOrderList;
@@ -98,13 +104,7 @@ public class OrderServiceImpl implements OrderService {
                 break;
             case OrderType.CANCELED:{
                 orderQuery.setStatus(OrderStatus.CANCELED);
-                List<OrderEvent> orderEventList = orderDao.getTimeToCanceledOrders(orderQuery.getCustomer_id());
-                logger.info("orderEventList==-==" + orderEventList);
-                for (OrderEvent orderEvent : orderEventList) {
-                    OrderEvent orderEvent1 = new OrderEvent(UUID.randomUUID().toString(), orderEvent.getOrder_id(),
-                            new Date(orderEvent.getEvent_time().getTime() + 15 * 60 * 1000L), OrderStatus.CANCELED, orderQuery.getCustomer_id(), null);
-                    changeOrderStatus(orderEvent1);
-                }
+                cancelOrders(orderQuery.getCustomer_id());
                 List<MyOrder> myOrderList = orderDao.getTopServeralOrdersByStatus(orderQuery);
                 setOrderPreviewsToMyOrders(myOrderList);
                 return myOrderList;
@@ -117,6 +117,37 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<MyOrder> getPartServeralOrders(OrderQuery orderQuery, String type) {
+        switch (type) {
+            case OrderType.ALL: {
+                cancelOrders(orderQuery.getCustomer_id());
+                List<MyOrder> myOrderList = orderDao.getPartServeralOrdersAll(orderQuery);
+                setOrderPreviewsToMyOrders(myOrderList);
+                return myOrderList;
+            }
+            case OrderType.UNPAID: {
+                orderQuery.setStatus(OrderStatus.CREATION);
+                cancelOrders(orderQuery.getCustomer_id());
+                List<MyOrder> myOrderList = orderDao.getPartServeralOrdersByStatus(orderQuery);
+                setOrderPreviewsToMyOrders(myOrderList);
+                return myOrderList;
+            }
+            case OrderType.PROCESSING:{
+                List<MyOrder> myOrderList = orderDao.getPartServeralOrdersProcessing(orderQuery);
+                setOrderPreviewsToMyOrders(myOrderList);
+                return myOrderList;
+            }
+            case OrderType.FINISHED:
+                break;
+            case OrderType.CANCELED:{
+                orderQuery.setStatus(OrderStatus.CANCELED);
+                cancelOrders(orderQuery.getCustomer_id());
+                List<MyOrder> myOrderList = orderDao.getPartServeralOrdersByStatus(orderQuery);
+                setOrderPreviewsToMyOrders(myOrderList);
+                return myOrderList;
+            }
+            default:
+                return null;
+        }
         return null;
     }
 }
