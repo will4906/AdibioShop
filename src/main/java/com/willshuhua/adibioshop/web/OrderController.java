@@ -2,6 +2,7 @@ package com.willshuhua.adibioshop.web;
 
 import com.willshuhua.adibioshop.define.order.OrderType;
 import com.willshuhua.adibioshop.dto.common.Result;
+import com.willshuhua.adibioshop.dto.order.OrderDetail;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.order.MyOrder;
 import com.willshuhua.adibioshop.entity.order.OrderQuery;
@@ -53,9 +54,22 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/order_detail", method = RequestMethod.GET)
-    @ResponseBody
-    public Object orderInfo(@RequestParam("order_id")String orderId){
-        return orderService.queryOrderInfoByOrderId(orderId);
+    public ModelAndView orderInfo(HttpServletRequest request, @RequestParam("order_id")String orderId) throws Exception {
+        String code = request.getParameter("code");
+        String state = request.getParameter("state");
+        if (code == null || code.equals("")){
+            HttpSession httpSession = request.getSession();
+            Customer customer = (Customer)httpSession.getAttribute("customer");
+            if (customer == null){
+                throw new Exception("Can't find the customer!");
+            }
+        }else {
+            //TODO:处理订单详情
+        }
+        OrderDetail orderDetail = orderService.getOrderDetail(orderId);
+        ModelAndView modelAndView = new ModelAndView("/info/order_detail");
+        modelAndView.addObject("orderDetail", orderDetail);
+        return modelAndView;
     }
 
 }

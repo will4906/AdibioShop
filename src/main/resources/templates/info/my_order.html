@@ -3,23 +3,24 @@
   ~ Copyright (c) 2017. willshuhua.
   -->
 
-<html xmlns:th="http://www.thymeleaf.org" style="height: 100%">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
 	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-
 	<link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/jquery-weui.css}"/>
 	<link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/weui.min.css}">
-
 	<link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui.css}" />
+	<!--<link rel="stylesheet" type="text/css" href="../../jquery-weui/css/jquery-weui.css"/>-->
+	<!--<link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">-->
+	<!--<link rel="stylesheet" type="text/css" href="../../AUI/css/aui.css" />-->
 
 	<title>我的订单</title>
 	
 </head>
 <body style="">
 	<div class="weui-tab" id='page-infinite-navbar'>
-		<div class="weui-navbar">
+		<div class="weui-navbar" style="position: fixed;top: 0;">
 			<a href='#tab1' class="weui-navbar__item weui-bar__item--on">
 				全部
 			</a>
@@ -36,28 +37,13 @@
 				已取消
 			</a>
 		</div>
-		<div class="weui-tab__bd">
+		<div class="weui-tab__bd" style="position: relative; overflow-y:scroll; widows: 100%">
 			<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
 				<h1 class="doc-head"></h1>
-				<!--all list-->
-				<div class="content-padded aui-content-padded">
+				<!--*******all list********-->
+				<div class="content-padded aui-content-padded"  id="allList">
 					<!--all item-->
-					<div class="aui-card-list">
-						<div class="aui-card-list-header"><span name="all_statusTop">已完成</span></div>
-						<div class="aui-card-list-content-padded">
-							<div class="aui-row aui-row-padded">
-								<div class="aui-col-xs-8">订单编号:<span name="all_orderID">123456123456</span></div>
-								<div class="aui-col-xs-4 aui-pull-right">
-									<div></div>
-									<div>金额:￥<span name="all_money">50</span></div>
-								</div>
-							</div>
-						</div>
-						<div class="aui-card-list-footer">
-							<div class=" aui-pull-left">下单时间：<span name="all_time">2017-08-24 15:30:10</span></div>
-							<div class=" aui-pull-right"><span name="all_statusBottom">已完成</span></div>
-						</div>
-					</div>
+					
 					<!--all item-->
 				</div>
 				<div class="weui-loadmore">
@@ -67,10 +53,10 @@
 			</div>
 			<div id="tab2" class="weui-tab__bd-item">
 				<h1 class="doc-head"></h1>
-				<!--paying list-->
-				<div class="content-padded aui-content-padded">
+				<!--******paying list*******-->
+				<div class="content-padded aui-content-padded" id="payingList">
 					<!--paying item-->
-
+					
 					<!--paying item-->
 				</div>
 				<div class="weui-loadmore">
@@ -80,10 +66,10 @@
 			</div>
 			<div id="tab3" class="weui-tab__bd-item">
 				<h1 class="doc-head"></h1>
-				<!--handing list-->
-				<div class="content-padded aui-content-padded">
+				<!--**********handing list**********-->
+				<div class="content-padded aui-content-padded" id="handingList">
 					<!--handing item-->
-
+					
 					<!--hanfing item-->
 				</div>
 				<div class="weui-loadmore">
@@ -93,8 +79,8 @@
 			</div>
 			<div id="tab4" class="weui-tab__bd-item">
 				<h1 class="doc-head"></h1>
-				<!--done list-->
-				<div class="content-padded aui-content-padded">
+				<!--***********done list**************-->
+				<div class="content-padded aui-content-padded" id="doneList">
 					<!--done item-->
 
 					<!--done item-->
@@ -106,8 +92,8 @@
 			</div>
 			<div id="tab5" class="weui-tab__bd-item">
 				<h1 class="doc-head"></h1>
-				<!--cancel list-->
-				<div class="content-padded aui-content-padded">
+				<!--*************cancel list**********-->
+				<div class="content-padded aui-content-padded" id="cancelList">
 					<!--cancel item-->
 
 					<!--cancel item-->
@@ -124,43 +110,46 @@
 	<!--item temple-->
 	<section id='templet' style="display: none;">
 		<!--all-->
-		<div id="paying_templet">
-			<div class="aui-card-list">
-				<div class="aui-card-list-header"><span name="all_statusTop">已完成</span></div>
+		<div id="all_templet">
+			<div class="aui-card-list" name='allList'>
+				<input type="hidden" name="orderData">
+				<div class="aui-card-list-header order-status_done"><span name="status">已完成</span></div>
 				<div class="aui-card-list-content-padded">
 					<div class="aui-row aui-row-padded">
-						<div class="aui-col-xs-8">订单编号:<span name="all_orderID">123456123456</span></div>
-						<div class="aui-col-xs-4 aui-pull-right">
-							<div></div>
-							<div>金额:￥<span name="all_money">50</span></div>
+						<div class="aui-col-xs-8" style="display: flex;flex-direction: column;" name='productList'>
+							<span class="font-gray" name="productName">肾病早期筛查</span>
+							
+						</div>
+						<div class="aui-col-xs-4">
+							<div class=" aui-pull-right font-gray">金额:￥<span name="money">50</span></div>
 						</div>
 					</div>
 				</div>
 				<div class="aui-card-list-footer">
-					<div class=" aui-pull-left">下单时间：<span name="all_time">2017-08-24 15:30:10</span></div>
-					<div class=" aui-pull-right"><span name="all_statusBottom">已完成</span></div>
+					<div class=" aui-pull-left">下单时间：<span name="time">2017-08-24 15:30:10</span></div>
+					
 				</div>
 			</div>
 		</div>
 		<!--paying-->
-		<div id="all_templet">
-			<div class="aui-card-list" >
-				<div class="aui-card-list-header">
-					<div class=" aui-pull-left"><span name="paying_statusTop">待支付</span></div>
-					<div class="aui-pull-right"><span name="paying_timeShow">支付剩余时间：15:00</span></div>
-				</div>
+		<div id="paying_templet">
+			<div class="aui-card-list">
+				<div class="aui-card-list-header order-status_done"><span name="status">已完成</span></div>
 				<div class="aui-card-list-content-padded">
 					<div class="aui-row aui-row-padded">
-						<div class="aui-col-xs-8">订单编号:<span name="paying_orderID">20170917283274</span></div>
-						<div class="aui-col-xs-4" >
-							<div></div>
-							<div>金额:￥<span name="paying_money">50</span></div>
+						<div class="aui-col-xs-8" style="display: flex;flex-direction: column;" name='productList'>
+							<span class="font-gray" name="productName">肾病早期筛查</span>
+							
+						</div>
+						<div class="aui-col-xs-4"  style="display: flex;flex-direction: column;align-items: flex-end;">
+							<div class=" aui-pull-right font-gray">金额:￥<span name="money">50</span></div>
+							<div class="weui-btn weui-btn_mini weui-btn_primary" name="pay" style="margin: 0 0;">支付</div>
 						</div>
 					</div>
 				</div>
 				<div class="aui-card-list-footer">
-					<div class=" aui-pull-left">下单时间：<span name="paying_time">2017-08-24 15:30:10</span></div>
-					<div class="aui-btn aui-btn-success aui-pull-right" name="pay">支付</div>
+					<div class=" aui-pull-left">下单时间：<span name="time">2017-08-24 15:30:10</span></div>
+					
 				</div>
 			</div>
 		</div>
@@ -169,18 +158,21 @@
 
 		</div>
 	</section>
-
 	<script type="text/javascript" data-th-src="@{/jquery-weui/js/jquery-3.2.1.min.js}"></script>
 	<script type="text/javascript" data-th-src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+	<!--<script type="text/javascript" src="../../jquery-3.2.1/jquery-3.2.1.min.js"></script>-->
+	<!--<script type="text/javascript" src="../../jquery-weui/js/jquery-weui.min.js"></script>-->
 
-	<script type="text/javascript">
+	<script type="text/javascript" th:inline="javascript">
     var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
-	var timeBegin = 900;//十五分钟
+    var path = context + '/user_init_orders';
+	var timeBegin = 10;//十五分钟
 	var tabIndex=1;
 
 	$(document).ready(function () {
+			$('div.content-padded').height($(document).height());
             timer(timeBegin);
-            $('#tab1').infinite(50);
+            $('#tab1').infinite();
             $('#tab2').infinite(50);
             $('#tab3').infinite(50);
             $('#tab4').infinite(50);
@@ -189,12 +181,12 @@
 
 	function timer(time){
 		if (time == 0) {
-			$('#timeShow').text('已失效');
-			$('#pay').remove();
+			$('span[name=paying_status]').text('已失效');
+			$('div[name=pay]').remove();
 
 			return 0;
 		}else{
-			$('#timeShow').text('支付剩余时间：'+parseInt(time/60)+':'+((time%60<10?('0'):'')+time%60));
+			$('span[name=paying_status]').text('支付剩余时间：'+parseInt(time/60)+':'+((time%60<10?('0'):'')+time%60));
 			setTimeout(function () {
                 timer(time-1);
             },1000);
@@ -208,15 +200,39 @@
 	function BindData(bindObj,data) {
 		bindObj.data(data);
     }
+    //首次获得所有订单信息
+    function InitGetAll(){
+    	$.showLoading();
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url: path,
+            data: 'ALL',
+            async: true,
+            error: function (request) {
+				$.hideLoading();
+                alert("Connection error");
+            },
+            success: function (data) {
+                $.hideLoading();
+                if(data.result=='ok'){
+                    DrawAllList(data);
+				}else{
+                    alert('获取订单信息错误！');
+				}
+
+            }
+        });
+    }
 	//获取所有订单信息
 	function GetAll(allReq) {
-		var allPath = context + '';
+		
 		$.showLoading();
         $.ajax({
             cache: true,
-            type: "POST",
-            url: allPath,
-            data: allReq,// 你的formid
+            type: "GET",
+            url: path,
+            data: 'ALL',
             async: true,
             error: function (request) {
 				$.hideLoading();
@@ -235,18 +251,43 @@
     }
     //画出全部订单列表
 	function DrawAllList(orderData) {
+		$('#all_templet').find('div[name=productList]').html('<span class="font-gray" name="productName"></span>');
+		var status;
+		var product = $('#all_templet').find('span[name=productName]').clone();
+		for(var i=0; i<orderData.parm.length ;i++){
+			$('#all_templet').find('span[name=time]').text(orderData.parm[i].create_time);
+			switch(orderData.parm[i].status){
+				case "PAID":
+				status = '已支付'；
+				break;
+				case "CANCELED":
+				status = '已取消'；
+				break;
+				case "CREATION":
+				status = '已完成'；
+				break;
+			}
+			$('#all_templet').find('span[name=status]').text(status);
+			$('#all_templet').find('span[name=money]').text(orderData.parm[i].orderPreviewListprice);
+			for (var j = 0; j < orderData.parm[i].orderPreviewList.length; i++) {
+				$('#all_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewListprice[j].product_name+' x'+orderData.parm[i].orderPreviewListprice[j].quantity))
+			}
+			var allItem = $('#all_templet').next().clone();
+			$('#allList').append(allItem);
+			BindData($('#allList').find('input:hidden').last(),orderData.parm[i]);
+			
+		}
 
     }
 
     //获取待付款订单信息
 	function GetPaying(payingReq) {
-		var payingPath = context + '';
         $.showLoading();
         $.ajax({
             cache: true,
-            type: "POST",
-            url: payingPath,
-            data: payingReq,// 你的formid
+            type: "GET",
+            url: path,
+            data: payingReq,
             async: true,
             error: function (request) {
                 $.hideLoading();
@@ -268,12 +309,11 @@
     }
     //获取处理中订单信息
     function GetHanding(handingReq) {
-        var handingPath = context + '';
         $.ajax({
             cache: true,
-            type: "POST",
-            url: handingPath,
-            data: handingReq,// 你的formid
+            type: "GET",
+            url: path,
+            data: handingReq,
             async: true,
             error: function (request) {
                 $.hideLoading();
@@ -296,12 +336,11 @@
 
     //获取已完成订单信息
     function GetDone(doneReq) {
-        var donePath = context + '';
         $.ajax({
             cache: true,
-            type: "POST",
-            url: donePath,
-            data: doneReq,// 你的formid
+            type: "GET",
+            url: path,
+            data: doneReq,
             async: true,
             error: function (request) {
                 $.hideLoading();
@@ -324,12 +363,11 @@
 
     //获取已取消订单信息
     function GetCancel(cancelReq) {
-        var cancelPath = context + '';
         $.ajax({
             cache: true,
-            type: "POST",
-            url: cancelPath,
-            data: cancelReq,// 你的formid
+            type: "GET",
+            url: path,
+            data: ,
             async: true,
             error: function (request) {
                 $.hideLoading();
@@ -408,6 +446,16 @@
 
 
 </script>
+<style type="text/css">
+	.order-status_done,.order-status_paying{
+		color:#299238;
+		display: flex;
+		justify-content: flex-end;
+	}
+	.font-gray{
+		color: #888;
+	}
+</style>
 </body>
 
 

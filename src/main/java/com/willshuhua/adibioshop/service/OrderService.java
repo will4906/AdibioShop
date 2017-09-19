@@ -4,6 +4,7 @@
 
 package com.willshuhua.adibioshop.service;
 
+import com.willshuhua.adibioshop.dto.order.OrderDetail;
 import com.willshuhua.adibioshop.entity.order.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public interface OrderService {
 
     void cancelOrders(String customer_id);
 
+    OrderDetail getOrderDetail(String order_id);
     /**
      * 获取头几个订单
      * @param orderQuery
@@ -31,6 +33,12 @@ public interface OrderService {
      */
     List<MyOrder> getTopServeralOrders(OrderQuery orderQuery, String type);
 
+    /**
+     * 获取部分订单，和以上函数结合形成分页
+     * @param orderQuery
+     * @param type
+     * @return
+     */
     List<MyOrder> getPartServeralOrders(OrderQuery orderQuery, String type);
 
 

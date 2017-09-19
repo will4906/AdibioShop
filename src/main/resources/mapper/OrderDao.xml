@@ -193,6 +193,34 @@
         LIMIT #{limit}
     </select>
 
+    <select id="getOrderByOrderId" resultType="Order">
+        SELECT order_id, customer_id, price, status, description FROM orders WHERE order_id = #{order_id}
+    </select>
+
+    <select id="getOrderEventList" resultType="OrderEvent">
+        SELECT order_eventid, order_id, event_time, event_title, event_executor, description FROM orders WHERE order_id = #{order_id}
+    </select>
+
+    <select id="getItemMapList" resultType="java.util.Map">
+        SELECT order_items.order_id, order_items.order_itemid, order_items.product_id, products.product_name, products.unit_price, order_items.quantity
+        FROM
+            order_items, products
+        WHERE
+            order_items.order_id = #{order_id}
+        AND
+                products.product_id = order_items.product_id
+    </select>
+
+    <select id="getOrderInfoDetailList" resultType="java.util.Map">
+        SELECT order_infos.order_itemid, order_infos.order_infoid, order_infos.product_id, order_infos.patient_infoid,
+            patient_infos.name, patient_infos.age, patient_infos.gender
+        FROM
+            order_infos, patient_infos
+        WHERE
+            order_infos.order_itemid = #{order_itemid}
+        AND
+            patient_infos.patient_infoid = order_infos.patient_infoid
+    </select>
 </mapper>
 
 

@@ -7,6 +7,8 @@ package com.willshuhua.adibioshop.service.impl;
 import com.willshuhua.adibioshop.dao.OrderDao;
 import com.willshuhua.adibioshop.define.order.OrderStatus;
 import com.willshuhua.adibioshop.define.order.OrderType;
+import com.willshuhua.adibioshop.dto.order.ItemDetail;
+import com.willshuhua.adibioshop.dto.order.OrderDetail;
 import com.willshuhua.adibioshop.entity.order.*;
 import com.willshuhua.adibioshop.service.OrderService;
 import org.apache.log4j.Logger;
@@ -14,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -76,6 +75,27 @@ public class OrderServiceImpl implements OrderService {
                     new Date(orderEvent.getEvent_time().getTime() + 15 * 60 * 1000L), OrderStatus.CANCELED, customer_id, null);
             changeOrderStatus(orderEvent1);
         }
+    }
+
+    @Transactional
+    @Override
+    public OrderDetail getOrderDetail(String order_id) {
+        OrderDetail orderDetail = new OrderDetail();
+        Order order = orderDao.getOrderByOrderId(order_id);
+        List<OrderEvent> orderEventList = orderDao.getOrderEventList(order);
+        List<Map<String, Object>> itemMapList = orderDao.getItemMapList(order);
+        List<ItemDetail> itemDetailList = new ArrayList<>();
+        for (Map<String, Object> itemMap : itemMapList){
+            ItemDetail itemDetail = new ItemDetail();
+            itemDetail.setItemMap(itemMap);
+            List<Map<String, Object>> infoMapList = orderDao.getOrderInfoDetailList(itemMap);
+            itemDetail.setInfoMapList(infoMapList);
+            itemDetailList.add(itemDetail);
+        }
+        orderDetail.setItemDetailList(itemDetailList);
+        orderDetail.setOrder(order);
+        orderDetail.setOrderEventList(orderEventList);
+        return orderDetail;
     }
 
     @Transactional

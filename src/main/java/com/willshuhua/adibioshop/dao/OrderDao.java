@@ -30,6 +30,15 @@ public interface OrderDao {
     List<OrderEvent> getTimeToCanceledOrders(@Param("customer_id")String customer_id);
 
     List<OrderPreview> getOrderPreviews(@Param("order_id") String order_id);
+
+    Order getOrderByOrderId(@Param("order_id")String order_id);
+
+    List<OrderEvent> getOrderEventList(Order order);
+
+    List<Map<String, Object>> getOrderInfoDetailList(Map<String, Object> itemMap);
+
+    List<Map<String, Object>> getItemMapList(Order order);
+
     /**
      * 查询顶部几个全类型订单
      * @param orderQuery
