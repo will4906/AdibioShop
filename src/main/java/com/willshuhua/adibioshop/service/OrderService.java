@@ -19,6 +19,7 @@ public interface OrderService {
 
     List<Map<String,Object>> queryOrderInfoByOrderId(String orderId);
 
+    void setOrderPreviewsToMyOrders(List<MyOrder> myOrderList);
     /**
      * 获取头几个订单
      * @param orderQuery
@@ -26,4 +27,6 @@ public interface OrderService {
      * @return
      */
     List<MyOrder> getTopServeralOrders(OrderQuery orderQuery, String type);
+
+    List<MyOrder> getPartServeralOrders(OrderQuery orderQuery, String type);
 }

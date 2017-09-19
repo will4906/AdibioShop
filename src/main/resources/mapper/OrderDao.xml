@@ -54,6 +54,15 @@
         products.product_id = oi.product_id
     </select>
 
+    <select id="getOrderPreviews" resultType="OrderPreview">
+        SELECT order_items.order_itemid, order_items.product_id, order_items.quantity, products.product_name
+        FROM order_items, products
+        WHERE
+            order_items.order_id = #{order_id}
+        AND
+            products.product_id = order_items.product_id
+    </select>
+
     <select id="getTopServeralOrdersAll" resultType="MyOrder">
         SELECT
             orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description,
@@ -82,20 +91,32 @@
             AND now() - INTERVAL '15 minutes' > order_events.event_time
     </select>
 
-    <select id="getTopServeralOrdersUnpaid" resultType="MyOrder">
+    <select id="getTopServeralOrdersByStatus" resultType="MyOrder">
         SELECT
-            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description,
-            order_items.order_itemid, order_items.product_id, order_items.quantity, products.product_name
+            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description
         FROM
-            orders, order_items, products
+            orders
         WHERE
             customer_id = #{customer_id}
             AND
-            orders.order_id = order_items.order_id
+            orders.status = #{status}
+        ORDER BY
+            row_id
+        DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="getTopServeralOrdersProcessing" resultType="MyOrder">
+        SELECT
+            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description
+        FROM
+            orders
+        WHERE
+            customer_id = #{customer_id}
             AND
-            products.product_id = order_items.product_id
+            orders.status != 'CREATION'
             AND
-            status = #{status}
+            orders.status != 'CANCELED'
         ORDER BY
             row_id
         DESC

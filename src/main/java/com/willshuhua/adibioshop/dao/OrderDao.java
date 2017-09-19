@@ -28,6 +28,8 @@ public interface OrderDao {
     List<Map<String,Object>> queryOrderInfoByOrderId(@Param("orderId") String orderId);
 
     List<OrderEvent> getTimeToCanceledOrders(@Param("customer_id")String customer_id);
+
+    List<OrderPreview> getOrderPreviews(@Param("order_id") String order_id);
     /**
      * 查询顶部几个全类型订单
      * @param orderQuery
@@ -36,9 +38,16 @@ public interface OrderDao {
     List<MyOrder> getTopServeralOrdersAll(OrderQuery orderQuery);
 
     /**
-     * 查询顶部几个未支付类型订单
+     * 根据状态查询顶部几个订单
      * @param orderQuery
      * @return
      */
-    List<MyOrder> getTopServeralOrdersUnpaid(OrderQuery orderQuery);
+    List<MyOrder> getTopServeralOrdersByStatus(OrderQuery orderQuery);
+
+    /**
+     * 获取正在处理中的头几个订单
+     * @param orderQuery
+     * @return
+     */
+    List<MyOrder> getTopServeralOrdersProcessing(OrderQuery orderQuery);
 }

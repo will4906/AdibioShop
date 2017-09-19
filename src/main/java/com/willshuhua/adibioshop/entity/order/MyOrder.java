@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,9 +19,5 @@ public class MyOrder {
     private String status;
     private String description;
 
-    private String order_itemid;
-    private String product_id;
-    private int quantity;
-
-    private String product_name;
+    private List<OrderPreview> orderPreviewList;
 }

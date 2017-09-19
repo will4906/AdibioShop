@@ -14,10 +14,28 @@ The orders api of adibioshop.
             
             type = 'ALL'(全部), 'UNPAID'(未支付), 'PROCESSING'(处理中), 'FINISHED'(已完成), 'CANCELED'(已取消)
 
-+ Response 200 (text/html)
++ Response 200 (application/json)
 
     + Body
 
             {
-
+                result: "ok",
+                errMsg: "",
+                parm: [
+                    {
+                        row_id: 133,
+                        customer_id: "de14cd03-2f57-4efd-a14b-8e2cebb7a890",
+                        order_id: "359473555194249216",
+                        price: 0.02,
+                        status: "PAID",
+                        orderPreviewList: [
+                            {
+                                order_itemid: "1d7b4790-01ff-4078-9ddd-3590d87ab2aa",
+                                product_id: "83f7c071-7858-4e3f-b000-3c011db15e41",
+                                quantity: 1,
+                                product_name: "肾病早期筛查"
+                            }
+                        ]
+                    }
+                ]
             }

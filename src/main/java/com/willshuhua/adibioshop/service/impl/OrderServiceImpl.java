@@ -9,6 +9,7 @@ import com.willshuhua.adibioshop.define.order.OrderStatus;
 import com.willshuhua.adibioshop.define.order.OrderType;
 import com.willshuhua.adibioshop.entity.order.*;
 import com.willshuhua.adibioshop.service.OrderService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderDao orderDao;
+
+    private Logger logger = Logger.getLogger(OrderServiceImpl.class);
 
     @Transactional
     @Override
@@ -58,13 +61,23 @@ public class OrderServiceImpl implements OrderService {
         return orderDao.queryOrderInfoByOrderId(orderId);
     }
 
+    @Override
+    public void setOrderPreviewsToMyOrders(List<MyOrder> myOrderList) {
+        for (MyOrder myOrder : myOrderList) {
+            myOrder.setOrderPreviewList(orderDao.getOrderPreviews(myOrder.getOrder_id()));
+        }
+    }
+
     @Transactional
     @Override
     public List<MyOrder> getTopServeralOrders(OrderQuery orderQuery, String type) {
         switch (type) {
-            case OrderType.ALL:
-                return orderDao.getTopServeralOrdersAll(orderQuery);
-            case OrderType.UNPAID:
+            case OrderType.ALL: {
+                List<MyOrder> myOrderList = orderDao.getTopServeralOrdersAll(orderQuery);
+                setOrderPreviewsToMyOrders(myOrderList);
+                return myOrderList;
+            }
+            case OrderType.UNPAID: {
                 orderQuery.setStatus(OrderStatus.CREATION);
                 List<OrderEvent> orderEventList = orderDao.getTimeToCanceledOrders(orderQuery.getCustomer_id());
                 for (OrderEvent orderEvent : orderEventList) {
@@ -72,16 +85,38 @@ public class OrderServiceImpl implements OrderService {
                             new Date(orderEvent.getEvent_time().getTime() + 15 * 60 * 1000L), OrderStatus.CANCELED, orderQuery.getCustomer_id(), null);
                     changeOrderStatus(orderEvent1);
                 }
-                return orderDao.getTopServeralOrdersUnpaid(orderQuery);
-            case OrderType.PROCESSING:
-                break;
+                List<MyOrder> myOrderList = orderDao.getTopServeralOrdersByStatus(orderQuery);
+                setOrderPreviewsToMyOrders(myOrderList);
+                return myOrderList;
+            }
+            case OrderType.PROCESSING:{
+                List<MyOrder> myOrderList = orderDao.getTopServeralOrdersProcessing(orderQuery);
+                setOrderPreviewsToMyOrders(myOrderList);
+                return myOrderList;
+            }
             case OrderType.FINISHED:
                 break;
-            case OrderType.CANCELED:
-                break;
+            case OrderType.CANCELED:{
+                orderQuery.setStatus(OrderStatus.CANCELED);
+                List<OrderEvent> orderEventList = orderDao.getTimeToCanceledOrders(orderQuery.getCustomer_id());
+                logger.info("orderEventList==-==" + orderEventList);
+                for (OrderEvent orderEvent : orderEventList) {
+                    OrderEvent orderEvent1 = new OrderEvent(UUID.randomUUID().toString(), orderEvent.getOrder_id(),
+                            new Date(orderEvent.getEvent_time().getTime() + 15 * 60 * 1000L), OrderStatus.CANCELED, orderQuery.getCustomer_id(), null);
+                    changeOrderStatus(orderEvent1);
+                }
+                List<MyOrder> myOrderList = orderDao.getTopServeralOrdersByStatus(orderQuery);
+                setOrderPreviewsToMyOrders(myOrderList);
+                return myOrderList;
+            }
             default:
                 return null;
         }
+        return null;
+    }
+
+    @Override
+    public List<MyOrder> getPartServeralOrders(OrderQuery orderQuery, String type) {
         return null;
     }
 }

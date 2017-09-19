@@ -44,20 +44,7 @@ public class OrderController {
     @ResponseBody
     public Object typeOrders(HttpSession httpSession, @RequestParam("type")String type){
         Customer customer = (Customer)httpSession.getAttribute("customer");
-        switch (type){
-            case OrderType.ALL:
-                break;
-            case OrderType.UNPAID:
-                break;
-            case OrderType.PROCESSING:
-                break;
-            case OrderType.FINISHED:
-                break;
-            case OrderType.CANCELED:
-                break;
-            default:
-                return new Result(Result.ERR, "The type is error");
-        }
+
         return new Result();
     }
 
