@@ -22,6 +22,9 @@ public class CustomerInterceptor implements HandlerInterceptor{
                 return true;
             }
         }
+        if (uri.equals("/")){
+            return true;
+        }
         HttpSession httpSession = request.getSession();
         Customer customer = (Customer) httpSession.getAttribute("customer");
         if (customer == null){

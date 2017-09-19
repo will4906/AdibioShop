@@ -358,6 +358,7 @@ public class PayController {
             String paySign = WechatTool.generateMD5PaySign(jsSortMap, wechatProperties.getApikey());
             jsPayParm.setPaySign(paySign);
 
+            logger.info(jsPayParm);
             return new Result(Result.OK, jsPayParm);
         }else {
             return new Result(Result.ERR, "Happened some errors!");

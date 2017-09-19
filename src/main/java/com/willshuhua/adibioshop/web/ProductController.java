@@ -53,24 +53,24 @@ public class ProductController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpSession httpSession) throws IOException {
-//        String code = request.getParameter("code");
-//        String state = request.getParameter("state");
-//        logger.info("code===" + code);
-//        logger.info(httpSession);
-//        ModelAndView modelAndView  = new ModelAndView("index");
-//        if (code == null || code.equals("")){
-//            return modelAndView;
-//        }
-//        analyseCustomer(code, httpSession, false);
+        String code = request.getParameter("code");
+        String state = request.getParameter("state");
+        logger.info("code===" + code);
+        logger.info(httpSession);
+        ModelAndView modelAndView  = new ModelAndView("index");
+        if (code == null || code.equals("")){
+            return modelAndView;
+        }
+        analyseCustomer(code, httpSession, false);
 
 
 //        调试
-        Customer customer = new Customer();
-        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
-        customer.setOpenid("owNVIwQFSY-BxMyKi10bqi_6761w");
-        httpSession.setAttribute("customer", customer);
-
-        ModelAndView modelAndView  = new ModelAndView("index");
+//        Customer customer = new Customer();
+//        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
+//        customer.setOpenid("owNVIwQFSY-BxMyKi10bqi_6761w");
+//        httpSession.setAttribute("customer", customer);
+//
+//        ModelAndView modelAndView  = new ModelAndView("index");
         return modelAndView;
 
     }
