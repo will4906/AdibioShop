@@ -11,9 +11,9 @@ CREATE TABLE customers
     register_time TIMESTAMP(0) NOT NULL,
     CONSTRAINT customers_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT customers_customerid_unique UNIQUE(customer_id),
-    CONSTRAINT customers_telphone_unigue UNIQUE(telphone),
-    CONSTRAINT customers_email_unigue UNIQUE(email),
-    CONSTRAINT customers_openid_unigue UNIQUE(openid)
+    CONSTRAINT customers_telphone_unique UNIQUE(telphone),
+    CONSTRAINT customers_email_unique UNIQUE(email),
+    CONSTRAINT customers_openid_unique UNIQUE(openid)
 );
 
 -- 描述用户微信相关信息，这个暂时不用

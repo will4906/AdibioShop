@@ -5,10 +5,12 @@
     <title>json test</title>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" data-th-src="@{/AUI/script/aui-dialog.js}"></script>
 
+<button onclick="requestPay()">你猜</button>
+<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.js}"></script>
+<script type="text/javascript" data-th-src="@{/AUI/script/aui-dialog.js}"></script>
 <script data-th-src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+<script th:src="@{/js/pay.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
 
@@ -151,8 +153,8 @@
             type: "POST",
             url: buyPath,
             data: {
-                "product_id": '1',
-                "patient_infoid": '2'
+                "product_id": '83f7c071-7858-4e3f-b000-3c011db15e41',
+                "patient_infoid": 'dd6abd91-0d5e-46de-81f4-f7d7133ed9fd'
             },
             async: false,
             error: function (request) {
@@ -163,11 +165,12 @@
                 if (data.result === 'err') {
                     alert(data.errMsg);
                 }
+                requestWechatPayment(data);
             }
         })
     }
 
-    requestPay();
+//    requestPay();
 //    requestBuyCzrtSelects();
 //            requestReduceCartItem();
     //        requestAddCartItem();

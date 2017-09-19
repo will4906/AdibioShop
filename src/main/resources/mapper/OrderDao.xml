@@ -65,16 +65,15 @@
 
     <select id="getTopServeralOrdersAll" resultType="MyOrder">
         SELECT
-            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description,
-            order_items.order_itemid, order_items.product_id, order_items.quantity, products.product_name
+            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description, order_events.event_time AS create_time
         FROM
-            orders, order_items, products
+            orders, order_events
         WHERE
             customer_id = #{customer_id}
             AND
-                orders.order_id = order_items.order_id
+                order_events.order_id = orders.order_id
             AND
-                products.product_id = order_items.product_id
+                order_events.event_title = 'CREATION'
         ORDER BY
             row_id
         DESC
@@ -93,13 +92,17 @@
 
     <select id="getTopServeralOrdersByStatus" resultType="MyOrder">
         SELECT
-            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description
+            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description, order_events.event_time AS create_time
         FROM
-            orders
+            orders, order_events
         WHERE
             customer_id = #{customer_id}
             AND
             orders.status = #{status}
+            AND
+            order_events.order_id = orders.order_id
+            AND
+            order_events.event_title = 'CREATION'
         ORDER BY
             row_id
         DESC
@@ -108,15 +111,19 @@
 
     <select id="getTopServeralOrdersProcessing" resultType="MyOrder">
         SELECT
-            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description
+            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description, order_events.event_time AS create_time
         FROM
-            orders
+            orders, order_events
         WHERE
             customer_id = #{customer_id}
             AND
             orders.status != 'CREATION'
             AND
             orders.status != 'CANCELED'
+            AND
+            order_events.order_id = orders.order_id
+            AND
+            order_events.event_title = 'CREATION'
         ORDER BY
             row_id
         DESC

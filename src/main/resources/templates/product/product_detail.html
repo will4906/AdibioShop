@@ -211,22 +211,9 @@
     <script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.js}"></script>
     <script type="text/javascript" th:src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
     <script th:src="@{/jquery-weui/js/city-picker.min.js}"></script>
+	<script th:src="@{/js/pay.js}"></script>
 
 	<script type="text/javascript" th:inline="javascript">
-	var wechat_ready = false;
-    function onBridgeReady(){
-        wechat_ready = true;
-    }
-    if (typeof WeixinJSBridge == "undefined"){
-        if( document.addEventListener ){
-            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-        }else if (document.attachEvent){
-            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-        }
-    }else{
-        onBridgeReady();
-    }
     
 	 var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
      var product_id = /*[[${product.product_id}]]*/;
@@ -379,7 +366,8 @@
 	            success: function (data) {
 	                $.hideLoading();
 	                if (data.result=='ok') {
-	                	$('#buy').click();
+//	                    TODO: 选择按钮点击
+	                	//$('#buy').click();
 	                }else{
 
 	                }
@@ -389,6 +377,7 @@
 	}
 	//发送购买请求
 	function SendBuy(reqBuy){
+	    console.log(reqBuy);
 		var buyPath = context + '/direct_pay';
 		$.showLoading();
 		$.ajax({
@@ -404,8 +393,8 @@
 	            success: function (data) {
 	                $.hideLoading();
 	                if (data.result=='ok') {
-	                	WeChatPay(data);
-
+//	                	WeChatPay(data);
+						requestWechatPayment(data);
 	                }else{
 	                	alert('购买失败！');
 	                }
