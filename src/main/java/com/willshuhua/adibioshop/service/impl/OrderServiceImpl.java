@@ -81,6 +81,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDetail getOrderDetail(String order_id) {
         OrderDetail orderDetail = new OrderDetail();
+        logger.info(order_id);
         Order order = orderDao.getOrderByOrderId(order_id);
         List<OrderEvent> orderEventList = orderDao.getOrderEventList(order);
         List<Map<String, Object>> itemMapList = orderDao.getItemMapList(order);
@@ -95,6 +96,7 @@ public class OrderServiceImpl implements OrderService {
         orderDetail.setItemDetailList(itemDetailList);
         orderDetail.setOrder(order);
         orderDetail.setOrderEventList(orderEventList);
+        logger.info(orderDetail);
         return orderDetail;
     }
 

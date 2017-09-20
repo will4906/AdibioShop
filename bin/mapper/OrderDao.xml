@@ -130,6 +130,103 @@
         LIMIT #{limit}
     </select>
 
+    <select id="getPartServeralOrdersAll" resultType="MyOrder">
+        SELECT
+            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description, order_events.event_time AS create_time
+        FROM
+            orders, order_events
+        WHERE
+            customer_id = #{customer_id}
+            AND
+            order_events.order_id = orders.order_id
+            AND
+            order_events.event_title = 'CREATION'
+            AND
+            orders.row_id <![CDATA[ < ]]> #{row_id}
+        ORDER BY
+            orders.row_id
+        DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="getPartServeralOrdersByStatus" resultType="MyOrder">
+        SELECT
+            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description, order_events.event_time AS create_time
+        FROM
+            orders, order_events
+        WHERE
+            customer_id = #{customer_id}
+            AND
+            orders.status = #{status}
+            AND
+            order_events.order_id = orders.order_id
+            AND
+            order_events.event_title = 'CREATION'
+            AND
+            orders.row_id <![CDATA[ < ]]> #{row_id}
+        ORDER BY
+            orders.row_id
+        DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="getPartServeralOrdersProcessing" resultType="MyOrder">
+        SELECT
+            orders.row_id, orders.order_id, orders.customer_id, orders.price, orders.status, orders.description, order_events.event_time AS create_time
+        FROM
+            orders, order_events
+        WHERE
+            customer_id = #{customer_id}
+            AND
+            orders.status != 'CREATION'
+            AND
+            orders.status != 'CANCELED'
+            AND
+            order_events.order_id = orders.order_id
+            AND
+            order_events.event_title = 'CREATION'
+            AND
+            orders.row_id <![CDATA[ < ]]> #{row_id}
+        ORDER BY
+            orders.row_id
+        DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="getOrderByOrderId" resultType="Order">
+        SELECT order_id, customer_id, price, status, description FROM orders WHERE order_id = #{order_id}
+    </select>
+
+    <select id="getOrderEventList" resultType="OrderEvent">
+        SELECT
+            order_eventid, order_id, event_time, event_title, event_executor, description
+        FROM
+            order_events
+        WHERE
+            order_id = #{order_id}
+        ORDER BY row_id DESC
+    </select>
+
+    <select id="getItemMapList" resultType="java.util.Map">
+        SELECT order_items.order_id, order_items.order_itemid, order_items.product_id, products.product_name, products.unit_price, order_items.quantity
+        FROM
+            order_items, products
+        WHERE
+            order_items.order_id = #{order_id}
+        AND
+                products.product_id = order_items.product_id
+    </select>
+
+    <select id="getOrderInfoDetailList" resultType="java.util.Map">
+        SELECT order_infos.order_itemid, order_infos.order_infoid, order_infos.product_id, order_infos.patient_infoid,
+            patient_infos.name, patient_infos.age, patient_infos.gender
+        FROM
+            order_infos, patient_infos
+        WHERE
+            order_infos.order_itemid = #{order_itemid}
+        AND
+            patient_infos.patient_infoid = order_infos.patient_infoid
+    </select>
 </mapper>
 
 

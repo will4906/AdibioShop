@@ -94,4 +94,7 @@
         DELETE FROM cart_patient_infos WHERE cart_patient_infos.cart_patient_infoid = #{cart_patient_infoid}
     </delete>
 
+    <delete id="deleteItemCartPatientInfos">
+        DELETE FROM cart_patient_infos WHERE cart_itemid = #{cart_itemid}
+    </delete>
 </mapper>

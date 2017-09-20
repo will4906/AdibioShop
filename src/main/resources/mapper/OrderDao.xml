@@ -198,7 +198,13 @@
     </select>
 
     <select id="getOrderEventList" resultType="OrderEvent">
-        SELECT order_eventid, order_id, event_time, event_title, event_executor, description FROM orders WHERE order_id = #{order_id}
+        SELECT
+            order_eventid, order_id, event_time, event_title, event_executor, description
+        FROM
+            order_events
+        WHERE
+            order_id = #{order_id}
+        ORDER BY row_id DESC
     </select>
 
     <select id="getItemMapList" resultType="java.util.Map">

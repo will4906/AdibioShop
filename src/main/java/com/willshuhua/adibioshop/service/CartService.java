@@ -30,4 +30,6 @@ public interface CartService {
     CartItem getCartItem(String cart_itemid);
 
     List<Map<String, Object>> queryCartPatientInfos(CartItem cartItem);
+
+    void deleteSelectCart(List<CartItem> cartItemList);
 }

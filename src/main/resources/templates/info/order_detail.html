@@ -2,128 +2,153 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>订单详情</title>
-    <!--<link rel="stylesheet" data-th-href="@{/adminlte/css/AdminLTE.min.css}">-->
-    <!--<link rel="stylesheet" data-th-href="@{/font-awesome/css/font-awesome.css}">-->
-    <link rel="stylesheet" href="../../static/adminlte/css/AdminLTE.min.css">
-    <link rel="stylesheet" href="../../static/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" data-th-href="@{/adminlte/css/AdminLTE.min.css}">
+    <link rel="stylesheet" data-th-href="@{/font-awesome/css/font-awesome.css}">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/weui/css/weui.min.css}">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/jquery-weui.css}"/>
 </head>
 <body>
-    <section class="content">
-        <ul class="timeline">
-            <li class="time-label" th:each="event: ${order.events}">
+<div class="weui-tab__panel">
+    <div class="weui-cells" id="order_detail_title">
+        <div class="weui-cell" href="#">
+            <div class="weui-cell__bd">
+                <p>订单号：</p>
+            </div>
+            <div class="weui-cell__ft"><span class="pull-right" name="order_id"></span></div>
+        </div>
+        <div class="weui-cell" href="#">
+            <div class="weui-cell__bd">
+                <p>订单状态：</p>
+            </div>
+            <div class="weui-cell__ft"><span class="pull-right" name="order_status"></span></div>
+        </div>
+        <div class="weui-cell" href="#">
+            <div class="weui-cell__bd">
+                <p>订单金额：</p>
+            </div>
+            <div class="weui-cell__ft"><span class="pull-right" name="order_price"></span></div>
+        </div>
+        <div class="weui-cell" href="#">
+            <div class="weui-cell__bd">
+                <p>备注：</p>
+            </div>
+            <div class="weui-cell__ft"><span class="pull-right" name="order_description"></span></div>
+        </div>
+    </div>
+    <ul class="timeline" id="event_timeline">
+        <li class="time-label" id="tlabel" style="display: none;">
+            <span class="bg-red" name="time_span"></span>
+        </li>
+        <li id="titem" style="display: none;">
+            <i class="fa fa-envelope bg-blue"></i>
+            <div class="timeline-item">
+                <span class="time"><i class="fa fa-clock-o"></i> <span name="event_hour_min"></span></span>
 
-            </li>
-            <!-- timeline time label -->
-            <li class="time-label">
-                  <span class="bg-red">
-                    10 Feb. 2014
-                  </span>
-            </li>
-            <!-- /.timeline-label -->
-            <!-- timeline item -->
-            <li>
-                <i class="fa fa-envelope bg-blue"></i>
+                <h3 class="timeline-header"><a href="#"><span name="event_title"></span></a></h3>
 
-                <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                <div class="timeline-body" name="item_body">
 
-                    <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                    <div class="timeline-body">
-                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                        quora plaxo ideeli hulu weebly balihoo...
-                    </div>
-                    <div class="timeline-footer">
-                        <a class="btn btn-primary btn-xs">Read more</a>
-                        <a class="btn btn-danger btn-xs">Delete</a>
-                    </div>
                 </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline item -->
-            <li>
-                <i class="fa fa-user bg-aqua"></i>
+                <div class="timeline-footer">
 
-                <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                    <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
                 </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline item -->
-            <li>
-                <i class="fa fa-comments bg-yellow"></i>
+            </div>
+        </li>
 
-                <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
+    </ul>
+</div>
 
-                    <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+<script th:src="@{/jquery/jquery-3.2.1.js}"></script>
+<script type="text/javascript" data-th-src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
+    var order_id = /*[[${order_id}]]*/;
+    var whole_path = context + '/order_detail?order_id=' + order_id;
 
-                    <div class="timeline-body">
-                        Take me to your leader!
-                        Switzerland is small and neutral!
-                        We are more like Germany, ambitious and misunderstood!
-                    </div>
-                    <div class="timeline-footer">
-                        <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                    </div>
-                </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline time label -->
-            <li class="time-label">
-                  <span class="bg-green">
-                    3 Jan. 2014
-                  </span>
-            </li>
-            <!-- /.timeline-label -->
-            <!-- timeline item -->
-            <li>
-                <i class="fa fa-camera bg-purple"></i>
+    function parseOrderDetailTitle(data) {
+        var order = data.parm.order;
+        $('#order_detail_title').find('span[name=order_id]').text(order.order_id);
+        $('#order_detail_title').find('span[name=order_status]').text(order.status);
+        $('#order_detail_title').find('span[name=order_price]').text(order.price);
+        $('#order_detail_title').find('span[name=order_description]').text(order.description);
+    }
+//    处理订单事件时间线timeline
+    function parseOrderEvent(data) {
+        console.log(data.parm);
+        var orderEventList = data.parm.orderEventList;
+        var lastDate = '';
+        for (var i = 0; i < orderEventList.length; i++) {
+            var event_time = new Date(orderEventList[i].event_time);
+            var time_title = event_time.getFullYear().toString() + '年' + event_time.getMonth() + '月' + event_time.getDate() + '号';
+            if (lastDate !== time_title) {
+                var tlabel = $('#tlabel').clone();
+                tlabel.find('span[name=time_span]').text(time_title);
+                tlabel.attr('id', tlabel.attr('id') + i.toString());
+                tlabel.show();
+                lastDate = time_title;
+                $('#event_timeline').append(tlabel);
+            }
+            var titem = $('#titem').clone();
+            titem.show();
+            titem.find('span[name=event_hour_min]').text(event_time.getHours().toString() + ':' + event_time.getMinutes());
+            var event_title = orderEventList[i].event_title;
+            switch (event_title) {
+                case 'CREATION': {
+                    titem.find('span[name=event_title]').text('创建订单');
+                    var orderItemList = data.parm.itemDetailList;
+                    var table = document.createElement('table');
+//                            table.setAttribute('class', 'table table-bordered');
+                    table.setAttribute('class', 'table');
+                    table.width = "100%";
+                    for (var j = 0; j < orderItemList.length; j++) {
+                        var tr = "<tr>";
+                        var td = "<td>" + orderItemList[j].itemMap.product_name + "</td>";      //产品名称
+                        tr += td;
+                        td = "<td> x" + orderItemList[j].itemMap.quantity + "</td>";            //购买数量
+                        tr += td;
+                        tr += "</tr>";
+                        table.innerHTML += tr;
+                    }
+                    titem.find('div[name=item_body]').append(table);
+                    break;
+                }
+                case 'PAID': {
+                    titem.find('span[name=event_title]').text('已支付');
+                    titem.find('div[name=item_body]').text("支付金额：￥" + data.parm.order.price);
+                    break;
+                }
+                case 'CANCELED': {
+                    titem.find('span[name=event_title]').text('取消订单');
+                    break;
+                }
+            }
+            $('#event_timeline').append(titem);
+            console.log(event_time);
+        }
+    }
+    function requestOrderDetail() {
+        $.showLoading();
+        $.ajax({
+            type: 'GET',
+            url: whole_path,
+            async: true,
+            error: function (request) {
+                alert("Connection error");
+                $.hideLoading();
+            },
+            success: function (data) {
+                parseOrderDetailTitle(data);
+                parseOrderEvent(data);
+                $.hideLoading();
+            }
+        })
+    }
 
-                <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+    $(document).ready(requestOrderDetail());
 
-                    <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                    <div class="timeline-body">
-                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    </div>
-                </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline item -->
-            <li>
-                <i class="fa fa-video-camera bg-maroon"></i>
-
-                <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> 5 days ago</span>
-
-                    <h3 class="timeline-header"><a href="#">Mr. Doe</a> shared a video</h3>
-
-                    <div class="timeline-body">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tMWkeBIohBs" frameborder="0" allowfullscreen=""></iframe>
-                        </div>
-                    </div>
-                    <div class="timeline-footer">
-                        <a href="#" class="btn btn-xs bg-maroon">See comments</a>
-                    </div>
-                </div>
-            </li>
-            <!-- END timeline item -->
-            <li>
-                <i class="fa fa-clock-o bg-gray"></i>
-            </li>
-        </ul>
-    </section>
+</script>
 </body>
 </html>

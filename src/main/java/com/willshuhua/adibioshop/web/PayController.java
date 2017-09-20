@@ -111,72 +111,6 @@ public class PayController {
         return notifyUnifiedOrder(request, order, product.getProduct_name(), customer);
     }
 
-    /*
-    *
-    * @RequestMapping(value = "/direct_pay", method = RequestMethod.POST)
-    @ResponseBody
-    public Object payEvent(@ModelAttribute("patientDetail")PatientDetail patientDetail, HttpServletRequest request, HttpSession httpSession) throws Exception {
-        logger.info(patientDetail);
-//        校验各种东西，到时候需要重新构造 TODO:考虑使用spring security或者其他方式处理
-        Customer customer = (Customer) httpSession.getAttribute("customer");
-        if (customer == null){
-            return new Result(Result.ERR, "Can't find the openid.Please retry !");
-        }
-        String productId = patientDetail.getProduct_id();
-        if (productId == null || productId.equals("null") || productId.equals("")){
-            return new Result(Result.ERR, "Can't find the product_id");
-        }
-        Product product = productService.queryProductByProductId(productId);
-        if (product == null){
-            return new Result(Result.ERR, "Can't find the product");
-        }
-//      配置订单
-        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
-        String orderId = String.valueOf(idWorker.nextId());
-
-        Order order = new Order(orderId, customer.getCustomer_id(), product.getUnit_price(), OrderStatus.CREATION, null);
-        OrderEvent orderEvent = new OrderEvent(UUID.randomUUID().toString(), orderId, new Date(), OrderStatus.CREATION, customer.getCustomer_id(), null);
-        OrderItem orderItem = new OrderItem(orderId, UUID.randomUUID().toString(), productId, 1);
-//      TODO:这是一段冗长的配置，日后会想想是否有什么更好地方式。
-        OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setOrder_itemid(orderItem.getOrder_itemid());
-        orderInfo.setOrder_infoid(UUID.randomUUID().toString());
-        orderInfo.setProduct_id(patientDetail.getProduct_id());
-
-        PatientInfo patientInfo = new PatientInfo();
-        patientInfo.setCustomer_id(customer.getCustomer_id());
-        patientInfo.setName(patientDetail.getName());
-        patientInfo.setGender(patientDetail.getGender());
-        patientInfo.setAge(Float.valueOf(patientDetail.getAge()));
-        patientInfo.setCountry("CHINA");
-        patientInfo.setProvince(patientDetail.getProvince());
-        patientInfo.setCity(patientDetail.getCity());
-        patientInfo.setDistrict(patientDetail.getDistrict());
-        patientInfo.setAddress(patientDetail.getAddress());
-        patientInfo.setPhone(patientDetail.getPhone());
-        patientInfo.setHas_diabetic(Integer.valueOf(patientDetail.getHas_diabetic()));
-        patientInfo.setIs_pregnant(Integer.valueOf(patientDetail.getIs_pregnant()));
-        if (!(patientDetail.getHeight() == null || patientDetail.getHeight().equals("null") || patientDetail.getHeight().equals(""))){
-            patientInfo.setHeight(Float.valueOf(patientDetail.getHeight()));
-        }
-        if (!(patientDetail.getWeight() == null || patientDetail.getWeight().equals("null") || patientDetail.getWeight().equals(""))){
-            patientInfo.setWeight(Float.valueOf(patientDetail.getWeight()));
-        }
-
-        PatientInfo hasPatient = customerService.hasPatientInfo(patientInfo);
-        if (hasPatient != null){
-            patientInfo = hasPatient;
-        }else {
-            patientInfo.setPatient_infoid(UUID.randomUUID().toString());
-            customerService.createPatientInfo(patientInfo);
-        }
-
-        orderInfo.setPatient_infoid(patientInfo.getPatient_infoid());
-        orderService.createOrder(order, orderInfo, orderEvent, orderItem);
-        return notifyUnifiedOrder(request, order, product.getProduct_name(), customer);
-    }
-    * */
-
     @RequestMapping(value = "/buy_cart_selects", method = RequestMethod.POST)
     @ResponseBody
     public Object buyCartSelects2(HttpServletRequest request, HttpSession httpSession, @RequestBody List<CartItem> cartItemList) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
@@ -216,6 +150,7 @@ public class PayController {
         }
         order.setPrice(wholePrice);
         orderService.createOrder(order, orderInfoList, orderEvent, orderItemList);
+        cartService.deleteSelectCart(cartItemList);
         logger.info(cartItemList);
         return notifyUnifiedOrder(request, order, "批量检测", customer);
     }
@@ -253,7 +188,10 @@ public class PayController {
         WechatTemplate wechatTemplate = new WechatTemplate();
         wechatTemplate.setTouser(customer.getOpenid());
         wechatTemplate.setTemplate_id(TemplateId.CHECKOUT_SUCCESS);
-        wechatTemplate.setUrl(request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/order_info?order_id=" + wechatPayBack.getOut_trade_no());
+        String strUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wechatProperties.getAppid() + "&redirect_uri=APP_URL&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+        strUrl = strUrl.replace("APP_URL", request.getScheme() +"%3A%2F%2F" + request.getServerName() + request.getContextPath() + "%2Forder_detail_page?order_id=" + wechatPayBack.getOut_trade_no());
+        logger.info(strUrl);
+        wechatTemplate.setUrl(strUrl);
         Map<String, Map<String, String>> data = new HashMap<>();
         Map<String, String> first = new HashMap<>();
         first.put("value", "您好，您已下单成功。");

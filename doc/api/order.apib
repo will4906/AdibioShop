@@ -111,5 +111,79 @@ The orders api of adibioshop.
                 ]
             }
 
+# 加载订单详情页面[/order_detail_page]
 
+## GET
+
++ Request
+    + Body
+        order_id = '1234'
+
++ Response
+    + Body (text/html)
+        订单详情页面
+
+# 获取订单详情相关信息[/order_detail]
+
+## GET
+
++ Request
+    + Body
+        order_id = '1234'
+
++ Response 200 (application/json)
+
+    + Body
+            {
+                "result": "ok",
+                "errMsg": "",
+                "parm": {
+                    "order": {
+                        "order_id": "3601424812",
+                        "customer_id": "3f7d4403-4832-4e17-ab1",
+                        "price": 0.02,
+                        "status": "PAID"
+                    },
+                    "orderEventList": [
+                        {
+                            "order_eventid": "bd1b4ed6-729fc27ed",
+                            "order_id": "360142481",
+                            "event_time": "Sep 20, 2017 7:17:44 PM",
+                            "event_title": "PAID",
+                            "event_executor": "3f7d4403-4832-4e17-",
+                            "description": "WechatPayBack{return_code\u003d\u0027SUCCESS\u0027, return_msg\u003d\u0027null\u0027, appid\u003d\u0027wxb32b1a2100838738\u0027, mch_id\u003d\u00271441771602\u0027, device_info\u003d\u0027null\u0027, nonce_str\u003d\u002707372C00DB61A24F2C59997261FA7E93\u0027, sign\u003d\u00276BA1373544DE74E39419E13E79A00C5B\u0027, sign_type\u003d\u0027null\u0027, result_code\u003d\u0027SUCCESS\u0027, err_code\u003d\u0027null\u0027, err_code_des\u003d\u0027null\u0027, openid\u003d\u0027owNVIwdLGp07zeIjYZSlZTFDPak8\u0027, is_subscribe\u003d\u0027Y\u0027, trade_type\u003d\u0027JSAPI\u0027, bank_type\u003d\u0027CFT\u0027, total_fee\u003d\u00272\u0027, settlement_total_fee\u003d\u0027null\u0027, fee_type\u003d\u0027CNY\u0027, cash_fee\u003d\u00272\u0027, cash_fee_type\u003d\u0027null\u0027, coupon_fee\u003d\u0027null\u0027, coupon_count\u003d\u0027null\u0027, coupon_type_$n\u003d\u0027null\u0027, coupon_id_$n\u003d\u0027null\u0027, coupon_fee_$n\u003d\u0027null\u0027, transaction_id\u003d\u00274200000015201709203237560145\u0027, out_trade_no\u003d\u0027360142481519542272\u0027, attach\u003d\u0027null\u0027, time_end\u003d\u002720170920191743\u0027}"
+                        },
+                        {
+                            "order_eventid": "9291f2e6-f840-4ea4-",
+                            "order_id": "360142481",
+                            "event_time": "Sep 20, 2017 7:17:39 PM",
+                            "event_title": "CREATION",
+                            "event_executor": "3f7d4403-4832-4e17"
+                        }
+                    ],
+                    "itemDetailList": [
+                        {
+                            "itemMap": {
+                                "quantity": 1,
+                                "product_id": "bda342a2-27c0-4cb1",
+                                "order_itemid": "34ac3c59-b149-49a9-",
+                                "unit_price": 0.02,
+                                "order_id": "3601424815",
+                                "product_name": "糖尿病早期筛查"
+                            },
+                            "infoMapList": [
+                                {
+                                    "gender": "M",
+                                    "order_infoid": "711c76c6-9a86-4d8b-9",
+                                    "product_id": "bda342a2-27c0-4cb1-bed35",
+                                    "name": "李四",
+                                    "order_itemid": "34ac3c59-b149-49a9-bcdcfb",
+                                    "patient_infoid": "db2eb182-6c6e-4565-bee7-cd",
+                                    "age": 20
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
 

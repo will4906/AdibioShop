@@ -16,7 +16,7 @@ public class CustomerInterceptor implements HandlerInterceptor{
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
         logger.info("request_uri=====" + uri);
-        String[] allowUris = new String[]{"/index", "/message", "/wechat_pay_notify", "/error"};
+        String[] allowUris = new String[]{"/index", "/message", "/wechat_pay_notify", "/error", "/order_detail_page"};
         for (String allow : allowUris){
             if (uri.contains(allow)){
                 return true;

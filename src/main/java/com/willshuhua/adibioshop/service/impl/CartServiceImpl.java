@@ -166,4 +166,13 @@ public class CartServiceImpl implements CartService{
         return cartDao.queryCartPatientInfos(cartItem);
     }
 
+    @Transactional
+    @Override
+    public void deleteSelectCart(List<CartItem> cartItemList) {
+        for (CartItem cartItem : cartItemList){
+            cartDao.deleteItemCartPatientInfos(cartItem);
+            cartDao.deleteCartItem(cartItem);
+        }
+    }
+
 }
