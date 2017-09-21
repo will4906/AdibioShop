@@ -61,6 +61,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order getCustomerOrder(String customerId, String orderId) {
+        OrderQuery orderQuery = new OrderQuery();
+        orderQuery.setCustomer_id(customerId);
+        orderQuery.setOrder_id(orderId);
+        return orderDao.getCustomerOrder(orderQuery);
+    }
+
+    @Override
     public void setOrderPreviewsToMyOrders(List<MyOrder> myOrderList) {
         for (MyOrder myOrder : myOrderList) {
             myOrder.setOrderPreviewList(orderDao.getOrderPreviews(myOrder.getOrder_id()));
@@ -72,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderEvent> orderEventList = orderDao.getTimeToCanceledOrders(customer_id);
         for (OrderEvent orderEvent : orderEventList) {
             OrderEvent orderEvent1 = new OrderEvent(UUID.randomUUID().toString(), orderEvent.getOrder_id(),
-                    new Date(orderEvent.getEvent_time().getTime() + 15 * 60 * 1000L), OrderStatus.CANCELED, customer_id, null);
+                    new Date(orderEvent.getEvent_time().getTime() + 15 * 60 * 1000L), OrderStatus.CANCELED, customer_id, "过时自动取消");
             changeOrderStatus(orderEvent1);
         }
     }
@@ -171,5 +179,17 @@ public class OrderServiceImpl implements OrderService {
                 return null;
         }
         return null;
+    }
+
+    @Override
+    public void cancelOrderByOrderId(String customer_id, String orderId, String whyCancel) throws Exception {
+        OrderQuery orderQuery = new OrderQuery();
+        orderQuery.setCustomer_id(customer_id);
+        orderQuery.setOrder_id(orderId);
+        Order order = orderDao.getCustomerOrder(orderQuery);
+        if (order == null){
+            throw new Exception("Can't bind the order!");
+        }
+        changeOrderStatus(new OrderEvent(UUID.randomUUID().toString(), orderId, new Date(), "CANCELED", order.getCustomer_id(), whyCancel));
     }
 }

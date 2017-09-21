@@ -5,25 +5,29 @@
     <meta name="viewport"
           content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>订单详情</title>
+    <link rel="stylesheet" data-th-href="@{/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" data-th-href="@{/adminlte/css/AdminLTE.min.css}">
     <link rel="stylesheet" data-th-href="@{/font-awesome/css/font-awesome.css}">
     <link rel="stylesheet" type="text/css" data-th-href="@{/weui/css/weui.min.css}">
     <link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/jquery-weui.css}"/>
 </head>
 <body style="background-color: #f8f8f8;">
-<div class="row">
-    <div class="col-md-6">
-        <div class="box box-solid">
-            <div class="box-header with-border">
-                <h3 class="box-title">订单未支付</h3>
-            </div>
-            <div class="box-body text-center">
-
+<section class="content">
+    <div class="row" id="unpaid_div" style="display: none;">
+        <div class="col-md-6">
+            <div class="box box-solid">
+                <div class="box-header with-border text-center">
+                    <h3 class="box-title">订单未支付</h3>
+                </div>
+                <div class="box-body text-center">
+                    <p><span id="cout_down_text"></span></p>
+                    <p>
+                        <button id="pay_button" class="btn btn-danger" onclick="requestBuyOrder()">支付订单</button>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<section class="content">
     <div class="row">
         <div class="col-md-6">
             <div class="box">
@@ -69,38 +73,41 @@
         </div>
     </div>
     <div class="row">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">订单事件</h3>
-                <div class="box-tools pull-right">
-                    <!-- Collapse Button -->
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">订单事件</h3>
+                    <div class="box-tools pull-right">
+                        <!-- Collapse Button -->
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <ul class="timeline" id="event_timeline">
-                    <li class="time-label" id="tlabel" style="display: none;">
-                        <span class="bg-red" name="time_span"></span>
-                    </li>
-                    <li id="titem" style="display: none;">
-                        <i class="" name="i_label"></i>
-                        <div class="timeline-item">
-                            <span class="time"><i class="fa fa-clock-o"></i> <span name="event_hour_min"></span></span>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <ul class="timeline" id="event_timeline">
+                        <li class="time-label" id="tlabel" style="display: none;">
+                            <span class="bg-red" name="time_span"></span>
+                        </li>
+                        <li id="titem" style="display: none;">
+                            <i class="" name="i_label"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fa fa-clock-o"></i> <span
+                                        name="event_hour_min"></span></span>
 
-                            <h3 class="timeline-header"><a href="#"><span name="event_title"></span></a></h3>
+                                <h3 class="timeline-header"><a href="#"><span name="event_title"></span></a></h3>
 
-                            <div class="timeline-body" name="item_body">
+                                <div class="timeline-body" name="item_body">
 
+                                </div>
+                                <div class="timeline-footer">
+
+                                </div>
                             </div>
-                            <div class="timeline-footer">
-
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -137,6 +144,7 @@
 <script th:src="@{/jquery/jquery-3.2.1.js}"></script>
 <script type="text/javascript" data-th-src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
 <script th:src="@{/adminlte/js/adminlte.min.js}"></script>
+<script th:src="@{/js/pay.js}"></script>
 <!--<script th:src="@{/adminlte/js/app.min.js}"></script>-->
 <script type="text/javascript" th:inline="javascript">
     var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
@@ -145,12 +153,12 @@
 
     function parsePatientInfos(data) {
         var detailList = data.parm.itemDetailList;
-        for (var i = 0; i < detailList.length; i ++){
+        for (var i = 0; i < detailList.length; i++) {
             var infoMapList = detailList[i].infoMapList;
             var itemMap = detailList[i].itemMap;
-            for (var j = 0; j < infoMapList.length; j ++){
-                var tr = "<tr>" ;
-                if (j === 0){
+            for (var j = 0; j < infoMapList.length; j++) {
+                var tr = "<tr>";
+                if (j === 0) {
                     tr += "<td rowspan=\"" + infoMapList.length.toString() + "\">" + itemMap.product_name + "</td>";
                 }
                 tr += "<td style=\"border:1px\">" + infoMapList[j].name + "</td>";
@@ -159,30 +167,36 @@
             }
         }
     }
+
     function parseOrderDetailTitle(data) {
         var order = data.parm.order;
         $('#order_detail_title').find('span[name=order_id]').text(order.order_id);
-        switch (order.status){
-            case 'CREATION':{
+        switch (order.status) {
+            case 'CREATION': {
                 $('#order_detail_title').find('span[name=order_status]').text('未支付');
                 break;
             }
-            case 'PAID':{
+            case 'RE_CREATION':{
+                $('#order_detail_title').find('span[name=order_status]').text('重新创建');
+                break;
+            }
+            case 'PAID': {
                 $('#order_detail_title').find('span[name=order_status]').text('已支付');
                 break;
             }
-            case 'CANCELED':{
+            case 'CANCELED': {
                 $('#order_detail_title').find('span[name=order_status]').text('已取消');
                 break;
             }
-            default:{
+            default: {
                 $('#order_detail_title').find('span[name=order_status]').text('其他');
             }
         }
         $('#order_detail_title').find('span[name=order_price]').text('￥' + order.price.toString());
         $('#order_detail_title').find('span[name=order_description]').text(order.description);
     }
-//    处理订单事件时间线timeline
+
+    //    处理订单事件时间线timeline
     function parseOrderEvent(data) {
         console.log(data.parm);
         var orderEventList = data.parm.orderEventList;
@@ -200,7 +214,7 @@
             }
             var titem = $('#titem').clone();
             titem.show();
-            titem.find('span[name=event_hour_min]').text(event_time.getHours().toString() + ':' + event_time.getMinutes());
+            titem.find('span[name=event_hour_min]').text(event_time.getHours().toString() + ':' + event_time.getUTCMinutes());
             var event_title = orderEventList[i].event_title;
             switch (event_title) {
                 case 'CREATION': {
@@ -228,9 +242,20 @@
                     titem.find('div[name=item_body]').text("支付金额：￥" + data.parm.order.price);
                     break;
                 }
+                case 'RE_CREATION':{
+                    titem.find('i[name=i_label]').addClass('fa bg-blue fa-cart-plus');
+                    titem.find('span[name=event_title]').text('重新创建订单');
+                    break;
+                }
                 case 'CANCELED': {
-                    titem.find('i[name=i_label]').addClass('fa weui-icon-success bg-green');
+                    titem.find('i[name=i_label]').addClass('fa bg-gray fa-close');
                     titem.find('span[name=event_title]').text('取消订单');
+                    for (var ii = 0; ii < orderEventList.length; ii++) {
+                        if (orderEventList[ii].event_title === 'CANCELED') {
+                            titem.find('div[name=item_body]').text(orderEventList[ii].description);
+                            break;
+                        }
+                    }
                     break;
                 }
             }
@@ -238,6 +263,7 @@
             console.log(event_time);
         }
     }
+
     function requestOrderDetail() {
         $.showLoading();
         $.ajax({
@@ -249,12 +275,58 @@
                 $.hideLoading();
             },
             success: function (data) {
+//                countDown(data);
                 parseOrderDetailTitle(data);
                 parseOrderEvent(data);
                 parsePatientInfos(data);
                 $.hideLoading();
             }
         })
+    }
+
+    function setTimer(time, statusNode) {
+        if (time === 0) {
+            return 0;
+        } else {
+            statusNode.text('支付剩余时间：' + Math.floor(time / 60) + ':' + ((time % 60 < 10 ? ('0') : '') + time % 60));
+            setTimeout(function () {
+                setTimer(time - 1, statusNode);
+            }, 1000);
+        }
+    }
+
+    function countDown(data) {
+        var order = data.parm.order;
+        if (order.status === 'CREATION' || order.status === 'RE_CREATION') {
+            var last_time = new Date(data.parm.orderEventList[0].event_time);
+            var time = Math.floor((15 * 60 * 1000 - (new Date() - last_time)) / 1000);
+            $('#unpaid_div').show();
+            setTimer(time - 1, $('#cout_down_text'));
+        }
+    }
+
+    function requestBuyOrder() {
+        var buyPath = context + '/but_target_order';
+        $.showLoading();
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: buyPath,
+            data: {'order_id': order_id},
+            async: true,
+            error: function (request) {
+                $.hideLoading();
+                alert("发送购买请求失败！");
+            },
+            success: function (data) {
+                if (data.result == 'ok') {
+                    requestWechatPayment(data);
+                } else {
+                    alert('购买失败！');
+                }
+                $.hideLoading();
+            }
+        });
     }
 
     $(document).ready(requestOrderDetail());

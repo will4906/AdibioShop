@@ -113,7 +113,7 @@
 				<div class="weui-cells" id="selectPatientList">
 					<!--拥有的检测人信息-->
 				</div>
-				<div class="weui-btn weui-btn_mini weui-btn_primary " style="display:flex; justify-content:center;width: 40%; margin: 0.4em auto;" id='addNewPatient' name='add'>添加新的检测人</div>
+				<a href="?page=input"><div class="weui-btn weui-btn_mini weui-btn_primary " style="display:flex; justify-content:center;width: 40%; margin: 0.4em auto;" id='addNewPatient' name='add'>添加新的检测人</div></a>
 			</div>
 		</div>
 	</div>
@@ -276,8 +276,11 @@
     function InitAll(){
         GetCartData();
     }
-    $(document).ready(InitAll());
-    //点击添加已有检测人或者添加新的检测人
+    $(function () {
+        InitAll();
+        $()
+    })
+
 
 
 	//获取customer拥有的患者信息
@@ -597,7 +600,7 @@
 	            data: JSON.stringify(reqBuy),
                 dataType:"json",
                 contentType: "application/json",
-	            async: false,
+	            async: true,
 	            error: function (request) {
                     $.hideLoading();
 	                alert("购买失败");

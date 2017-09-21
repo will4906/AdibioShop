@@ -73,27 +73,27 @@ public class PayController {
     private Logger logger = Logger.getLogger(PayController.class);
 
     @RequestMapping(value = "/pay_success", method = RequestMethod.GET)
-    public String paySuccess(){
+    public String paySuccess() {
         return "/pay/pay_success";
     }
 
     @RequestMapping(value = "/pay_fail", method = RequestMethod.GET)
-    public String payFail(){
+    public String payFail() {
         return "/pay/pay_fail";
     }
 
     @RequestMapping(value = "/direct_pay", method = RequestMethod.POST)
     @ResponseBody
-    public Object directPay(HttpServletRequest request, HttpSession httpSession, @RequestParam("patient_infoid")String patientInfoId, @RequestParam("product_id")String productId) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
+    public Object directPay(HttpServletRequest request, HttpSession httpSession, @RequestParam("patient_infoid") String patientInfoId, @RequestParam("product_id") String productId) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
         Customer customer = (Customer) httpSession.getAttribute("customer");
         logger.info("patient_Infoid===" + patientInfoId);
         logger.info("product_id===" + productId);
-        if (patientInfoId == null || productId == null){
+        if (patientInfoId == null || productId == null) {
             return new Result(Result.ERR, "the parameter is error!");
         }
         Product product = productService.queryProductByProductId(productId);
         PatientInfo patientInfo = customerService.hasPatientInfoId(patientInfoId);
-        if (product == null || patientInfo == null){
+        if (product == null || patientInfo == null) {
             return new Result(Result.ERR, "the parameter is error!");
         }
         //配置订单
@@ -113,12 +113,8 @@ public class PayController {
 
     @RequestMapping(value = "/buy_cart_selects", method = RequestMethod.POST)
     @ResponseBody
-    public Object buyCartSelects2(HttpServletRequest request, HttpSession httpSession, @RequestBody List<CartItem> cartItemList) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
-        Customer customer = (Customer)httpSession.getAttribute("customer");
-        if (customer == null){
-            return new Result(Result.ERR, "Can't find the customer");
-        }
-
+    public Object buyCartSelects(HttpServletRequest request, HttpSession httpSession, @RequestBody List<CartItem> cartItemList) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
+        Customer customer = (Customer) httpSession.getAttribute("customer");
         Order order = new Order();
         SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
         String orderId = String.valueOf(idWorker.nextId());
@@ -132,9 +128,9 @@ public class PayController {
         List<OrderItem> orderItemList = new ArrayList<>();
 
         BigDecimal wholePrice = new BigDecimal(0);
-        for (CartItem cartItem : cartItemList){
+        for (CartItem cartItem : cartItemList) {
             cartItem = cartService.getCartItem(cartItem.getCart_itemid());
-            if (cartItem == null){
+            if (cartItem == null) {
                 return new Result(Result.ERR, "Can't find CartItem!");
             }
             List<Map<String, Object>> cartPatientInfoList = cartService.queryCartPatientInfos(cartItem);
@@ -143,7 +139,7 @@ public class PayController {
             Product product = productService.queryProductByProductId(cartItem.getProduct_id());
             BigDecimal unit_price = product.getUnit_price();
             wholePrice = wholePrice.add(unit_price.multiply(new BigDecimal(cartItem.getQuantity())));
-            for (Map map : cartPatientInfoList){
+            for (Map map : cartPatientInfoList) {
                 OrderInfo orderInfo = new OrderInfo(orderItem.getOrder_itemid(), UUID.randomUUID().toString(), cartItem.getProduct_id(), (String) map.get("patient_infoid"));
                 orderInfoList.add(orderInfo);
             }
@@ -153,6 +149,17 @@ public class PayController {
         cartService.deleteSelectCart(cartItemList);
         logger.info(cartItemList);
         return notifyUnifiedOrder(request, order, "批量检测", customer);
+    }
+
+    @RequestMapping(value = "/but_target_order", method = RequestMethod.POST)
+    @ResponseBody
+    public Object buyTargetOrder(HttpServletRequest request, HttpSession httpSession, @RequestParam("order_id") String orderId) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
+        Customer customer = (Customer) httpSession.getAttribute("customer");
+        Order order = orderService.getCustomerOrder(customer.getCustomer_id(), orderId);
+        logger.info(order);
+        OrderEvent orderEvent = new OrderEvent(UUID.randomUUID().toString(), orderId, new Date(), OrderStatus.RE_CREATION, customer.getCustomer_id(), null);
+        orderService.changeOrderStatus(orderEvent);
+        return notifyUnifiedOrder(request, order, "重新发起订单支付", customer);
     }
 
     @RequestMapping(value = "/wechat_pay_notify", method = RequestMethod.POST)
@@ -169,9 +176,9 @@ public class PayController {
         result = resultWriter.toString();
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        if (redisTemplate.hasKey("pay." + wechatPayBack.getOut_trade_no())){
+        if (redisTemplate.hasKey("pay." + wechatPayBack.getOut_trade_no())) {
             return result;
-        }else {
+        } else {
             ops.set("pay." + wechatPayBack.getOut_trade_no(), "send", 1, TimeUnit.DAYS);
         }
 
@@ -189,7 +196,7 @@ public class PayController {
         wechatTemplate.setTouser(customer.getOpenid());
         wechatTemplate.setTemplate_id(TemplateId.CHECKOUT_SUCCESS);
         String strUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wechatProperties.getAppid() + "&redirect_uri=APP_URL&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
-        strUrl = strUrl.replace("APP_URL", request.getScheme() +"%3A%2F%2F" + request.getServerName() + request.getContextPath() + "%2Forder_detail_page?order_id=" + wechatPayBack.getOut_trade_no());
+        strUrl = strUrl.replace("APP_URL", request.getScheme() + "%3A%2F%2F" + request.getServerName() + request.getContextPath() + "%2Forder_detail_page?order_id=" + wechatPayBack.getOut_trade_no());
         logger.info(strUrl);
         wechatTemplate.setUrl(strUrl);
         Map<String, Map<String, String>> data = new HashMap<>();
@@ -251,7 +258,7 @@ public class PayController {
         String out_trade_no = order.getOrder_id();
         String total_fee = order.getPrice().multiply(new BigDecimal(100)).toBigInteger().toString();
         String spbill_create_ip = request.getRemoteAddr();
-        String notify_url = request.getScheme() +"://" + request.getServerName()  + ":" +request.getServerPort() + request.getContextPath() + "/wechat_pay_notify";
+        String notify_url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/wechat_pay_notify";
         String trade_type = "JSAPI";
         String openid = customer.getOpenid();
 
@@ -267,7 +274,7 @@ public class PayController {
         unifiedOrder.setOpenid(openid);
         //计算sign
         SortedMap<String, String> sortedMap = BeanUtil.beanToMap(unifiedOrder);
-        if (sortedMap == null){
+        if (sortedMap == null) {
             return new Result(Result.ERR, "Can't parse the order.");
         }
         String sign = WechatTool.generateMD5PaySign(sortedMap, wechatProperties.getApikey());
@@ -281,7 +288,7 @@ public class PayController {
         UnifiedOrderBack unifiedOrderBack = backResponse.body();
 
         JsPayParm jsPayParm = new JsPayParm();
-        if (unifiedOrderBack != null){
+        if (unifiedOrderBack != null) {
             jsPayParm.setAppId(wechatProperties.getAppid());
             jsPayParm.setPackage_sign_cut("prepay_id=" + unifiedOrderBack.getPrepay_id());
             jsPayParm.setNonceStr(Encryption.md5(UUID.randomUUID().toString()));
@@ -290,7 +297,7 @@ public class PayController {
 
             //计算sign
             SortedMap<String, String> jsSortMap = BeanUtil.beanToMap(jsPayParm);
-            if (jsSortMap == null){
+            if (jsSortMap == null) {
                 return new Result(Result.ERR, "Can't parse the order.");
             }
             String paySign = WechatTool.generateMD5PaySign(jsSortMap, wechatProperties.getApikey());
@@ -298,7 +305,7 @@ public class PayController {
 
             logger.info(jsPayParm);
             return new Result(Result.OK, jsPayParm);
-        }else {
+        } else {
             return new Result(Result.ERR, "Happened some errors!");
         }
     }

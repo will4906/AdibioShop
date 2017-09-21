@@ -141,9 +141,11 @@
 				</div>
 			</div>
 		</div>
-		<!--handing-->
-		<div id="handing_templet">
-
+		<!--show no more-->
+		<div id="noMore_templet">
+			<div style = "display: flex;justify-content: center;align-items: center">
+				<h2>目前没有订单</h2>
+			</div>
 		</div>
 	</section>
 	<script type="text/javascript" data-th-src="@{/jquery-weui/js/jquery-3.2.1.min.js}"></script>
@@ -169,7 +171,7 @@
 	
 	$(document).ready(function(){
 		
-		$('div.content-padded').height($(document).height());
+		$('div.content-padded').height($(document).height()*0.7);
 		
 		Init();
 
@@ -205,7 +207,7 @@
 
 			return 0;
 		}else{
-			statusNode.text('支付剩余时间：'+parseInt(time/60)+':'+((time%60<10?('0'):'')+time%60));
+			statusNode.text('支付剩余时间：'+Math.floor(time/60)+':'+((time%60<10?('0'):'')+time%60));
 			setTimeout(function () {
                 setTimer(time-1,statusNode,listNode);
             },1000);
@@ -226,23 +228,29 @@
         $('#tabAll').click(function(e){
         	PullUp();
         	InitGetAll();
+            $(document.body).scrollTop(0);
         });
         $('#tabAll').click();
         $('#tabPaying').click(function(e){
         	PullUp();
         	InitGetPaying();
+            $(document.body).scrollTop(0);
         });
         $('#tabHanding').click(function(e){
         	PullUp();
         	InitGetHanding();
+            $(document.body).scrollTop(0);
         });
         $('#tabDone').click(function(e){
         	//PullUp();
         	//InitGetDone();
+//            $(document.body).scrollTop(0);
+			ShowNoMore(); //临时禁用
         });
         $('#tabCancel').click(function(e){
         	PullUp();
         	InitGetCancel();
+            $(document.body).scrollTop(0);
         });
 
        
@@ -261,11 +269,33 @@
             GetDetail($(this));
             e.stopPropagation();
         });
+        $('div[name=payingItem]').off('click');
+        $('div[name=payingItem]').click(function(e){
+            GetDetail($(this));
+            e.stopPropagation();
+        });
     }
     //显示暂时无订单
 	function ShowNoMore() {
+        var curID;
+        var list;
+        $(document.body).off('infinite');
         $('#loadMore').css('display','none');
-        $.alert('暂时没有订单~')；
+		curID = $('div.weui-tab__bd-item--active').attr('id');
+		if (curID=='tab1') {
+			list = $('#allList');
+		}else if(curID=='tab2'){
+            list = $('#payingList');
+		}else if(curID=='tab3'){
+            list = $('#handingList');
+		}else if(curID=='tab4'){
+            list = $('#doneList');
+		}else{
+            list = $('#cancelList');
+		}
+		list.append($('#noMore_templet').clone());
+
+
     }
 
 	//绑定数据
@@ -287,7 +317,9 @@
 
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm == ''){
+                    ShowNoMore();
+                }else if(data.result=='ok' && data.parm != ''){
                     DrawAllList(data);
 				}else{
                     alert('获取订单信息错误！');
@@ -335,8 +367,9 @@
 				case "CANCELED":
 				status = '已取消';
 				break;
+                case 'RE_CREATION':
 				case "CREATION":
-				status = '已完成';
+				status = '未支付';
 				break;
 			}
 			$('#all_templet').find('span[name=status]').text(status);
@@ -370,17 +403,13 @@
 
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm == ''){
+                    ShowNoMore();
+                }else if(data.result=='ok' && data.parm != ''){
                     DrawPayingList(data);
-                    
                 }else{
-                	
                     alert('获取订单信息错误！');
                 }
-                $('div[name=payingItem]').click(function(e){
-                    GetDetail($(this));
-                    e.stopPropagation();
-                });
             }
         });
 
@@ -411,19 +440,14 @@
     }
     //画出待付款订单列表
 	function DrawPayingList(orderData) {
-		var resTime;
-		var date;
+        var seconds
         var payingItem
 		$('#paying_templet').find('div[name=productList]').html('<span class="font-gray" name="productName"></span>');
 		var status = "待支付";
 		var product = $('#paying_templet').find('span[name=productName]');
 		for(var i=0; i<orderData.parm.length ;i++){
 
-			date = ChangeDate(orderData.parm[i].create_time);
-			var seconds = IsWithin15(new Date(),new Date(date.month+" "+date.day+","+date.year+" "+date.time));
-			if (seconds==0) {
-				continue;
-			}
+			seconds  = GetSeconds(orderData.parm[i].create_time);
 			$('#paying_templet').find('span[name=time]').text(orderData.parm[i].create_time);
 			$('#paying_templet').find('span[name=money]').text(orderData.parm[i].price);
 
@@ -435,7 +459,7 @@
 			$('#payingList').append(payingItem);
 			BindData($('#payingList').find('input:hidden').last(),orderData.parm[i]);
 			
-			setTimer(seconds,$('#payingList').find('span[name=status]').last(),$('#payingList').find('div[name=payingItem]').last()); //计时器
+			setTimer(15*60-seconds,$('#payingList').find('span[name=status]').last(),$('#payingList').find('div[name=payingItem]').last()); //计时器
 			if (i==orderData.parm.length-1) {
 				row_paying = orderData.parm[i].row_id;
 			}
@@ -458,17 +482,13 @@
 
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm == ''){
+                    ShowNoMore();
+                }else if(data.result=='ok' && data.parm != ''){
                     DrawHandingList(data);
-                    
                 }else{
-                	
                     alert('获取订单信息错误！');
                 }
-                $('div[name=allItem]').click(function(e){
-                    (GetDetail($(this)));
-                    e.stopPropagation();
-                });
             }
         });
 
@@ -549,16 +569,13 @@
                 alert("Connection error");
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm == ''){
+                    ShowNoMore();
+                }else if(data.result=='ok' && data.parm != ''){
                     DrawDoneList(data);        
                 }else{
                     alert('获取订单信息错误！');
                 }
-                $('div[name=allItem]').click(function(e){
-                    GetDetail($(this));
-                    e.stopPropagation();
-                });
-
             }
         });
    
@@ -626,15 +643,13 @@
                 alert("Connection error");
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm == ''){
+                    ShowNoMore();
+                }else if(data.result=='ok' && data.parm != ''){
                     DrawCancelList(data);
                 }else{
                     alert('获取订单信息错误！');
                 }
-                $('div[name=allItem]').click(function(e){
-                    GetDetail($(this));
-                    e.stopPropagation();
-                });
             }
         });
 
@@ -691,8 +706,6 @@
     	if(loading) return;
     	if(row_all>0){
             GetAll();
-		}else{
-            ShowNoMore();
 		}
     }
     //待支付订单额面加载更多
@@ -700,27 +713,21 @@
     	if(loading) return;
     	if(row_paying>0){
             GetPaying();
-		}else{
-            ShowNoMore();
-        }
+		}
     }
     //处理中订单额面加载更多
     function LoadHanding(){
     	if(loading) return;
     	if(row_handing>0){
             GetHanding();
-		}else{
-            ShowNoMore();
-        }
+		}
     }
     //已完成订单额面加载更多
     function LoadDone(){
     	if(loading) return;
     	if(row_done>0){
             GetDone();
-		}else{
-            ShowNoMore();
-        }
+		}
 
     }
     //已取消订单额面加载更多
@@ -728,9 +735,7 @@
     	if(loading) return;
     	if(row_cancel){
             GetCancel();
-		}else{
-            ShowNoMore();
-        }
+		}
     }
 
     //转化返回的date数据
@@ -740,41 +745,11 @@
     		day,
     		times
     	}*/
-    function ChangeDate(date){
-    	var dateObj ={};
-    	var dateArr = [];
-    	var timeArr = [];
-    	date = date.replace(',','');
-    	dateArr = date.split(' ');
-    	dateObj.year = dateArr[2];
-    	dateObj.month = dateArr[0];
-    	dateObj.day = dateArr[1];
-    	timeArr = dateArr[3].split(':');
-    	if (dateArr[4]=='PM') {
-    		timeArr[0] = (parseInt(timeArr[0]) + 12).toString();
-    	}
-    	dateObj.time = timeArr.join(':');
-    	return dateObj;
-    }
-    //比较时间是否为15分钟内
-    function IsWithin15(nowDate,orderDate){
-    	var time = nowDate.getTime() - orderDate.getTime();
-    	//计算出相差天数
-		var days=Math.floor(time/(24*3600*1000))	 
-		//计算出小时数
-		var leave1=time%(24*3600*1000)    //计算天数后剩余的毫秒数
-		var hours=Math.floor(leave1/(3600*1000))
-		//计算相差分钟数
-		var leave2=leave1 %(3600*1000)        //计算小时数后剩余的毫秒数
-		var minutes=Math.floor(leave2/(60*1000))
-		//计算相差秒数
-		var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
-		var seconds=Math.round(leave3/1000)
-		if (days==0 && hours==0 && minutes<15 && minutes>0) {
-			return Math.round(leave2/1000);	//返回相差秒
-		}else{
-			return 0;
-		}
+    function GetSeconds(dateStr){
+    	var nowDate =new Date();
+    	var orderDate = new Date(dateStr);
+    	var seconds = Math.floor((nowDate.getTime()-orderDate.getTime())/1000);
+    	return seconds;
     }
 
 	//下拉刷新
@@ -797,43 +772,6 @@
 	        }
 	    
 	})*/
-    //tab切换
-    /*var auiTab = new auiTab({
-        element:document.getElementById("tab"),
-        index:tabIndex,
-        repeatClick:false
-    },function(ret){
-        tabIndex=ret.index;
-        if (ret.index==1) {
-            //s所有
-            document.getElementById('all').style.display="block";
-            document.getElementById('paying').style.display="none";
-            tabIndex = ret.index;
-
-        }else if (ret.index==2){
-            //待支付
-            document.getElementById('all').style.display="none";
-            document.getElementById('paying').style.display="block";
-            tabIndex = ret.index;
-        }else if (ret.index==3) {
-            //处理中
-            document.getElementById('all').style.display="none";
-            document.getElementById('paying').style.display="none";
-            tabIndex = ret.index;
-        }else if (ret.index==4) {
-            //已完成
-            document.getElementById('all').style.display="none";
-            document.getElementById('paying').style.display="none";
-            tabIndex = ret.index;
-        }else{
-            //已取消
-            document.getElementById('all').style.display="none";
-            document.getElementById('paying').style.display="none";
-            tabIndex = ret.index;
-        }
-
-    });*/
-
 
 </script>
 <style type="text/css">

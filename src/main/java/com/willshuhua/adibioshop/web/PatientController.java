@@ -26,7 +26,7 @@ public class PatientController {
     }
 
     @RequestMapping(value = "/update_patient_info", method = RequestMethod.POST)
-    public Object updatePatientInfo(HttpSession httpSession, @ModelAttribute("patientInfo")PatientInfo patientInfo){
+    public Object updatePatientInfo(HttpSession httpSession, @RequestBody PatientInfo patientInfo){
         Customer customer = (Customer)httpSession.getAttribute("customer");
         PatientInfo targetPatientInfo = customerService.hasPatientInfoId(patientInfo.getPatient_infoid());
         if (targetPatientInfo != null){

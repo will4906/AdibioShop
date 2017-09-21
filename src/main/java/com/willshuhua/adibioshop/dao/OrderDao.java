@@ -39,6 +39,8 @@ public interface OrderDao {
 
     List<Map<String, Object>> getItemMapList(Order order);
 
+    Order getCustomerOrder(OrderQuery orderQuery);
+
     /**
      * 查询顶部几个全类型订单
      * @param orderQuery

@@ -20,6 +20,8 @@ public interface OrderService {
 
     List<Map<String,Object>> queryOrderInfoByOrderId(String orderId);
 
+    public Order getCustomerOrder(String customerId, String orderId);
+
     void setOrderPreviewsToMyOrders(List<MyOrder> myOrderList);
 
     void cancelOrders(String customer_id);
@@ -41,5 +43,5 @@ public interface OrderService {
      */
     List<MyOrder> getPartServeralOrders(OrderQuery orderQuery, String type);
 
-
+    void cancelOrderByOrderId(String customer_id, String orderId, String whyCancel) throws Exception;
 }

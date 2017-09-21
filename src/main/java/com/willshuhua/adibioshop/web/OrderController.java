@@ -7,6 +7,7 @@ import com.willshuhua.adibioshop.dto.order.OrderDetail;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.cart.ShoppingCart;
 import com.willshuhua.adibioshop.entity.order.MyOrder;
+import com.willshuhua.adibioshop.entity.order.Order;
 import com.willshuhua.adibioshop.entity.order.OrderQuery;
 import com.willshuhua.adibioshop.properties.WechatProperties;
 import com.willshuhua.adibioshop.retrofit.RetrofitManager;
@@ -118,9 +119,24 @@ public class OrderController {
 
     @RequestMapping(value = "/order_detail", method = RequestMethod.GET)
     @ResponseBody
-    public Object orderInfo(@RequestParam("order_id")String orderId) throws Exception {
+    public Object orderInfo(HttpSession httpSession, @RequestParam("order_id")String orderId) throws Exception {
+        Customer customer = (Customer) httpSession.getAttribute("customer");
+        orderService.cancelOrders(customer.getCustomer_id());
         return new Result(Result.OK, orderService.getOrderDetail(orderId));
     }
+
+    @RequestMapping(value = "/cancel_customer_order", method = RequestMethod.POST)
+    @ResponseBody
+    public Object cancelOrders(HttpSession httpSession, @RequestParam("order_id")String orderId){
+        Customer customer = (Customer)httpSession.getAttribute("customer");
+        try {
+            orderService.cancelOrderByOrderId(customer.getCustomer_id(), orderId, "手动取消");
+        }catch (Exception e){
+            return new Result(Result.ERR, "We have some errors!");
+        }
+        return new Result(Result.OK);
+    }
+
 
 }
 
