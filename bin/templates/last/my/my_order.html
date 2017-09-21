@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>我的订单</title>
+    <link rel="stylesheet" type="text/css" data-th-href="@{/weui/css/weui.min.css}">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/jquery-weui.css}"/>
+    <link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui.css}"/>
+    <link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui-pull-refresh.css}" />
+</head>
+<body>
+<div class="weui-tab">
+    <div class="weui-navbar">
+        <div id="order_nav0" class="weui-navbar__item weui-bar__item_on" onclick="onChangeOrderNav(0)">
+            全部
+        </div>
+        <div id="order_nav1" class="weui-navbar__item" onclick="onChangeOrderNav(1)">
+            待付款
+        </div>
+        <div id="order_nav2" class="weui-navbar__item" onclick="onChangeOrderNav(2)">
+            处理中
+        </div>
+        <div id="order_nav3" class="weui-navbar__item" onclick="onChangeOrderNav(3)">
+            已完成
+        </div>
+        <div id="order_nav4" class="weui-navbar__item" onclick="onChangeOrderNav(4)">
+            已取消
+        </div>
+    </div>
+    <div class="weui-tab__panel">
+        <div id="order_page0" class="display_on" >
+            <section class="aui-content-padded aui-refresh-content">
+                <div id="done">
+                    <div class="aui-card-list" >
+                        <div class="aui-card-list-header">已完成</div>
+                        <div class="aui-card-list-content-padded">
+                            <div class="aui-row aui-row-padded">
+                                <div class="aui-col-xs-8">订单编号:123456123456</div>
+                                <div class="aui-col-xs-4 aui-pull-right">
+                                    <div></div>
+                                    <div>金额:￥50</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aui-card-list-footer">
+                            <div class=" aui-pull-left">下单时间：2017-08-24 15:30:10</div>
+                            <div class=" aui-pull-right">已完成</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div id="order_page1" style="display:none">待付款</div>
+        <div id="order_page2" style="display:none">处理中</div>
+        <div id="order_page3" style="display:none">已完成</div>
+        <div id="order_page4" style="display:none">已取消</div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.js}"></script>
+<script data-th-src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+<script type="text/javascript" data-th-src="@{/AUI/script/aui-pull-refresh.js}" ></script>
+<script type="text/javascript" th:inline="javascript">
+    function onChangeOrderNav(index) {
+        $('.weui-bar__item_on').removeClass('weui-bar__item_on');
+        $('.display_on').hide().removeClass('display_on');
+        $('#order_nav' + index.toString()).addClass('weui-bar__item_on');
+        $('#order_page' + index.toString()).addClass('display_on').show();
+        switch (index){
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+        }
+    }
+</script>
+</body>
+</html>

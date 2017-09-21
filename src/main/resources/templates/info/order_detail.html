@@ -10,69 +10,176 @@
     <link rel="stylesheet" type="text/css" data-th-href="@{/weui/css/weui.min.css}">
     <link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/jquery-weui.css}"/>
 </head>
-<body>
-<div class="weui-tab__panel">
-    <div class="weui-cells" id="order_detail_title">
-        <div class="weui-cell" href="#">
-            <div class="weui-cell__bd">
-                <p>订单号：</p>
+<body style="background-color: #f8f8f8;">
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">订单未支付</h3>
             </div>
-            <div class="weui-cell__ft"><span class="pull-right" name="order_id"></span></div>
-        </div>
-        <div class="weui-cell" href="#">
-            <div class="weui-cell__bd">
-                <p>订单状态：</p>
+            <div class="box-body text-center">
+
             </div>
-            <div class="weui-cell__ft"><span class="pull-right" name="order_status"></span></div>
-        </div>
-        <div class="weui-cell" href="#">
-            <div class="weui-cell__bd">
-                <p>订单金额：</p>
-            </div>
-            <div class="weui-cell__ft"><span class="pull-right" name="order_price"></span></div>
-        </div>
-        <div class="weui-cell" href="#">
-            <div class="weui-cell__bd">
-                <p>备注：</p>
-            </div>
-            <div class="weui-cell__ft"><span class="pull-right" name="order_description"></span></div>
         </div>
     </div>
-    <ul class="timeline" id="event_timeline">
-        <li class="time-label" id="tlabel" style="display: none;">
-            <span class="bg-red" name="time_span"></span>
-        </li>
-        <li id="titem" style="display: none;">
-            <i class="fa fa-envelope bg-blue"></i>
-            <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> <span name="event_hour_min"></span></span>
-
-                <h3 class="timeline-header"><a href="#"><span name="event_title"></span></a></h3>
-
-                <div class="timeline-body" name="item_body">
-
+</div>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">订单信息</h3>
+                    <div class="box-tools pull-right">
+                        <!-- Collapse Button -->
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="timeline-footer">
-
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div id="order_detail_title">
+                        <div class="weui-cell">
+                            <div class="weui-cell__bd">
+                                <p>订单号：</p>
+                            </div>
+                            <div class="weui-cell__ft"><span class="pull-right" name="order_id"></span></div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__bd">
+                                <p>订单状态：</p>
+                            </div>
+                            <div class="weui-cell__ft"><span class="pull-right" name="order_status"></span></div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__bd">
+                                <p>订单金额：</p>
+                            </div>
+                            <div class="weui-cell__ft"><span class="pull-right" name="order_price"></span></div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__bd">
+                                <p>备注：</p>
+                            </div>
+                            <div class="weui-cell__ft"><span class="pull-right" name="order_description"></span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </li>
+        </div>
+    </div>
+    <div class="row">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">订单事件</h3>
+                <div class="box-tools pull-right">
+                    <!-- Collapse Button -->
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="timeline" id="event_timeline">
+                    <li class="time-label" id="tlabel" style="display: none;">
+                        <span class="bg-red" name="time_span"></span>
+                    </li>
+                    <li id="titem" style="display: none;">
+                        <i class="" name="i_label"></i>
+                        <div class="timeline-item">
+                            <span class="time"><i class="fa fa-clock-o"></i> <span name="event_hour_min"></span></span>
 
-    </ul>
-</div>
+                            <h3 class="timeline-header"><a href="#"><span name="event_title"></span></a></h3>
+
+                            <div class="timeline-body" name="item_body">
+
+                            </div>
+                            <div class="timeline-footer">
+
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">检测项目</h3>
+                    <div class="box-tools pull-right">
+                        <!-- Collapse Button -->
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-bordered" align='center' id="patient_infos" width="100%">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui-footer">
+        <p class="weui-footer__links">
+            <a href="javascript:void(0);" class="weui-footer__link">安帝宝</a>
+        </p>
+        <p class="weui-footer__text">Copyright &copy; 2016-2017 Adibio</p>
+    </div>
+</section>
+
 
 <script th:src="@{/jquery/jquery-3.2.1.js}"></script>
 <script type="text/javascript" data-th-src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+<script th:src="@{/adminlte/js/adminlte.min.js}"></script>
+<!--<script th:src="@{/adminlte/js/app.min.js}"></script>-->
 <script type="text/javascript" th:inline="javascript">
     var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
     var order_id = /*[[${order_id}]]*/;
     var whole_path = context + '/order_detail?order_id=' + order_id;
 
+    function parsePatientInfos(data) {
+        var detailList = data.parm.itemDetailList;
+        for (var i = 0; i < detailList.length; i ++){
+            var infoMapList = detailList[i].infoMapList;
+            var itemMap = detailList[i].itemMap;
+            for (var j = 0; j < infoMapList.length; j ++){
+                var tr = "<tr>" ;
+                if (j === 0){
+                    tr += "<td rowspan=\"" + infoMapList.length.toString() + "\">" + itemMap.product_name + "</td>";
+                }
+                tr += "<td style=\"border:1px\">" + infoMapList[j].name + "</td>";
+                tr += "</tr>";
+                $('#patient_infos').append(tr);
+            }
+        }
+    }
     function parseOrderDetailTitle(data) {
         var order = data.parm.order;
         $('#order_detail_title').find('span[name=order_id]').text(order.order_id);
-        $('#order_detail_title').find('span[name=order_status]').text(order.status);
-        $('#order_detail_title').find('span[name=order_price]').text(order.price);
+        switch (order.status){
+            case 'CREATION':{
+                $('#order_detail_title').find('span[name=order_status]').text('未支付');
+                break;
+            }
+            case 'PAID':{
+                $('#order_detail_title').find('span[name=order_status]').text('已支付');
+                break;
+            }
+            case 'CANCELED':{
+                $('#order_detail_title').find('span[name=order_status]').text('已取消');
+                break;
+            }
+            default:{
+                $('#order_detail_title').find('span[name=order_status]').text('其他');
+            }
+        }
+        $('#order_detail_title').find('span[name=order_price]').text('￥' + order.price.toString());
         $('#order_detail_title').find('span[name=order_description]').text(order.description);
     }
 //    处理订单事件时间线timeline
@@ -97,10 +204,10 @@
             var event_title = orderEventList[i].event_title;
             switch (event_title) {
                 case 'CREATION': {
+                    titem.find('i[name=i_label]').addClass('fa bg-blue fa-cart-plus');
                     titem.find('span[name=event_title]').text('创建订单');
                     var orderItemList = data.parm.itemDetailList;
                     var table = document.createElement('table');
-//                            table.setAttribute('class', 'table table-bordered');
                     table.setAttribute('class', 'table');
                     table.width = "100%";
                     for (var j = 0; j < orderItemList.length; j++) {
@@ -116,11 +223,13 @@
                     break;
                 }
                 case 'PAID': {
+                    titem.find('i[name=i_label]').addClass('fa weui-icon-success bg-green');
                     titem.find('span[name=event_title]').text('已支付');
                     titem.find('div[name=item_body]').text("支付金额：￥" + data.parm.order.price);
                     break;
                 }
                 case 'CANCELED': {
+                    titem.find('i[name=i_label]').addClass('fa weui-icon-success bg-green');
                     titem.find('span[name=event_title]').text('取消订单');
                     break;
                 }
@@ -142,6 +251,7 @@
             success: function (data) {
                 parseOrderDetailTitle(data);
                 parseOrderEvent(data);
+                parsePatientInfos(data);
                 $.hideLoading();
             }
         })

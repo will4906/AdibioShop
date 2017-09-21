@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2017. willshuhua.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui.css}"/>
+    <title>服务信息</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+    <script type="text/javascript" data-th-src="@{/AUI/script/aui-dialog.js}"></script>
+
+
+</head>
+<body>
+<section class="aui-grid aui-margin-b-15">
+    <div class="aui-content aui-content-padded">
+        <div>操作视频:</div>
+        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503288333155&di=8100d32622b38ed6e4ae6b9aa08e80d3&imgtype=0&src=http%3A%2F%2Fpic.uuhy.com%2Fuploads%2F2012%2F01%2F10%2FMacro_by_AstridT.jpg">
+
+    </div>
+
+</section>
+<section class="aui-grid aui-margin-b-15">
+    <div class="aui-content aui-content-padded">
+        <div>操作流程:</div>
+        <div>购买产品服务→微信支付→等待公司送取样杯→取样操作→寄送样本</div>
+    </div>
+</section>
+<section class="aui-grid aui-margin-b-15">
+    <div class="aui-content aui-content-padded">
+        <div>注意事项:</div>
+        <div>取样杯的使用注意、寄送样本的地址、样品收集日期</div>
+    </div>
+</section>
+
+<footer class="aui-bar aui-bar-tab">
+    <div class="aui-bar-tab-item" tapmode id="add" style="background-color:#0e53a7;">
+        <div class="aui-bar-tab-label" style="color: #fff">添加到购物车</div>
+    </div>
+    <div class="aui-bar-tab-item" tapmode id="buy" style="background-color:#00b64f;">
+        <div class="aui-bar-tab-label" style="color: #fff">购买</div>
+    </div>
+</footer>
+
+</body>
+<script type = "text/javascript" src = "http://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/AUI/script/aui-dialog.js}" ></script>
+<script type="text/javascript" th:src="@{/jquery-weui/js/jquery-weui.min.js}" ></script>
+<script type="text/javascript" th:inline="javascript">
+    var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/
+    var product_id = /*[[${productId}]]*/;
+    var path = context + "/pay_detail?product_id=" + product_id;
+    var product = "";
+
+    $(document).ready(function(){
+        product = GetProduct();			//获得产品名
+
+    });
+
+    //获取产品名
+    function GetProduct(){
+        var urlinfo=window.location.href; //获取当前页面的url
+        var len=urlinfo.length;//获取url的长度
+        var offset=urlinfo.indexOf("?");//设置参数字符串开始的位置
+        var newsidinfo=urlinfo.substr(offset,len)//取出参数字符串 这里会获得类似“id=1”这样的字符串
+        var newsids=newsidinfo.split("=");//对获得的参数字符串按照“=”进行分割
+        var newsid=newsids[1];//得到参数值
+        return newsid;
+    }
+    //点击购买
+    $("#buy").click(function(e){
+        window.location.href = path;
+	});
+    
+    //点击添加到购物车
+    $("#add").click(function(e){
+        console.log("add");
+    });
+</script>
+</html>
+

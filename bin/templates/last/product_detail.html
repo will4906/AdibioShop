@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/weui/css/weui.min.css}">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/css/index.css}">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui.css}"/>
+    <link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/jquery-weui.css}"/>
+	<title>服务信息</title>
+
+	
+	
+</head>
+<body>
+	<section class="aui-content-padded ">
+		<div class="aui-card-list">
+			<div class="aui-card-list-header">操作视频:</div>
+				<img  class="aui-card-list-content-padded" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503288333155&di=8100d32622b38ed6e4ae6b9aa08e80d3&imgtype=0&src=http%3A%2F%2Fpic.uuhy.com%2Fuploads%2F2012%2F01%2F10%2FMacro_by_AstridT.jpg">
+			
+		</div>
+
+		<div class="aui-card-list">
+			<div class="aui-card-list-header">操作流程:</div>
+				<div class="aui-card-list-content-padded">购买产品服务→微信支付→等待公司送取样杯→取样操作→寄送样本</div>
+		</div>	
+		
+		<div class="aui-card-list">
+			<div class="aui-card-list-header">注意事项:</div>
+				<div class="aui-card-list-content-padded">取样杯的使用注意、寄送样本的地址、样品收集日期</div>
+		</div>		
+	</section>
+
+	
+		
+	
+	
+	<footer class="aui-bar aui-bar-tab">    
+			<div class="aui-bar-tab-item" tapmode id="add" style="background-color:#0e53a7;">
+		        
+		        <div class="aui-bar-tab-label" style="color: #fff">添加到购物车</div>
+		    </div>
+		    <div class="aui-bar-tab-item" tapmode id="buy" style="background-color:#00b64f;">
+		        
+		        <div class="aui-bar-tab-label" style="color: #fff">购买(￥<span th:text="${product.unit_price}"></span>)</div>
+		    </div>
+			
+	       
+	</footer>
+
+	<!--弹出列表内的检测人信息item模板-->
+	<div id='templet' style="display: none">
+		<div id="customerPatientItem">
+			<div class="weui-cell" name='selectPatientItem'>
+				<div class="weui-cell__bd">
+					<span name="patientName">检测人</span>
+				</div>
+				<div class="weui-cell__ft" name="selectAdd">选择</div>
+				<input type="hidden" name="selectPatientInfo">
+			</div>
+		</div>
+	</div>
+
+	<!--选择检测人弹出列表-->
+	<div id="selectPop" class="weui-popup__container popup-bottom weui-popup-overlay" style="z-index: 999; ">
+		<div class="weui-popup__overlay"></div>
+		<div class="weui-popup__modal">
+			<div class="toolbar">
+				<div class="toolbar-inner">
+					<a href="javascript:;" class="picker-button close-popup">关闭</a>
+					<h1 class="title">选择检测人</h1>
+				</div>
+			</div>
+			<div class="modal-content">
+				<div class="weui-cells" id="selectPatientList">
+					<!--拥有的检测人信息-->
+				</div>
+				<div class="weui-btn weui-btn_mini weui-btn_primary " style="display:flex; justify-content:center;width: 40%; margin: 0.4em auto;" id='addNewPatient'>添加新的检测人</div>
+			</div>
+		</div>
+	</div>
+
+	<!--填写新的检测人信息框-->
+	<div id="writePop" class="weui-popup__container weui-popup-overlay" style="z-index: 999; ">
+		<div class="weui-popup__overlay"></div>
+		<div class="weui-popup__modal">
+			<form id="payinfo_form" name="inform" onchange="changed()" oninput="changed()">
+			
+				<div class="aui-content aui-margin-b-15">
+					<ul class="aui-list aui-from-list">
+						<li class="aui-list-header">填写信息（必填）</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">*姓名:</div>
+								<div class="aui-list-item-input">
+									<input type="text" placeholder="姓名" name="name">
+								</div>
+							</div>
+						</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">*性别:</div>
+								<div class="aui-list-item-input">
+									<label><input class="aui-radio" type="radio" name="gender" value="M"
+										checked="true">男</label>
+									<label><input class="aui-radio" type="radio" name="gender" value="F">女</label>
+
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">*年龄:</div>
+									<div class="aui-list-item-input">
+										<input type="number" placeholder="年龄" name="age">
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">*邮寄地址:</div>
+									<div class="aui-list-item-input">
+										<input type="text" name="province" class="weui-input" value="" id="city-picker">
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label"></div>
+									<div class="aui-list-item-input">
+										<input type="text" placeholder="详细地址" name="address">
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">*联系电话:</div>
+									<div class="aui-list-item-input">
+										<input type="number" placeholder="电话" name="phone">
+									</div>
+								</div>
+							</li>
+
+							<li class="aui-list-item" style="display: none">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">*是否怀孕:</div>
+									<div class="aui-list-item-input">
+										<label><input class="aui-radio" type="radio" name="is_pregnant" value="1">是</label>
+										<label><input class="aui-radio" type="radio" name="is_pregnant" value="0"
+											checked="true">否</label>
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+			                    <div class="aui-list-item-inner" style="display: flex;flex-direction: row;justify-content: left;">
+			                        <div class="">*是否有糖尿病史:</div>
+			                        <div class="" style="margin-left: 1em;">
+			                            <label><input class="aui-radio" type="radio" name="has_diabetic" value="1">是</label>
+			                            <label><input class="aui-radio" type="radio" name="has_diabetic" value="0"
+			                                          checked="true">否</label>
+
+			                        </div>
+			                    </div>
+			                </li>
+						</ul>
+					</div>
+				<div class="aui-content aui-margin-b-15">
+					<ul class="aui-list aui-from-list">
+						<li class="aui-list-header">其他信息（选题）</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">身高:</div>
+								<div class="aui-list-item-input">
+									<input type="number" placeholder="身高（cm）" name="height">
+								</div>
+							</div>
+						</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">体重:</div>
+								<div class="aui-list-item-input">
+									<input type="number" placeholder="体重（kg）" name="weight">
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<input type="hidden" th:value="${product.product_id}" name="product_id">
+				<div class="aui-content aui-margin-b-15">
+					<ul class="aui-list aui-from-list">
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div style="display: flex;flex-direction: row">
+									<input class="aui-checkbox" type="radio" name="isagree" onclick="agreeClick(this)">
+									<p>阅读并同意该协议<a href="#">《协议》</a></p>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</form>
+			<div class="block">
+				<div class="Mask" id="mask"></div>
+				<div class="weui-btn weui-btn_primary" id='patientInfoConfirm'>确认</div>
+			</div>
+		</div>
+	</div>
+
+
+    <script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+    <script th:src="@{/jquery-weui/js/city-picker.min.js}"></script>
+
+	<script type="text/javascript" th:inline="javascript">
+	 var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
+     var product_id = /*[[${product.product_id}]]*/;
+
+	$(document).ready(ClickEven());
+
+	function ClickEven(){
+		//点击购买
+		$("#buy").click(function(e){
+            GetPatientInfo($(this));
+	        //window.location.href ="../pay_detail.html";
+			});
+		//点击添加到购物车
+		$("#add").click(function(e){
+			//获取保存到的检测人信息
+			GetPatientInfo($(this));
+		});
+		//点击添加新的检测人
+		$('#addNewPatient').click(function(e){
+			$('#writePop').popup();
+		})
+		//点击确认，新的检测人信息
+		$('#patientInfoConfirm').click(function(e){
+			//遍历form的元素值
+
+	        var arr = $('form').serializeArray();
+	        var phone = /^[1][3,5,8][0-9]{9}$/;
+	        var data = {};
+	        //变成json格式
+	        for (var item in arr) {
+	            data[arr[item].name] = arr[item].value;
+	        }
+	        //分割省市区
+	        var local = data.province.split(' ');
+	        data.province = local[0];
+	        data.city = local[1];
+	        data.district = local[2];
+
+	         if (data.height=='') {
+	            data.height=0;
+	        }
+	        if (data.weight=='') {
+	            data.weight=0;
+	        }
+	        //判断电话是否为手机
+	        if (!phone.test(data.phone)) {
+	            $.confirm({
+				title: '提示',
+				text: '电话格式错误！',
+				onOK: function () {
+			    //点击确认
+			},
+			onCancel: function () {
+			  	//点击取消
+			  }
+			});
+	        } else {
+	        	//发送增加检测人
+	        	SendAddPatient(data);
+		        $.closePopup();
+		        //$("#add").trigger("click");
+	        }
+		});
+
+	}
+     //选择该检测人
+    function SelectPatient(clickObj){
+        $('div[name=selectPatientItem]').click(function(e){
+            var patientInfo = $(this).find('input:hidden').data();
+            var req = {};
+            req.cartItem = {};
+            req.cartItem.product_id = product_id;
+            req.patientInfo = patientInfo;
+            if(clickObj.attr("id")=='add'){
+                //点击得失的是加入购物车
+                //发送添加到购物车请求
+                SendAddCart(req);
+            }else{
+                //点击的是购买
+            }
+            $.closePopup();
+        });
+    }
+	//画出弹出列表检测人item
+	function DrawPatientItem(patientItem,beInsectItem,patientData,clickObj){
+		beInsectItem.empty();
+		for (var i = 0; i <patientData.parm.length; i++) {
+			patientItem.find('span[name=patientName]').text(patientData.parm[i].name);
+			beInsectItem.append(patientItem.clone());
+		}
+        SelectPatient(clickObj);
+	}
+	//绑定检测人信息到select列表
+	function BindPatientInfo(content,patientData){
+		content.find('input:hidden').each(function(index){
+			$(this).data(patientData.parm[index]);
+		});
+	}
+	//发送加入购物车请求
+	function SendAddCart(req){
+		var addCartPath = context + '/add_cart';
+        $.showLoading();
+		$.ajax({
+		            cache: true,
+		            type: "POST",
+		            url: addCartPath,
+		            data: JSON.stringify(req),
+		            dataType:'json',
+		            contentType:'application/json',
+		            async: true,
+		            error: function (request) {
+                        $.hideLoading();
+		                alert("加入购物车请求失败！");
+		            },
+		            success: function (data) {
+		                $.hideLoading();
+		                //提示加入购物车成功
+                        if(data.result=='ok'){
+                            alert("加入购物车成功！");
+                        }else{
+                            alert("加入购物车失败！");
+                        }
+
+
+		            }
+		        });
+
+	}
+
+	//发送加入检测人请求
+	function SendAddPatient(patientData){
+		var addPatientCart = context + '/add_patient_info';
+		$.showLoading();
+		$.ajax({
+		            cache: true,
+		            type: "POST",
+		            url: addPatientCart,
+		            data: JSON.stringify(patientData),
+                    contentType: "application/json",
+                    dataType:'json',
+		            async: true,
+		            error: function (request) {
+                        $.hideLoading();
+		                alert("添加新的检测人失败！");
+		            },
+		            success: function (data) {
+		                $.hideLoading();
+		                //回调
+		            }
+		        });
+	}
+
+	//获取保存有的检测人信息
+	function GetPatientInfo(clickObj){
+		var patientInfoPath = context + '/patient_infos';
+		var patientInfo;
+        $.showLoading();
+		 $.ajax({
+            type: "GET",
+            url: patientInfoPath,
+            dataType: "json",
+            data: 'Get Patient Info',
+            contentType: "application/json",
+            async: false,
+            error: function (request) {
+                $.hideLoading();
+                alert("Connection error");
+            },
+            success: function (data) {
+                $.hideLoading();
+            	patientInfo = data;
+                if (patientInfo.result=='ok') {
+                    if (patientInfo.parm.length>0) {
+                        //存在则弹出检测人选择列表
+                        DrawPatientItem($('#customerPatientItem'),$('#selectPatientList'),patientInfo,clickObj);
+                        BindPatientInfo($('#selectPatientList'),patientInfo);
+                        $('#selectPop').popup();
+                    }else{
+                        //不存在则直接填写新的信息
+                        $('#writePop').popup();
+                    }
+                }else{
+                    alert('获取检测人信息失败');
+                }
+            }
+        });
+
+
+         return patientInfo;
+	}
+
+	//呼出省市选择器
+    $("#city-picker").cityPicker({
+        showDistrict: true
+    });
+
+     //radio按钮取消/选定
+     var aflag = true;
+     function agreeClick(id) {
+         id.checked = aflag;
+         aflag = !aflag;
+         changed();
+     }
+
+    //启用/禁用蒙版
+    function Mask(action){
+        if(action == 'hide'){
+            document.getElementById('mask').style.display="block";
+        }else{
+            document.getElementById('mask').style.display="none";
+        }
+    }
+
+	//启用、禁用按钮
+    function changed() {
+        //阻止input-age内输入e
+        $('input[name=age]').val($('input[name=age]').val().replace(/^[e.]$/, ''));
+        $('input[name=phone]').val($('input[name=phone]').val().replace(/^[e.]$/, ''));
+        //遍历form的元素值
+        var arr = $('form').serializeArray();
+        var data = {};
+        //变成json格式
+        for (var item in arr) {
+            data[arr[item].name] = arr[item].value;
+        }
+        if (data.name == '' || data.name == ' ' || data.age == '' || data.age == ' ' || data.province == "" || data.address == '' || data.address == ' ' || data.phone == '' || data.phone == ' ' || (!data.isagree)) {
+            Mask('hide');
+        } else {
+            
+            Mask('unhide');
+            
+        }
+    }
+
+	</script>
+
+</body>
+
+<style type="text/css">
+	.block {
+        position: relative;
+    }
+
+	.Mask {
+		z-index: 1;
+		position: absolute;
+		width: 100%;
+		height: 2.5rem;
+		top: 0;
+		background-color: #eee;
+		opacity: 0.5
+	}
+
+    .beMask {
+        z-index: 1;
+        position: absolute;
+    }
+</style>
+
+
+</html>
+

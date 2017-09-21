@@ -1,0 +1,16 @@
+<section data-th-each="product: ${productList}"  xmlns:th="http://www.thymeleaf.org">
+    <div class="aui-card-list">
+        <a data-th-href="@{'/product_detail?product_id=' + ${product.product_id}}">
+            <!--/*@thymesVar id="name" type="java.lang.String"*/-->
+            <div class="aui-card-list-header" th:text="${product.product_name}">
+                糖尿病早期筛查
+            </div>
+            <div class="aui-card-list-content-padded">
+                <img src="">
+            </div>
+            <div class="aui-card-list-footer">
+                了解更多
+            </div>
+        </a>
+    </div>
+</section>

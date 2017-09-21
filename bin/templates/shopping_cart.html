@@ -296,17 +296,20 @@
 		            async: true,
 		            error: function (request) {
 		                //错误
-		                patientInfo = 'error';
+                        $.hideLoading();
+                        alert("Connection error");
 		            },
 		            success: function (data) {
-                        $.hideLoading();
+
 						patientInfo = data;
                         if(patientInfo.result=='ok'){
                             //弹出检测人选择框
                             DrawSelectPatient($('#selectPatientList'),patientInfo);
+                            $.hideLoading();
                             $("#pop_select").popup();
                             SelectAdd(cartItem);
                         }else{
+                            $.hideLoading();
                             alert('获取信息错误！');
                         }
 		                
@@ -330,11 +333,12 @@
             async: true,
             error: function (request) {
                 //错误
+                alert("Connection error");
             },
             success: function (data) {
-                $.hideLoading();
                 cartData = data;
                 DrawCart();
+                $.hideLoading();
             }
         });
     }
@@ -437,14 +441,15 @@
                     contentType: "application/json",
 		            async: true,
 		            error: function (request) {
-		                
+                        alert("Connection error");
 		            },
 		            success: function (data) {
-                        $.hideLoading();
 		                if(data.result=='ok'){
                             patientInfo = data;
                             DrawCartPatient(cartItem,patientInfo);
+                            $.hideLoading();
                         }else{
+                            $.hideLoading();
                             alert('获取该购物车项目对应的检测人信息失败');
                         }
 		            }
@@ -507,11 +512,12 @@
                 alert("Connection error");
             },
             success: function (data) {
-                $.hideLoading();
                 if(data.result=='ok'){
                     InitAll();
+                    $.hideLoading();
 
                 }else{
+                    $.hideLoading();
                     alert('删除失败');
                     InitAll();
                 }
