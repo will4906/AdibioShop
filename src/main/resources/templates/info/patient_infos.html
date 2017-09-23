@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+
+    <link rel="stylesheet" type="text/css" data-th-href="@{/bootstrap/css/bootstrap.min.css}">
+
+    <!--<link rel="stylesheet" type="text/css" data-th-href="@{/bootstrap/css/bootstrap-theme.min.css}">-->
+
+   	<link rel="stylesheet" type="text/css" data-th-href="@{/adminlte/css/AdminLTE.min.css}">
+   	
+   	<link rel="stylesheet" type="text/css" data-th-href="@{/font-awesome/css/font-awesome.min.css}">
+
+   	<!--<link rel="stylesheet" type="text/css" href="../AdminLTE-2.4.0-rc/bower_components/Ionicons/css/ionicons.min.css">-->
+
+   	<link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/jquery-weui.css}"/>
+
+	<title>检测人管理</title>
+</head>
+<body>
+
+	<section class="content" id = 'border'>
+
+		
+	</section>
+	
+	<section style="display: none" id="templet">
+		<div class="box box-info collapsed-box " name='box_templet'>
+
+			<div class="box-header with-border">
+				<h3 class="box-title" name='patientInfo'>检测人item</h3>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+					</button>
+					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<form name='info'>
+					<!-- Conversations are loaded here -->
+					<h4>必填信息</h4>
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user"></i></span>
+						<input type="text" class="form-control" placeholder="姓名" name='name'>
+					</div>
+					
+
+					<div class="radio">
+						性別：
+						<label>
+							<input type="radio" name="gender" value="M">
+							男
+						</label> 
+						<label>
+							<input type="radio" name="gender" checked value="F">
+							女
+						</label> 
+					</div>
+					
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-calendar-o"></i></span>
+						<input type="number" class="form-control" placeholder="年齡" name='age'>
+					</div>
+					<br>
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-map-pin"></i></span>
+						<input type="text" class="form-control" placeholder="邮寄地址" name="province">
+					</div>
+					<br>
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-map-signs"></i></span>
+						<input type="text" class="form-control" placeholder="详细地址" name="address">
+					</div>
+					<br>
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-map-pin"></i></span>
+						<input type="number" class="form-control" placeholder="联系电话" name='phone'>
+					</div>
+					
+
+					<div class="radio">
+						是否有糖尿病史:
+						<label>
+							<input type="radio" value="1" name="has_diabetic">
+							是
+						</label> 
+						<label>
+							<input type="radio" value="0" checked name="has_diabetic">
+							否
+						</label> 
+					</div>
+					<hr>
+					<h4>选填信息</h4>
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-map-pin"></i></span>
+						<input type="number" class="form-control" placeholder="身高（cm）"  name="height">
+					</div>
+					<br>
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-map-signs"></i></span>
+						<input type="number" class="form-control" placeholder="体重（kg）" name="weight">
+					</div>
+				</form>
+			</div>
+			<!-- /.box-body -->
+			<div class="box-footer">
+                <input type="hidden" name="patient_infoid" data>
+				<button type="submit" class="btn btn-info pull-right" disabled name="confirm">确认修改</button>
+			</div>
+			<!-- /.box-footer-->
+
+			<!-- <div class="overlay">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div> -->
+
+		</div>
+	</section>
+
+
+
+	<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/adminlte/js/adminlte.min.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery-weui/js/city-picker.min.js}"></script>
+	<script type="text/javascript" th:src="@{/adminlte/js/app.min.js}"></script>
+    <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<!--<script type="text/javascript" src="../jquery-3.2.1/jquery-3.2.1.min.js"></script>-->
+	<!--<script type="text/javascript" src='../AdminLTE-2.4.0-rc/bower_components/bootstrap/dist/js/bootstrap.js'></script>-->
+	<!--<script type="text/javascript" src="../AdminLTE-2.4.0-rc/dist/js/adminlte.js"></script>-->
+	<!--<script type="text/javascript" src="../AdminLTE-2.4.0-rc/dist/js/app.js"></script>-->
+	<!--<script type="text/javascript" src="../jquery-weui/js/jquery-weui.min.js"></script>-->
+	<!--<script src="../jquery-weui/js/city-picker.min.js"></script>-->
+
+	<script type="text/javascript" th:inline="javascript">
+		var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
+
+		var pathGet = context + '/patient_infos';
+		var pathEdit = context + '/update_patient_info';
+		//获取所有检测人信息
+
+		$(function(){
+			GetPatientInfos();
+		});
+
+		function GetPatientInfos() {
+			 $.ajax({
+			 	cache: true,
+		             type: "GET",
+		             url: pathGet,
+		             async: true,
+		             error: function (request) {
+		             	$.hideLoading();
+		                 alert("Connection error");
+		             },
+		             success: function (data) {
+			 			if(data.result=='ok' && data.parm!=''){
+			 				//有检测人信息
+			 				DrawPatientBox(data,$('#border'),$('div[name=box_templet]'));
+
+			 			}else if(data.result=='ok' && data.parm==''){
+			 				//没有检测人信息
+			 				DrawNoPatientInfo($('#border'));
+			 			}else{
+			 				alert('获取检测人信息错误');
+			 			}
+		                
+		             }
+			 });
+
+		}
+		function SendSaveInfo(req){
+			$.ajax({
+            cache: true,
+            type: "POST",
+            url: pathEdit,
+            dataType:"json",
+            contentType: "application/json",
+            data: JSON.stringify(req),
+            async: true,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+            	if (data.result=='ok') {
+            		alert("修改成功");
+            	}else{
+            		alert("修改失败");
+            	}
+                
+            }
+        });
+		}
+
+		//画出检测人信息列表
+		function DrawPatientBox(patientInfo,listNode,templetNode){
+			for (var i = 0; i < patientInfo.parm.length; i++) {
+				templetNode.find('h3[name=patientInfo]').text(patientInfo.parm[i].name);
+				templetNode.find('input[name=name]').val(patientInfo.parm[i].name);
+				templetNode.find('input[name=age]').val(patientInfo.parm[i].age);
+				
+				templetNode.find('input[name=province]').val(patientInfo.parm[i].province+' '+patientInfo.parm[i].city+" "+patientInfo.parm[i].district);
+				templetNode.find('input[name=phone]').val(patientInfo.parm[i].phone);
+                templetNode.find('input[name=address]').val(patientInfo.parm[i].address);
+				
+				templetNode.find('input[value='+patientInfo.parm[i].gender+']').attr('checked',true);
+				templetNode.find('input[value='+patientInfo.parm[i].has_diabetic+']').attr('checked',true);
+				if(patientInfo.parm[i].height!=0){
+					templetNode.find('input[name=height]').val(patientInfo.parm[i].height);
+				}
+				if(patientInfo.parm[i].weight!=0){
+					templetNode.find('input[name=weight]').val(patientInfo.parm[i].weight);
+				}
+				listNode.append(templetNode.clone());
+
+				//绑定数据
+				listNode.find('input[name=patient_infoid]').last().val(patientInfo.parm[i].patient_infoid);
+                console.log(listNode.find('input[name=patient_infoid]').last().val());
+//                listNode.find('button[name=confirm]').last().data(patientInfo.parm[i].patient_infoid);
+//                console.log(listNode.find('button[name=confirm]').last().data());
+				//点击事件
+				ConfirmEven();
+				CityPicker(listNode.find('input[name=province]').last());
+				KeyUp();
+
+			}
+		}
+
+		//点击确认保存
+		function ConfirmEven(){
+			//$.(#border).find('button[name=confirm]').off('click');
+			$('#border').find('button[name=confirm]').last().click(function(e){
+				//蒙版
+				//$(this).parents('div[name=box_templet]').activateBox();
+				//发送请求
+				getReq($(this));
+
+			});
+		}
+		function getReq(obj){
+			var patient_infoid = obj.prev().val();
+            console.log(obj.prev().val());
+
+			var arr = obj.parents('div[name=box_templet]').find('form').serializeArray();
+
+	        var phone = /^[1][3,5,8][0-9]{9}$/;
+	        var data = {};
+
+	        //变成json格式
+	        for (var item in arr) {
+	            data[arr[item].name] = arr[item].value;
+	        }
+            //分割省市区
+            var local = data.province.split(' ');
+            data.province = local[0];
+            data.city = local[1];
+            data.district = local[2];
+
+	        //判断电话是否为手机
+	        if (!phone.test(data.phone)) {
+	        	alert('手机号码格式不正确');
+	        	
+	        	return 0;
+	        } else {
+	        	data.is_pregnant = 0;	//是否怀孕，临时
+	        	if (data.weight=='') {
+	        		data.weight=0;
+	        	}if(data.height==''){
+	        		data.height=0;
+	        	}
+                console.log(data);
+	        	data.patient_infoid = patient_infoid;
+	        	SendSaveInfo(data);
+	        	
+	        }
+
+		}
+		//改变输入内容的时候
+		function KeyUp(){
+			$('form').off('keyup');
+			$('form').keyup(function(){
+				$(this).find('input[name=age]').val($('input[name=age]').val().replace(/^[e.]$/, ''));
+		        $(this).find('input[name=phone]').val($('input[name=phone]').val().replace(/^[e.]$/, ''));
+		        //遍历form的元素值
+		        var arr = $(this).serializeArray();
+		        var data = {};
+		        //变成json格式
+		        for (var item in arr) {
+		            data[arr[item].name] = arr[item].value;
+		        }
+		        if (data.name == '' || data.name == ' ' || data.age == '' || data.age == ' ' || data.province == "" || data.address == '' || data.address == ' ' || data.phone == '' || data.phone == ' ') {
+		        	//console.log('no'+$(this).parents('div.box-body').nextAll('button[name=confirm]'));
+		            
+		            $(this).parents('div.box-body').nextAll('div.box-footer').find('button[name=confirm]').attr("disabled",true);
+		        } else {
+
+		            $(this).parents('div.box-body').nextAll('div.box-footer').find('button[name=confirm]').removeAttr('disabled');
+		        }
+			});
+			
+		}
+		 //呼出省市选择器
+		function CityPicker(obj){
+			obj.cityPicker({
+		        showDistrict: true
+		    });
+		}
+	    
+
+	</script>
+</body>
+</html>

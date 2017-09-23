@@ -17,7 +17,7 @@
 	<section class="aui-content-padded ">
 		<div class="aui-card-list">
 			<div class="aui-card-list-header">操作视频:</div>
-			<iframe width="100%" height="100%" frameborder=0 src="http://v.qq.com/iframe/player.html?vid=x0156crui8x&tiny=0&auto=0" allowfullscreen=""></iframe>
+			<iframe style="z-index: 10;position: relative;" width="100%" height="100%" frameborder=0 src="http://v.qq.com/iframe/player.html?vid=x0156crui8x&tiny=0&auto=0" allowfullscreen=""></iframe>
 			
 		</div>
 
@@ -220,6 +220,15 @@
 
 	$(document).ready(ClickEven());
 
+	//加入本地页面
+    function pushHistory() { 
+		var state = { 
+		title: "info", 
+		url: "#" 
+		}; 
+		window.history.pushState(state, "title", "#"); 
+	} 
+
 	function ClickEven(){
 		//点击购买
 		$("#buy").click(function(e){
@@ -234,6 +243,11 @@
 		//点击添加新的检测人
 		$('#addNewPatient').click(function(e){
 			$('#writePop').popup();
+			//设置退出信息填写
+			pushHistory();
+			window.addEventListener("popstate", function(e) { 
+				$.closePopup(); //根据自己的需求实现自己的功能
+			}, false); 
 		})
 		//点击确认，新的检测人信息
 		$('#patientInfoConfirm').click(function(e){

@@ -85,5 +85,10 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDao.getCustomerWechat(customer_id);
     }
 
+    @Override
+    public void updatePatientInfo(PatientInfo patientInfo) {
+        customerDao.updatePatientInfo(patientInfo);
+    }
+
 
 }

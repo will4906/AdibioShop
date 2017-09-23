@@ -64,4 +64,14 @@
         SELECT customer_id, openid, refresh_token, retoken_time, nickname, sex, province, city, country, headimgurl, unionid FROM customer_wechats
         WHERE customer_wechats.customer_id = #{customer_id}
     </select>
+
+    <update id="updatePatientInfo">
+        UPDATE patient_infos SET name = #{name}, age = #{age}, country = #{country}, province = #{province}, city = #{city},
+            district = #{district}, address = #{address}, phone = #{phone}, has_diabetic = #{has_diabetic}, is_pregnant = #{is_pregnant},
+            height = #{height}, weight = #{weight}
+        WHERE
+        customer_id = #{customer_id}
+        AND
+        patient_infoid = #{patient_infoid}
+    </update>
 </mapper>

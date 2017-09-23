@@ -33,4 +33,6 @@ public interface CustomerService {
     void addOrUpdateWechatInfo(CustomerWechat customerWechat);
 
     CustomerWechat getCustomerWechat(String customer_id);
+
+    void updatePatientInfo(PatientInfo patientInfo);
 }

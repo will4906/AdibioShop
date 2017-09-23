@@ -36,4 +36,6 @@ public interface CustomerDao{
     void updateCustomerWechat(CustomerWechat customerWechat);
 
     CustomerWechat getCustomerWechat(@Param("customer_id")String customer_id);
+
+    void updatePatientInfo(PatientInfo patientInfo);
 }
