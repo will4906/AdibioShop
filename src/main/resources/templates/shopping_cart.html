@@ -12,11 +12,19 @@
 <body>
 
 <section class="" style="margin-bottom:5rem; " id=border>
+	<div class="weui-navbar weui-cells_checkbox" style="font-size: 20px;display: flex; align-items: center;padding: 7px 10px;">
+		<label class="weui-check__label" style="display: flex;flex-direction: row;align-items: center;">
+			<div class="" onclick="ClickAll(this)">
+				<input type="checkbox" class="weui-check" name="checkbox_all">
+				<i class="weui-icon-checked"></i>
 
-<div class="weui-cells weui-cells_checkbox"  id="content">
-
-
-</div>
+			</div>
+			<p id = "tip">全选</p>
+		</label>
+	</div>
+	<div class="weui-cells weui-cells_checkbox"  id="content">
+		<!--shopping cart list-->
+	</div>
 
 </section>
 
@@ -26,7 +34,7 @@
 		<div class="weui-panel__bd">
 			<div class="weui-cell">
 				<label class="weui-cell__hd weui-check__label">
-					<input type="checkbox" class="weui-check" name="checkbox" checked="checked">
+					<input type="checkbox" class="weui-check" name="checkbox">
 					<i class="weui-icon-checked"></i>
 					<input type="hidden" name="cart_info">
 				</label>
@@ -266,7 +274,7 @@
 -->
 <script th:src="@{/js/pay.js}"></script>
 <script type="text/javascript" th:inline="javascript">
-
+	var isAll = 0;
     var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
     //var context = window.location.hostname;
      var cartData={};
@@ -279,7 +287,25 @@
         $()
     })
 
+	//选择全部
+	function ClickAll() {
+        if(!isAll){
+            $("#content").find('input[name="checkbox"]').each(function(index){
+                $(this).prop('checked',true);
+            });
+            $('#tip').text('取消全选');
+            isAll = 1;
+		}else{
+            $("#content").find('input[name="checkbox"]').each(function(index){
+                $(this).prop('checked',false);
+            });
+            $('#tip').text('全选');
+            isAll = 0;
 
+		}
+
+
+    }
 
 	//获取customer拥有的患者信息
 	function GetPatientInfo(cartItem){
@@ -600,15 +626,18 @@
 		var path  = context + '/buy_cart_selects';
 //        var path  = context + '/direct_pay';
 		var reqBuy = [];
-		$('input[name="checkbox"]:checked').each(function(index){
+        $("#content").find('input[name="checkbox"]').each(function(index){
+			if($(this).prop('checked')){
 
-			reqBuy.push($(this).nextAll('input:hidden').data());
-			delete reqBuy.product_name;
-			delete reqBuy.unit_price;
-		}); 
-		reqBuy.pop();
+                reqBuy.push($(this).nextAll('input:hidden').data());
+                delete reqBuy.product_name;
+                delete reqBuy.unit_price;
+			}
+		});
+
 		
 		if (reqBuy!='') {
+
             $.showLoading();
 			$.ajax({
 	            cache: true,
@@ -630,6 +659,8 @@
 	                }
 	            }
 	        });
+		}else{
+
 		}
 
     }
