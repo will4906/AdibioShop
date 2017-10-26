@@ -226,7 +226,7 @@ public class PayController {
         data.put("remark", remark);
         wechatTemplate.setData(data);
 
-        String access_token = tokenInstance.getAccessToken(wechatProperties.getAppid(), wechatProperties.getAppsecret());
+        String access_token = tokenInstance.getAccessToken(redisTemplate, wechatProperties.getAppid(), wechatProperties.getAppsecret());
 
         Retrofit retrofit = retrofitManager.getGsonRetrofit();
         WechatRequest wechatRequest = retrofit.create(WechatRequest.class);

@@ -68,8 +68,8 @@ public class ProductController {
 //        Customer customer = new Customer();
 ////        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
 ////        customer.setOpenid("owNVIwQFSY-BxMyKi10bqi_6761w");
-//        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
-//        customer.setOpenid("owNVIwQFSY-BxMyKi10bqi_6761w");
+//        customer.setCustomer_id("3f7d4403-4832-4e17-ab1c-51a0ee85d526");
+//        customer.setOpenid("owNVIwdLGp07zeIjYZSlZTFDPak8");
 //        httpSession.setAttribute("customer", customer);
 //
 //        ModelAndView modelAndView  = new ModelAndView("index");
