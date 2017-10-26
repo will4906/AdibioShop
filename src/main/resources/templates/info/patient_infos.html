@@ -21,10 +21,108 @@
 </head>
 <body>
 
+	<div class="btn-float" onclick="AddPatient()">
+		<!--<i class="fa fa-plus"></i>-->
+		<i class="icon-plus fa fa-plus"></i>
+	</div>
 	<section class="content" id = 'border'>
 
 		
 	</section>
+	<div class=""  id='add_box' style="display:none; position: fixed;margin:auto;left:0; right:0; top:0; bottom:0;z-index: 40;background-color: #FFFFFF;">
+		<div class="box box-info" style="position:absolute;margin:10px 10px;width:94%; height:94%;overflow:auto;">
+
+			<div class="box-header with-border">
+				<h3 class="box-title" name='patientInfo'>添加检测人</h3>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" onclick="Remove(this)" ><i class="fa fa-times"></i></button>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<form name='info'>
+					<!-- Conversations are loaded here -->
+					<h4>必填信息</h4>
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user"></i></span>
+						<input type="text" class="form-control" placeholder="姓名" name='name'>
+					</div>
+
+
+					<div class="radio">
+						性別：
+						<label>
+							<input type="radio" name="gender" value="M">
+							男
+						</label>
+						<label>
+							<input type="radio" name="gender" checked value="F">
+							女
+						</label>
+					</div>
+
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-calendar-o"></i></span>
+						<input type="number" class="form-control" placeholder="年齡" name='age'>
+					</div>
+					<br>
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-map-pin"></i></span>
+						<input type="text" class="form-control" placeholder="邮寄地址" name="province">
+					</div>
+					<br>
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-map-signs"></i></span>
+						<input type="text" class="form-control" placeholder="详细地址" name="address">
+					</div>
+					<br>
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-phone"></i></span>
+						<input type="number" class="form-control" placeholder="联系电话" name='phone'>
+					</div>
+
+
+					<div class="radio">
+						是否有糖尿病史:
+						<label>
+							<input type="radio" value="1" name="has_diabetic">
+							是
+						</label>
+						<label>
+							<input type="radio" value="0" checked name="has_diabetic">
+							否
+						</label>
+					</div>
+					<hr>
+					<h4>选填信息</h4>
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-arrows-v"></i></span>
+						<input type="number" class="form-control" placeholder="身高（cm）"  name="height">
+					</div>
+					<br>
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa  fa-balance-scale"></i></span>
+						<input type="number" class="form-control" placeholder="体重（kg）" name="weight">
+					</div>
+				</form>
+			</div>
+			<!-- /.box-body -->
+			<div class="box-footer">
+				<input type="hidden" name="patient_infoid">
+				<button type="submit" class="btn btn-info pull-lift" disabled id="add">添加检测人</button>
+			</div>
+			<!-- /.box-footer-->
+		</div>
+		<div class="overlay" style="display: none">
+			<i class="fa fa-refresh fa-spin"></i>
+		</div>
+	</div>
+
 	
 	<section style="display: none" id="templet">
 		<div class="box box-info collapsed-box " name='box_templet'>
@@ -34,7 +132,7 @@
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
 					</button>
-					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+					<button type="button" class="btn btn-box-tool" ><i class="fa fa-times"></i></button>
 				</div>
 			</div>
 			<!-- /.box-header -->
@@ -80,7 +178,7 @@
 					<br>
 
 					<div class="input-group">
-						<span class="input-group-addon"><i class="fa  fa-map-pin"></i></span>
+						<span class="input-group-addon"><i class="fa  fa-phone"></i></span>
 						<input type="number" class="form-control" placeholder="联系电话" name='phone'>
 					</div>
 					
@@ -99,27 +197,27 @@
 					<hr>
 					<h4>选填信息</h4>
 					<div class="input-group">
-						<span class="input-group-addon"><i class="fa  fa-map-pin"></i></span>
+						<span class="input-group-addon"><i class="fa  fa-arrows-v"></i></span>
 						<input type="number" class="form-control" placeholder="身高（cm）"  name="height">
 					</div>
 					<br>
 
 					<div class="input-group">
-						<span class="input-group-addon"><i class="fa  fa-map-signs"></i></span>
+						<span class="input-group-addon"><i class="fa  fa-balance-scale"></i></span>
 						<input type="number" class="form-control" placeholder="体重（kg）" name="weight">
 					</div>
 				</form>
 			</div>
 			<!-- /.box-body -->
 			<div class="box-footer">
-                <input type="hidden" name="patient_infoid" data>
-				<button type="submit" class="btn btn-info pull-right" disabled name="confirm">确认修改</button>
+                <input type="hidden" name="patient_infoid">
+				<button type="submit" class="btn btn-info pull-lift" disabled name="confirm">确认修改</button>
 			</div>
 			<!-- /.box-footer-->
 
-			<!-- <div class="overlay">
+			<div class="overlay" style="display: none">
               <i class="fa fa-refresh fa-spin"></i>
-            </div> -->
+            </div>
 
 		</div>
 	</section>
@@ -144,39 +242,45 @@
 
 		var pathGet = context + '/patient_infos';
 		var pathEdit = context + '/update_patient_info';
+		var pathDelet = context + '/delete_patient_info';
 		//获取所有检测人信息
 
 		$(function(){
-			GetPatientInfos();
+			Init();
 		});
+		function Init(){
+		    $('#border').empty();
+            GetPatientInfos();
+
+		}
 
 		function GetPatientInfos() {
 			 $.ajax({
 			 	cache: true,
-		             type: "GET",
-		             url: pathGet,
-		             async: true,
-		             error: function (request) {
-		             	$.hideLoading();
-		                 alert("Connection error");
-		             },
-		             success: function (data) {
-			 			if(data.result=='ok' && data.parm!=''){
-			 				//有检测人信息
-			 				DrawPatientBox(data,$('#border'),$('div[name=box_templet]'));
+				 type: "GET",
+				 url: pathGet,
+				 async: true,
+				 error: function (request) {
 
-			 			}else if(data.result=='ok' && data.parm==''){
-			 				//没有检测人信息
-			 				DrawNoPatientInfo($('#border'));
-			 			}else{
-			 				alert('获取检测人信息错误');
-			 			}
-		                
-		             }
+					 alert("Connection error");
+				 },
+				 success: function (data) {
+					if(data.result=='ok' && data.parm!=''){
+						//有检测人信息
+						DrawPatientBox(data,$('#border'),$('div[name=box_templet]'));
+
+					}else if(data.result=='ok' && data.parm==''){
+						//没有检测人信息
+//						DrawNoPatientInfo($('#border'));
+					}else{
+						alert('获取检测人信息错误');
+					}
+
+				 }
 			 });
 
 		}
-		function SendSaveInfo(req){
+		function SendSaveInfo(req,obj){
 			$.ajax({
             cache: true,
             type: "POST",
@@ -187,13 +291,16 @@
             async: true,
             error: function (request) {
                 alert("Connection error");
+                HideMask(obj);
             },
             success: function (data) {
             	if (data.result=='ok') {
             		alert("修改成功");
+					Init();
             	}else{
             		alert("修改失败");
             	}
+            	HideMask(obj);
                 
             }
         });
@@ -221,14 +328,14 @@
 				listNode.append(templetNode.clone());
 
 				//绑定数据
-				listNode.find('input[name=patient_infoid]').last().val(patientInfo.parm[i].patient_infoid);
-                console.log(listNode.find('input[name=patient_infoid]').last().val());
+				listNode.find('input:hidden').last().val(patientInfo.parm[i].patient_infoid);
 //                listNode.find('button[name=confirm]').last().data(patientInfo.parm[i].patient_infoid);
 //                console.log(listNode.find('button[name=confirm]').last().data());
 				//点击事件
 				ConfirmEven();
 				CityPicker(listNode.find('input[name=province]').last());
 				KeyUp();
+                Delete();
 
 			}
 		}
@@ -238,15 +345,15 @@
 			//$.(#border).find('button[name=confirm]').off('click');
 			$('#border').find('button[name=confirm]').last().click(function(e){
 				//蒙版
-				//$(this).parents('div[name=box_templet]').activateBox();
+				ShowMask($(this));
 				//发送请求
 				getReq($(this));
 
 			});
 		}
+		//获取修改资料
 		function getReq(obj){
 			var patient_infoid = obj.prev().val();
-            console.log(obj.prev().val());
 
 			var arr = obj.parents('div[name=box_templet]').find('form').serializeArray();
 
@@ -275,19 +382,20 @@
 	        	}if(data.height==''){
 	        		data.height=0;
 	        	}
-                console.log(data);
+
 	        	data.patient_infoid = patient_infoid;
-	        	SendSaveInfo(data);
+	        	//发送修改请求
+	        	SendSaveInfo(data,obj);
 	        	
 	        }
 
 		}
 		//改变输入内容的时候
 		function KeyUp(){
-			$('form').off('keyup');
-			$('form').keyup(function(){
-				$(this).find('input[name=age]').val($('input[name=age]').val().replace(/^[e.]$/, ''));
-		        $(this).find('input[name=phone]').val($('input[name=phone]').val().replace(/^[e.]$/, ''));
+			$("#border").find('form').off('keyup');
+            $("#border").find('form').keyup(function(){
+				$(this).find('input[name=age]').val($(this).find('input[name=age]').val().replace(/^[e.]$/, ''));
+		        $(this).find('input[name=phone]').val($(this).find('input[name=phone]').val().replace(/^[e.]$/, ''));
 		        //遍历form的元素值
 		        var arr = $(this).serializeArray();
 		        var data = {};
@@ -296,13 +404,14 @@
 		            data[arr[item].name] = arr[item].value;
 		        }
 		        if (data.name == '' || data.name == ' ' || data.age == '' || data.age == ' ' || data.province == "" || data.address == '' || data.address == ' ' || data.phone == '' || data.phone == ' ') {
-		        	//console.log('no'+$(this).parents('div.box-body').nextAll('button[name=confirm]'));
+
 		            
 		            $(this).parents('div.box-body').nextAll('div.box-footer').find('button[name=confirm]').attr("disabled",true);
 		        } else {
 
 		            $(this).parents('div.box-body').nextAll('div.box-footer').find('button[name=confirm]').removeAttr('disabled');
 		        }
+
 			});
 			
 		}
@@ -312,8 +421,236 @@
 		        showDistrict: true
 		    });
 		}
-	    
+
+		//点击删除联系人按钮
+		function Delete() {
+            $("#border").find('i.fa-times').off('click');
+            $("#border").find('i.fa-times').click(function () {
+			    //蒙版
+				ShowMask($(this));
+				//请求
+				SendDelet($(this));
+            });
+        }
+
+        //发送删除检测人消息
+		function  SendDelet(obj) {
+			var infoid = obj.parents("div.box").find("input[name=patient_infoid]").val();
+			var req = {
+			    'patient_infoid': infoid
+			};
+
+			//请求
+
+			$.ajax({
+				cache: true,
+				type: "POST",
+                data: req,
+				url: pathDelet,
+				async: true,
+				error: function (request) {
+					alert("Connection error");
+					HideMask(obj);
+				},
+				success: function (data) {
+                    HideMask(obj);
+					if(data.result=='ok'){
+					    obj.parents('div[name=box_templet]').remove();
+					}
+
+				}
+			});
+
+        }
+
+		//显示蒙版
+		function ShowMask(obj) {
+			obj.parents("div.box").find('div.overlay').css("display","block");
+        }
+
+		//隐藏蒙版
+        function HideMask(obj) {
+            obj.parents("div.box").find('div.overlay').css("display","none");
+        }
+        //隐藏添加检测人框
+	    function Remove(btn) {
+		    $(btn).parents("#add_box").slideUp();
+
+        }
+        //点击添加检测人悬浮按钮
+        function AddPatient() {
+		    $("#add_box").slideDown();
+            CityPicker($("#add_box").find('input[name=province]'));
+            InputInfo();
+            AddClick();
+
+        }
+        //输入信息事
+		function InputInfo() {
+            $("#add_box").find('form').off('keyup');
+            $("#add_box").find('form').keyup(function(){
+                $(this).find('input[name=age]').val($(this).find('input[name=age]').val().replace(/^[e.]$/, ''));
+                $(this).find('input[name=phone]').val($(this).find('input[name=phone]').val().replace(/^[e.]$/, ''));
+                //遍历form的元素值
+                var arr = $(this).serializeArray();
+                var data = {};
+                //变成json格式
+                for (var item in arr) {
+                    data[arr[item].name] = arr[item].value;
+                }
+                if (data.name == '' || data.name == ' ' || data.age == '' || data.age == ' ' || data.province == "" || data.address == '' || data.address == ' ' || data.phone == '' || data.phone == ' ') {
+
+
+                    $(this).parents("#add_box").find('#add').attr("disabled",true);
+                } else {
+
+                    $(this).parents("#add_box").find('#add').attr("disabled",false);
+                }
+
+            });
+        }
+        //点击添加按钮
+        function AddClick() {
+            $("#add").off('click');
+		    $("#add").click(function () {
+                //蒙版
+                ShowMask($(this));
+                //获取资料
+                getReqAdd($(this));
+            })
+
+        }
+        function getReqAdd(obj){
+
+            var arr = obj.parents('#add_box').find('form').serializeArray();
+
+            var phone = /^[1][3,5,8][0-9]{9}$/;
+            var data = {};
+
+            //变成json格式
+            for (var item in arr) {
+                data[arr[item].name] = arr[item].value;
+            }
+            //分割省市区
+            var local = data.province.split(' ');
+            data.province = local[0];
+            data.city = local[1];
+            data.district = local[2];
+
+            //判断电话是否为手机
+            if (!phone.test(data.phone)) {
+                alert('手机号码格式不正确');
+
+                return 0;
+            } else {
+                data.is_pregnant = 0;	//是否怀孕，临时
+                if (data.weight=='') {
+                    data.weight=0;
+                }if(data.height==''){
+                    data.height=0;
+                }
+                SendAddPatient(data,obj);
+
+            }
+        }
+        function SendAddPatient(patientData,obj){
+            var addPatientCart = context + '/add_patient_info';
+
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: addPatientCart,
+                data: JSON.stringify(patientData),
+                contentType: "application/json",
+                dataType:'json',
+                async: true,
+                error: function (request) {
+                    $.hideLoading();
+                    alert("添加新的检测人失败！");
+                },
+                success: function (data) {
+                    HideMask(obj);
+                    alert("添加新的检测人成功！");
+                    //刷新
+                    Init();
+                    $("#add_box").slideUp();
+
+                }
+            });
+        }
 
 	</script>
+
+<style>
+	.btn-float{
+		position: fixed;
+		display: flex;
+		bottom: 30px;
+		right: 50px;
+		width: 60px;
+		height: 60px;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		background-color: #4cd964;
+		z-index:50;
+
+		transition: transform 1s;
+		-ms-transition: transform 1s;	/*IE9*/
+		-moz-transition: transform 1s;	/* Firefox 4 */
+		-webkit-transition: transform 1s;	/* Safari 和 Chrome */
+		-o-transition: transform 1s;	/* Opera */
+
+
+	}
+	.btn-float:hover{
+		transform:rotate(180deg);
+		-ms-transform:rotate(180deg); 	/* IE 9 */
+		-moz-transform:rotate(180deg); 	/* Firefox */
+		-webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+		-o-transform:rotate(180deg); 	/* Opera */
+
+		animation: change-color 2s linear 0;
+		-moz-animation: change-color 2s linear 0;	/* Firefox */
+		-webkit-animation: change-color 2s linear 0;	/* Safari 和 Chrome */
+		-o-animation: change-color 2s linear 0;	/* Opera */
+	}
+
+	.btn-float .icon-plus{
+		margin: auto;
+		font-size: 20px;
+		color: #FFFFFF;
+	}
+
+
+	@-webkit-keyframes change-color /* Safari 与 Chrome */
+	{
+		from {
+			background: #4cd964;
+		}
+
+		to {
+			background: -webkit-radial-gradient(#3c763d, #0bb20c, #4cd964); /* Safari 5.1 - 6.0 */
+			background: -o-radial-gradient(#3c763d, #0bb20c, #4cd964);  /* Opera 11.6 - 12.0 */
+			background: -moz-radial-gradient(#3c763d, #0bb20c, #4cd964); /* Firefox 3.6 - 15 */
+			background: radial-gradient(#3c763d, #0bb20c, #4cd964);  /* 标准的语法 */
+		}
+	}
+	@keyframes change-color
+	{
+		from {
+			background: #4cd964;
+		}
+
+		to {
+			background: -webkit-radial-gradient(#3c763d, #0bb20c, #4cd964); /* Safari 5.1 - 6.0 */
+			background: -o-radial-gradient(#3c763d, #0bb20c, #4cd964);  /* Opera 11.6 - 12.0 */
+			background: -moz-radial-gradient(#3c763d, #0bb20c, #4cd964); /* Firefox 3.6 - 15 */
+			background: radial-gradient(#3c763d, #0bb20c, #4cd964);  /* 标准的语法 */
+		}
+	}
+
+</style>
+
 </body>
 </html>

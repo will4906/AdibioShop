@@ -23,7 +23,87 @@
 
 		<div class="aui-card-list">
 			<div class="aui-card-list-header">操作流程:</div>
-				<div class="aui-card-list-content-padded">购买产品服务→微信支付→等待公司送取样杯→取样操作→寄送样本</div>
+				<div class="aui-card-list-content-padded">
+					<div class="weui-tab">
+						<div class="weui-navbar">
+							<a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+								1
+							</a>
+							<a class="weui-navbar__item" href="#tab2">
+								2
+							</a>
+							<a class="weui-navbar__item" href="#tab3">
+								3
+							</a>
+							<a class="weui-navbar__item" href="#tab4">
+								4
+							</a>
+							<a class="weui-navbar__item" href="#tab5">
+								5
+							</a>
+							<a class="weui-navbar__item" href="#tab6">
+								6
+							</a>
+							<a class="weui-navbar__item" href="#tab7">
+								7
+							</a>
+							<a class="weui-navbar__item" href="#tab8">
+								8
+							</a>
+							<a class="weui-navbar__item" href="#tab9">
+								9
+							</a>
+							<a class="weui-navbar__item" href="#tab10">
+								10
+							</a>
+
+						</div>
+						<div class="weui-tab__bd">
+							<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+								<img data-th-src="@{/pic/1.png}"  class="guid_pic">
+								<p>收集管、杯。<span>(勿打开真空收集管)</span></p>
+							</div>
+							<div id="tab2" class="weui-tab__bd-item">
+								<img data-th-src="@{/pic/2.png}" class="guid_pic">
+								<p>逆时针打开收集杯</p>
+							</div>
+							<div id="tab3" class="weui-tab__bd-item">
+								<img data-th-src="@{/pic/3.png}" class="guid_pic">
+								<p>杯盖倒置在桌上 </p>
+							</div>
+							<div id="tab4" class="weui-tab__bd-item">
+								<img data-th-src="@{/pic/4.png}" class="guid_pic">
+								<p>装入至少30ml的尿液</p>
+							</div>
+							<div id="tab5" class="weui-tab__bd-item">
+								<img data-th-src="@{/pic/5.png}" class="guid_pic">
+								<p>顺时针拧紧杯盖  </p>
+							</div>
+							<div id="tab6" class="weui-tab__bd-item">
+								<img data-th-src="@{/pic/6.png}" class="guid_pic">
+								<p>轻轻摇晃混匀  </p>
+							</div>
+							<div id="tab7" class="weui-tab__bd-item">
+								<img data-th-src="@{/pic/7.png}" class="guid_pic">
+								<p>撕开杯盖标签</p>
+							</div>
+							<div id="tab8" class="weui-tab__bd-item">
+								<img data-th-src="@{/pic/8.png}" class="guid_pic">
+								<p>将真空采集管竖直插入孔内</p>
+							</div>
+							<div id="tab9" class="weui-tab__bd-item">
+								<img data-th-src="@{/pic/9.png}" class="guid_pic">
+								<p>确保收集管无漏液，保存采集管</p>
+							</div>
+							<div id="tab10" class="weui-tab__bd-item">
+								<img data-th-src="@{/pic/10.png}" class="guid_pic">
+								<p>收集杯废置</p>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
 		</div>	
 		
 		<div class="aui-card-list">
@@ -547,6 +627,12 @@
         z-index: 1;
         position: absolute;
     }
+	.guid_pic{
+
+		width: auto;
+		height: auto;
+		max-height: 180px;
+	}
 </style>
 
 

@@ -74,4 +74,8 @@
         AND
         patient_infoid = #{patient_infoid}
     </update>
+
+    <delete id="deletePatientInfo">
+        DELETE FROM patient_infos WHERE patient_infoid = #{patient_infoid}
+    </delete>
 </mapper>
