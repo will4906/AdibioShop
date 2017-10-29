@@ -9,6 +9,8 @@ CREATE TABLE customers
     email VARCHAR(255),
     openid VARCHAR(255),
     register_time TIMESTAMP(0) NOT NULL,
+    zhifubao_account VARCHAR(255),
+    bank_card_number VARCHAR(255),
     CONSTRAINT customers_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT customers_customerid_unique UNIQUE(customer_id),
     CONSTRAINT customers_telphone_unique UNIQUE(telphone),
@@ -139,6 +141,8 @@ CREATE TABLE products
     product_groupid VARCHAR(255) NOT NULL,
     product_name VARCHAR(255) NOT NULL,
     unit_price decimal NOT NULL,
+    share_discount DECIMAL NOT NULL,
+    share_cashback DECIMAL NOT NULL,
     description TEXT,
     CONSTRAINT products_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT products_productid_unique UNIQUE(product_id),
@@ -179,3 +183,18 @@ CREATE TABLE cart_items
     CONSTRAINT cart_items_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT cart_items_itemid_unique UNIQUE (cart_itemid)
 );
+
+DROP TABLE IF EXISTS shares CASCADE;
+CREATE TABLE shares
+(
+    row_id SERIAL,
+    share_id VARCHAR(255) NOT NULL,
+    from_id VARCHAR(255) NOT NULL,
+    order_id VARCHAR(255) NOT NULL,
+    CONSTRAINT shares_rowid_pk PRIMARY KEY (row_id),
+    CONSTRAINT shares_shareid_unique UNIQUE (share_id)
+);
+
+
+
+
