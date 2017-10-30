@@ -1,6 +1,7 @@
 package com.willshuhua.adibioshop.common;
 
 import com.willshuhua.adibioshop.dto.access.AccessToken;
+import com.willshuhua.adibioshop.dto.access.JsTicket;
 import com.willshuhua.adibioshop.retrofit.RetrofitManager;
 import com.willshuhua.adibioshop.retrofit.wechat.WechatRequest;
 import org.apache.log4j.Logger;
@@ -39,6 +40,27 @@ public class TokenInstance {
             String strAccessToken = accessToken.getAccess_token();
             ops.set("access_token", strAccessToken, 7200, TimeUnit.SECONDS);
             return strAccessToken;
+        }
+    }
+
+    public String getJsapiTicket(StringRedisTemplate redisTemplate, String appId, String appSecret) throws IOException {
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        if (redisTemplate.hasKey("js_ticket")){
+            return ops.get("js_ticket");
+        }else {
+            String accessToken = getAccessToken(redisTemplate, appId, appSecret);
+            if (!accessToken.equals("")){
+                Retrofit retrofit = retrofitManager.getGsonRetrofit();
+                WechatRequest wechatRequest = retrofit.create(WechatRequest.class);
+                Call<JsTicket> jsTicketCall = wechatRequest.requestJsTicket(accessToken, "jsapi");
+                JsTicket jsTicket = jsTicketCall.execute().body();
+                logger.info(jsTicket);
+                String ticket = jsTicket.getTicket();
+                ops.set("js_ticket", ticket, 7200, TimeUnit.SECONDS);
+                return ticket;
+            }else {
+                return null;
+            }
         }
     }
 

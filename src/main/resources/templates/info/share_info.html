@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>分享</title>
+
+    <link rel="stylesheet" data-th-href="@{/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" data-th-href="@{/adminlte/css/AdminLTE.min.css}">
+    <link rel="stylesheet" data-th-href="@{/font-awesome/css/font-awesome.css}">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/weui/css/weui.min.css}">
+    <link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/jquery-weui.css}"/>
+</head>
+<body>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box box-danger">
+                <div class="box-header">
+                    返现信息
+                </div>
+                <div class="box-body" id="share_box">
+                    <form role="form" id="cashback_form">
+                        <label>支付宝账号：</label><input id="zhifubao_account_input" type="number" class="form-control share_input" placeholder="支付宝账号" th:attr="value=${customer.zhifubao_account}" name="zhifubao_account">
+                        <label>银行卡号：</label><input id="bank_card_number_input" type="number" class="form-control share_input" placeholder="银行卡号" th:attr="value=${customer.bank_card_number}" name="bank_card_number">
+                    </form>
+                    <br>
+                    <p class="text-center">
+                        <button type="button" class="btn btn-primary share_input" onclick="requestCashback()">重置</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="button" class="btn btn-primary share_input" onclick="requestUpdateCashback()">修改</button></p>
+                    <div class="overlay" id="share_overlay" style="display: none;">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </div>
+                </div>
+                <div class="box-footer">若以上信息为空则分享无法收到返现。</div>
+            </div>
+        </div>
+    </div>
+
+    <article>在此页面微信右上角，点击分享到朋友圈或分享给朋友。若朋友有支付成功案例，则可收到返现。朋友可以得到优惠。</article>
+</section>
+
+<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.js}"></script>
+<script type="text/javascript" th:src="@{/adminlte/js/adminlte.min.js}"></script>
+<script type="text/javascript" th:src="@{/adminlte/js/app.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script th:inline="javascript">
+    var url = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
+    function requestCashback() {
+        $.ajax({
+            url: url + '/cashback_info',
+            type: 'GET',
+            beforeSend: function (request) {
+                $('#share_overlay').show();
+                $('.share_input').attr("disabled",true);
+            },
+            complete: function (resp) {
+                $('#share_overlay').hide();
+                $('.share_input').attr("disabled",false);
+            },
+            success: function (resp) {
+                if (resp.result === 'ok'){
+                    $.toast("重置成功");
+                    $('#zhifubao_account_input').val(resp.parm.zhifubao_account);
+                    $('#bank_card_number_input').val(resp.parm.bank_card_number);
+                }else {
+                    $.toast("重置失败");
+                }
+            },
+            error: function (resp) {
+
+            }
+        });
+    }
+    function requestUpdateCashback() {
+        $.ajax({
+            url: url + '/update_cashback_info',
+            type: 'POST',
+            data: $("#cashback_form").serialize(),
+            beforeSend: function (request) {
+                $('#share_overlay').show();
+                $('.share_input').attr("disabled",true);
+            },
+            complete: function (resp) {
+                $('#share_overlay').hide();
+                $('.share_input').attr("disabled",false);
+            },
+            success: function (resp) {
+                if (resp.result === 'ok'){
+                    $.toast("修改成功");
+                }else {
+                    $.toast("修改失败");
+                }
+            },
+            error: function (resp) {
+
+            }
+        });
+    }
+    wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: /*[[${wxJsConfig.appId}]]*/, // 必填，公众号的唯一标识
+        timestamp: /*[[${wxJsConfig.timestamp}]]*/, // 必填，生成签名的时间戳
+        nonceStr: /*[[${wxJsConfig.nonceStr}]]*/, // 必填，生成签名的随机串
+        signature: /*[[${wxJsConfig.signature}]]*/,// 必填，签名，见附录1
+        jsApiList: [
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage'
+        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+    wx.ready(function () {
+        // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+        wx.onMenuShareTimeline({
+            title: '安帝宝检测', // 分享标题
+            link: 'http://ngrok.willshuhua.me/share_info', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: 'http://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoe2CG5B2YAM7Jib7CarDROfwY8EkEmnRjCMQb6BPYiaZQbYFQV70Fn9ASey9NLVBibl1POqmrrjeB8g/0', // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+        wx.onMenuShareAppMessage({
+            title: '安帝宝检测', // 分享标题
+            desc: '优惠啊', // 分享描述
+            link: 'http://ngrok.willshuhua.me/share_info', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: 'http://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoe2CG5B2YAM7Jib7CarDROfwY8EkEmnRjCMQb6BPYiaZQbYFQV70Fn9ASey9NLVBibl1POqmrrjeB8g/0', // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

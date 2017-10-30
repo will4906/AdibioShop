@@ -90,5 +90,10 @@ public class CustomerServiceImpl implements CustomerService {
         customerDao.updatePatientInfo(patientInfo);
     }
 
+    @Override
+    public void updateCashbackInfo(Customer customer) {
+        customerDao.updateCashbackInfo(customer);
+    }
+
 
 }

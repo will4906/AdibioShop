@@ -17,5 +17,7 @@ public class Customer {
     private String email;
     private String openid;
     private Date register_time;
+    private String zhifubao_account;
+    private String bank_card_number;
 
 }

@@ -6,6 +6,7 @@ package com.willshuhua.adibioshop.retrofit.wechat;
 
 import com.willshuhua.adibioshop.dto.access.AccessToken;
 import com.willshuhua.adibioshop.dto.access.Authorization;
+import com.willshuhua.adibioshop.dto.access.JsTicket;
 import com.willshuhua.adibioshop.dto.info.SnsapiUserinfo;
 import com.willshuhua.adibioshop.dto.template.TemplateBack;
 import com.willshuhua.adibioshop.dto.template.WechatTemplate;
@@ -31,6 +32,8 @@ public interface WechatRequest {
     Call<UnifiedOrderBack> requestUnifiedOrder(@Body UnifiedOrder unifiedOrder);
 
     @GET("/sns/userinfo")
-//    Call<String> requestWechatInfo(@Query("access_token") String access_token, @Query("openid") String openid, @Query("lang") String lang);
     Call<CustomerWechat> requestWechatInfo(@Query("access_token") String access_token, @Query("openid") String openid, @Query("lang") String lang);
+
+    @GET("/cgi-bin/ticket/getticket")
+    Call<JsTicket> requestJsTicket(@Query("access_token")String access_token, @Query("type")String type);
 }
