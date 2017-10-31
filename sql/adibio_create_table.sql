@@ -195,7 +195,7 @@ CREATE TABLE cart_items
     CONSTRAINT cart_items_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT cart_items_itemid_unique UNIQUE (cart_itemid)
 );
-
+-- 描述分享事件
 DROP TABLE IF EXISTS shares CASCADE;
 CREATE TABLE shares
 (

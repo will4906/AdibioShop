@@ -50,14 +50,35 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/share_info", method = RequestMethod.GET)
-    public ModelAndView shareInfo(HttpServletRequest request, HttpSession httpSession) throws IOException {
+    public ModelAndView shareInfo(HttpServletRequest request, HttpSession httpSession) throws Exception {
 //        添加微信分享配置
+        Customer customer = (Customer)httpSession.getAttribute("customer");
+        String weBaseUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=";
+        weBaseUrl += wechatProperties.getAppid();
+        weBaseUrl += "&redirect_uri=";
+        String myUrl = request.getScheme() + "%3A%2F%2F" + request.getServerName().replace("/", "%2F") + request.getContextPath().replace("/", "%2F") + "%2Findex";
+        weBaseUrl += myUrl;
+        weBaseUrl += "&response_type=code&scope=snsapi_userinfo&state=share_";
+        String fromId = request.getParameter("from_id");
+        if (fromId == null){
+            throw new Exception("Can't find from_id");
+        }
+        weBaseUrl += fromId;
+        String weUrl = weBaseUrl + "#wechat_redirect";
+        logger.info(weUrl);
+        if (customer == null){
+            return new ModelAndView("redirect:" + weUrl);
+        }else {
+            if (!customer.getCustomer_id().equals(request.getParameter("from_id"))){
+                return new ModelAndView("redirect:" + weUrl);
+            }
+        }
         WxJsConfig wxJsConfig = new WxJsConfig();
         wxJsConfig.setAppId(wechatProperties.getAppid());
         wxJsConfig.setNonceStr(Encryption.md5(UUID.randomUUID().toString()));
         wxJsConfig.setTimestamp(String.valueOf(new Date().getTime() / 1000));
         String jsTicket = tokenInstance.getJsapiTicket(redisTemplate, wechatProperties.getAppid(), wechatProperties.getAppsecret());
-        String strUrl = request.getScheme() + "://" + request.getServerName() + request.getContextPath() + "/share_info";
+        String strUrl = request.getScheme() + "://" + request.getServerName() + request.getContextPath() + "/share_info?from_id=" + customer.getCustomer_id();
         logger.info(strUrl);
         String sortSignature = "jsapi_ticket=" + jsTicket + "&noncestr=" + wxJsConfig.getNonceStr() + "&timestamp=" + wxJsConfig.getTimestamp() + "&url=" + strUrl;
         wxJsConfig.setSignature(InitMsgUtil.SHA1(sortSignature));
@@ -65,8 +86,8 @@ public class CustomerController {
         ModelAndView modelAndView = new ModelAndView("/info/share_info");
         modelAndView.addObject("wxJsConfig", wxJsConfig);
 //        添加用户返现用户信息
-        Customer customer = (Customer)httpSession.getAttribute("customer");
         modelAndView.addObject("customer", customer);
+        modelAndView.addObject("strUrl", strUrl);
         return modelAndView;
     }
 

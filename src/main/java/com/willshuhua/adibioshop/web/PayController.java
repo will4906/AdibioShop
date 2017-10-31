@@ -10,6 +10,7 @@ import com.willshuhua.adibioshop.dto.template.WechatTemplate;
 import com.willshuhua.adibioshop.dto.wechat_pay.*;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.PatientInfo;
+import com.willshuhua.adibioshop.entity.Share;
 import com.willshuhua.adibioshop.entity.product.Product;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
 import com.willshuhua.adibioshop.entity.order.Order;
@@ -20,10 +21,7 @@ import com.willshuhua.adibioshop.entity.product.ProductDiscount;
 import com.willshuhua.adibioshop.properties.WechatProperties;
 import com.willshuhua.adibioshop.retrofit.RetrofitManager;
 import com.willshuhua.adibioshop.retrofit.wechat.WechatRequest;
-import com.willshuhua.adibioshop.service.CartService;
-import com.willshuhua.adibioshop.service.CustomerService;
-import com.willshuhua.adibioshop.service.OrderService;
-import com.willshuhua.adibioshop.service.ProductService;
+import com.willshuhua.adibioshop.service.*;
 import com.willshuhua.adibioshop.util.BeanUtil;
 import com.willshuhua.adibioshop.util.Encryption;
 import com.willshuhua.adibioshop.util.WechatTool;
@@ -69,6 +67,8 @@ public class PayController {
     private WechatProperties wechatProperties;
     @Autowired
     private StringRedisTemplate redisTemplate;
+    @Autowired
+    private ShareService shareService;
 
     private Logger logger = Logger.getLogger(PayController.class);
 
@@ -110,6 +110,10 @@ public class PayController {
         orderInfo.setProduct_id(productId);
         orderInfo.setPatient_infoid(patientInfo.getPatient_infoid());
         orderService.createOrder(order, orderInfo, orderEvent, orderItem);
+        if ("share".equals(discountType)){
+            String fromId = (String)httpSession.getAttribute("from_id");
+            shareService.createShare(new Share(UUID.randomUUID().toString(), fromId, orderId));
+        }
         return notifyUnifiedOrder(request, order, product.getProduct_name(), customer);
     }
 
@@ -152,6 +156,10 @@ public class PayController {
         orderService.createOrder(order, orderInfoList, orderEvent, orderItemList);
         cartService.deleteSelectCart(cartItemList);
         logger.info(cartItemList);
+        if ("share".equals(discountType)){
+            String fromId = (String)httpSession.getAttribute("from_id");
+            shareService.createShare(new Share(UUID.randomUUID().toString(), fromId, orderId));
+        }
         return notifyUnifiedOrder(request, order, "批量检测", customer);
     }
 

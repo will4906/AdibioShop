@@ -61,16 +61,6 @@ public class ProductController {
         String pattern = "share_.*";
         logger.info(state);
         ModelAndView modelAndView  = new ModelAndView("index");
-        if (Pattern.matches(pattern, state)){
-            httpSession.setAttribute("discount_type", "share");
-            String[] stateArray = state.split("_");
-            CustomerWechat customerWechat = customerService.getCustomerWechat(stateArray[1]);
-            modelAndView.addObject("byshare", true);
-            modelAndView.addObject("from_nickname", customerWechat.getNickname());
-        }else {
-            httpSession.setAttribute("discount_type", "normal");
-            modelAndView.addObject("byshare", false);
-        }
         logger.info("code===" + code);
         logger.info(httpSession);
 
@@ -78,6 +68,23 @@ public class ProductController {
             return modelAndView;
         }
         analyseCustomer(code, httpSession, false);
+        if (Pattern.matches(pattern, state)){
+            String[] stateArray = state.split("_");
+            Customer customer = (Customer) httpSession.getAttribute("customer");
+            if (!customer.getCustomer_id().equals(stateArray[1])){
+                httpSession.setAttribute("discount_type", "share");
+                httpSession.setAttribute("from_id", stateArray[1]);
+                CustomerWechat customerWechat = customerService.getCustomerWechat(stateArray[1]);
+                modelAndView.addObject("byshare", true);
+                modelAndView.addObject("from_nickname", customerWechat.getNickname());
+            }else{
+                httpSession.setAttribute("discount_type", "normal");
+                modelAndView.addObject("byshare", false);
+            }
+        }else {
+            httpSession.setAttribute("discount_type", "normal");
+            modelAndView.addObject("byshare", false);
+        }
 
 
 //        调试
