@@ -123,7 +123,7 @@
 		    </div>
 		    <div class="aui-bar-tab-item" tapmode id="buy" style="background-color:#00b64f;">
 		        
-		        <div class="aui-bar-tab-label" style="color: #fff">购买(￥<span th:text="${product.unit_price}"></span>)</div>
+				<div class="aui-bar-tab-label" style="color: #fff">购买(￥<span th:text="${product.real_price}"></span> <span style="text-decoration:line-through;" th:text="${product.unit_price}"></span>)</div>
 		    </div>
 			
 	       

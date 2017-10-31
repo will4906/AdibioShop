@@ -140,13 +140,25 @@ CREATE TABLE products
     product_id VARCHAR(255) NOT NULL,
     product_groupid VARCHAR(255) NOT NULL,
     product_name VARCHAR(255) NOT NULL,
-    unit_price decimal NOT NULL,
-    share_discount DECIMAL NOT NULL,
-    share_cashback DECIMAL NOT NULL,
+    unit_price DECIMAL NOT NULL,
     description TEXT,
     CONSTRAINT products_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT products_productid_unique UNIQUE(product_id),
     CONSTRAINT products_name_unique UNIQUE(product_name)
+);
+-- 描述产品折扣和返现信息
+DROP TABLE IF EXISTS product_discounts CASCADE;
+CREATE TABLE product_discounts
+(
+    row_id SERIAL,
+    product_discount_id VARCHAR(255) NOT NULL,
+    product_id VARCHAR(255) NOT NULL,
+    discount_type VARCHAR(255) NOT NULL,
+    discount DECIMAL NOT NULL,
+    cashback DECIMAL,
+    description TEXT,
+    CONSTRAINT product_discounts_rowid_pk PRIMARY KEY (row_id),
+    CONSTRAINT product_discounts_product_discountid_unique UNIQUE (product_discount_id)
 );
 
 -- 描述购物车内存储的患者订单信息

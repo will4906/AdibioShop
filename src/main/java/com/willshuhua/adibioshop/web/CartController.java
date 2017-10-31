@@ -4,13 +4,11 @@ import com.willshuhua.adibioshop.dto.cart.AddCartItem;
 import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.PatientInfo;
-import com.willshuhua.adibioshop.entity.Product;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
 import com.willshuhua.adibioshop.entity.cart.CartPatientInfo;
 import com.willshuhua.adibioshop.entity.cart.ItemProduct;
 import com.willshuhua.adibioshop.service.CartService;
 import com.willshuhua.adibioshop.service.ProductService;
-import com.willshuhua.adibioshop.util.BeanUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,8 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,12 +34,13 @@ public class CartController {
     @ResponseBody
     public Object addCart(HttpSession httpSession, @RequestBody AddCartItem addCartItem) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Customer customer = (Customer)httpSession.getAttribute("customer");
+        String discountType = (String) httpSession.getAttribute("discount_type");
         PatientInfo patientInfo = addCartItem.getPatientInfo();
         logger.info(addCartItem);
         logger.info("patientInfo======" + patientInfo);
         patientInfo.setCustomer_id(customer.getCustomer_id());
         patientInfo.setCountry("CHINA");
-        CartItem cartItem = cartService.addCartItem(addCartItem);
+        CartItem cartItem = cartService.addCartItem(addCartItem, discountType);
         if (cartItem == null){
             return new Result(Result.ERR, "cart item is error");
         }
@@ -52,8 +49,9 @@ public class CartController {
 
     @RequestMapping(value = "/reduce_cart_item", method = RequestMethod.POST)
     @ResponseBody
-    public Object reduceCartItem(@RequestBody CartPatientInfo cartPatientInfo){
-        CartItem cartItem = cartService.reduceCartItem(cartPatientInfo);
+    public Object reduceCartItem(HttpSession session, @RequestBody CartPatientInfo cartPatientInfo){
+        String discountType = (String) session.getAttribute("discount_type");
+        CartItem cartItem = cartService.reduceCartItem(cartPatientInfo, discountType);
         if (cartItem == null){
             return new Result(Result.ERR, "can't find the cart_item");
         }
@@ -64,7 +62,8 @@ public class CartController {
     @ResponseBody
     public Object showCartInfo(HttpSession httpSession){
         Customer customer = (Customer)httpSession.getAttribute("customer");
-        List<ItemProduct> itemProductList = cartService.queryCartForCustomer(customer.getCustomer_id());
+        String discountType = (String) httpSession.getAttribute("discount_type");
+        List<ItemProduct> itemProductList = cartService.queryCartForCustomer(customer.getCustomer_id(), discountType);
         return new Result(Result.OK, itemProductList);
     }
 
@@ -81,7 +80,8 @@ public class CartController {
     @RequestMapping(value = "/shopping_cart", method = RequestMethod.GET)
     public ModelAndView shoppingCart(HttpSession httpSession) throws Exception {
         Customer customer = (Customer)httpSession.getAttribute("customer");
-        List<ItemProduct> itemProductList = cartService.queryCartForCustomer(customer.getCustomer_id());
+        String discountType = (String) httpSession.getAttribute("discount_type");
+        List<ItemProduct> itemProductList = cartService.queryCartForCustomer(customer.getCustomer_id(), discountType);
         ModelAndView modelAndView = new ModelAndView("shopping_cart");
         modelAndView.addObject("itemProductList", itemProductList);
         return modelAndView;

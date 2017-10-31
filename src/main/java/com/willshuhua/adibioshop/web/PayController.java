@@ -5,18 +5,18 @@ import com.willshuhua.adibioshop.common.TokenInstance;
 import com.willshuhua.adibioshop.define.order.OrderStatus;
 import com.willshuhua.adibioshop.define.template.TemplateId;
 import com.willshuhua.adibioshop.dto.common.Result;
-import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.dto.template.TemplateBack;
 import com.willshuhua.adibioshop.dto.template.WechatTemplate;
 import com.willshuhua.adibioshop.dto.wechat_pay.*;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.PatientInfo;
-import com.willshuhua.adibioshop.entity.Product;
+import com.willshuhua.adibioshop.entity.product.Product;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
 import com.willshuhua.adibioshop.entity.order.Order;
 import com.willshuhua.adibioshop.entity.order.OrderEvent;
 import com.willshuhua.adibioshop.entity.order.OrderInfo;
 import com.willshuhua.adibioshop.entity.order.OrderItem;
+import com.willshuhua.adibioshop.entity.product.ProductDiscount;
 import com.willshuhua.adibioshop.properties.WechatProperties;
 import com.willshuhua.adibioshop.retrofit.RetrofitManager;
 import com.willshuhua.adibioshop.retrofit.wechat.WechatRequest;
@@ -99,7 +99,9 @@ public class PayController {
         //配置订单
         SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
         String orderId = String.valueOf(idWorker.nextId());
-        Order order = new Order(orderId, customer.getCustomer_id(), product.getUnit_price(), OrderStatus.CREATION, null);
+        String discountType = (String) httpSession.getAttribute("discount_type");
+        product.computeRealPrice(discountType, productService);
+        Order order = new Order(orderId, customer.getCustomer_id(), product.getReal_price(), OrderStatus.CREATION, null);
         OrderEvent orderEvent = new OrderEvent(UUID.randomUUID().toString(), orderId, new Date(), OrderStatus.CREATION, customer.getCustomer_id(), null);
         OrderItem orderItem = new OrderItem(orderId, UUID.randomUUID().toString(), productId, 1);
         OrderInfo orderInfo = new OrderInfo();
@@ -115,6 +117,7 @@ public class PayController {
     @ResponseBody
     public Object buyCartSelects(HttpServletRequest request, HttpSession httpSession, @RequestBody List<CartItem> cartItemList) throws InvocationTargetException, NoSuchMethodException, IOException, IllegalAccessException {
         Customer customer = (Customer) httpSession.getAttribute("customer");
+        String discountType = (String)httpSession.getAttribute("discount_type");
         Order order = new Order();
         SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
         String orderId = String.valueOf(idWorker.nextId());
@@ -137,7 +140,8 @@ public class PayController {
             OrderItem orderItem = new OrderItem(order.getOrder_id(), UUID.randomUUID().toString(), cartItem.getProduct_id(), cartItem.getQuantity());
             orderItemList.add(orderItem);
             Product product = productService.queryProductByProductId(cartItem.getProduct_id());
-            BigDecimal unit_price = product.getUnit_price();
+            product.computeRealPrice(discountType, productService);
+            BigDecimal unit_price = product.getReal_price();
             wholePrice = wholePrice.add(unit_price.multiply(new BigDecimal(cartItem.getQuantity())));
             for (Map map : cartPatientInfoList) {
                 OrderInfo orderInfo = new OrderInfo(orderItem.getOrder_itemid(), UUID.randomUUID().toString(), cartItem.getProduct_id(), (String) map.get("patient_infoid"));

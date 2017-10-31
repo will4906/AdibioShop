@@ -16,4 +16,8 @@
         SELECT product_id, product_groupid, product_name, unit_price, description FROM products WHERE product_id = #{productId}
     </select>
 
+    <select id="getProductDiscount" resultType="ProductDiscount">
+        SELECT product_discount_id, product_id, discount_type, discount, cashback, description FROM product_discounts
+        WHERE product_id = #{product_id} AND discount_type = #{discount_type}
+    </select>
 </mapper>

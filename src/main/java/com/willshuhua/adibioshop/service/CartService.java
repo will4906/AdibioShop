@@ -13,13 +13,13 @@ import java.util.Map;
 
 public interface CartService {
 
-    List<ItemProduct> queryCartForCustomer(String customerId);
+    List<ItemProduct> queryCartForCustomer(String customerId, String discountType);
 
     void addCartItemQuantity(String cartItemId);
 
-    CartItem addCartItem(AddCartItem addCartItem);
+    CartItem addCartItem(AddCartItem addCartItem, String discountType);
 
-    CartItem reduceCartItem(CartPatientInfo cartPatientInfo);
+    CartItem reduceCartItem(CartPatientInfo cartPatientInfo, String discountType);
 
     ShoppingCart queryShoppingCart(String customer_id);
 

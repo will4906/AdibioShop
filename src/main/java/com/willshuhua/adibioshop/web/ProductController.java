@@ -1,11 +1,11 @@
 package com.willshuhua.adibioshop.web;
 
 import com.willshuhua.adibioshop.dto.access.Authorization;
-import com.willshuhua.adibioshop.dto.info.SnsapiUserinfo;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.CustomerWechat;
-import com.willshuhua.adibioshop.entity.Product;
+import com.willshuhua.adibioshop.entity.product.Product;
 import com.willshuhua.adibioshop.entity.cart.ShoppingCart;
+import com.willshuhua.adibioshop.entity.product.ProductDiscount;
 import com.willshuhua.adibioshop.properties.WechatProperties;
 import com.willshuhua.adibioshop.retrofit.RetrofitManager;
 import com.willshuhua.adibioshop.retrofit.wechat.WechatRequest;
@@ -28,10 +28,13 @@ import retrofit2.Retrofit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 @Controller
 public class ProductController {
@@ -53,27 +56,40 @@ public class ProductController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpSession httpSession) throws IOException {
-//        String code = request.getParameter("code");
-//        String state = request.getParameter("state");
-//        logger.info("code===" + code);
-//        logger.info(httpSession);
-//        ModelAndView modelAndView  = new ModelAndView("index");
-//        if (code == null || code.equals("")){
-//            return modelAndView;
-//        }
-//        analyseCustomer(code, httpSession, false);
+        String code = request.getParameter("code");
+        String state = request.getParameter("state");
+        String pattern = "share_.*";
+        logger.info(state);
+        ModelAndView modelAndView  = new ModelAndView("index");
+        if (Pattern.matches(pattern, state)){
+            httpSession.setAttribute("discount_type", "share");
+            String[] stateArray = state.split("_");
+            CustomerWechat customerWechat = customerService.getCustomerWechat(stateArray[1]);
+            modelAndView.addObject("byshare", true);
+            modelAndView.addObject("from_nickname", customerWechat.getNickname());
+        }else {
+            httpSession.setAttribute("discount_type", "normal");
+            modelAndView.addObject("byshare", false);
+        }
+        logger.info("code===" + code);
+        logger.info(httpSession);
+
+        if (code == null || code.equals("")){
+            return modelAndView;
+        }
+        analyseCustomer(code, httpSession, false);
 
 
 //        调试
-        Customer customer = new Customer();
+//        Customer customer = new Customer();
+////        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
+////        customer.setOpenid("owNVIwQFSY-BxMyKi10bqi_6761w");
 //        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
 //        customer.setOpenid("owNVIwQFSY-BxMyKi10bqi_6761w");
-        customer.setCustomer_id("de14cd03-2f57-4efd-a14b-8e2cebb7a890");
-        customer.setOpenid("owNVIwQFSY-BxMyKi10bqi_6761w");
-        customer = customerService.queryCustomerByOpenId(customer.getOpenid());
-        httpSession.setAttribute("customer", customer);
-        logger.info(customer);
-        ModelAndView modelAndView  = new ModelAndView("index");
+//        customer = customerService.queryCustomerByOpenId(customer.getOpenid());
+//        httpSession.setAttribute("customer", customer);
+//        logger.info(customer);
+//        ModelAndView modelAndView  = new ModelAndView("index");
         return modelAndView;
 
     }
@@ -91,9 +107,12 @@ public class ProductController {
         String productId = request.getParameter("product_id");
         ModelAndView modelAndView = new ModelAndView("/product/product_detail");
         Product product = productService.queryProductByProductId(productId);
+        HttpSession session = request.getSession();
+        String discountType = (String) session.getAttribute("discount_type");
         if (product == null){
             throw new Exception("Can't find the product");
         }
+        product.computeRealPrice(discountType, productService);
         modelAndView.addObject("product", product);
         return modelAndView;
     }

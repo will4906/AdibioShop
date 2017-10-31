@@ -4,14 +4,15 @@ import com.willshuhua.adibioshop.dao.CartDao;
 import com.willshuhua.adibioshop.dao.CustomerDao;
 import com.willshuhua.adibioshop.dao.ProductDao;
 import com.willshuhua.adibioshop.dto.cart.AddCartItem;
+import com.willshuhua.adibioshop.dto.order.ItemDetail;
 import com.willshuhua.adibioshop.entity.PatientInfo;
-import com.willshuhua.adibioshop.entity.Product;
+import com.willshuhua.adibioshop.entity.product.Product;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
 import com.willshuhua.adibioshop.entity.cart.CartPatientInfo;
 import com.willshuhua.adibioshop.entity.cart.ItemProduct;
 import com.willshuhua.adibioshop.entity.cart.ShoppingCart;
+import com.willshuhua.adibioshop.entity.product.ProductDiscount;
 import com.willshuhua.adibioshop.service.CartService;
-import groovy.util.IFileNameFinder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,20 @@ public class CartServiceImpl implements CartService{
     ProductDao productDao;
 
     @Override
-    public List<ItemProduct> queryCartForCustomer(String customerId) {
-        return cartDao.queryCartForCustomer(customerId);
+    public List<ItemProduct> queryCartForCustomer(String customerId, String discountType) {
+        List<ItemProduct> itemProductList = cartDao.queryCartForCustomer(customerId);
+        switch (discountType){
+            case "share":
+                for (ItemProduct itemProduct : itemProductList){
+                    ProductDiscount productDiscount = productDao.getProductDiscount(itemProduct.getProduct_id(), discountType);
+                    itemProduct.setUnit_price(itemProduct.getUnit_price().subtract(productDiscount.getDiscount()));
+                    itemProduct.setWhole_price(itemProduct.getUnit_price().multiply(new BigDecimal(itemProduct.getQuantity())));
+                }
+                break;
+            default:
+                break;
+        }
+        return itemProductList;
     }
 
     @Transactional
@@ -47,7 +60,7 @@ public class CartServiceImpl implements CartService{
 
     @Transactional
     @Override
-    public CartItem addCartItem(AddCartItem addCartItem) {
+    public CartItem addCartItem(AddCartItem addCartItem, String discountType) {
         CartItem cartItem = addCartItem.getCartItem();
         String cartItemId = cartItem.getCart_itemid();
         String product_id = cartItem.getProduct_id();
@@ -106,13 +119,13 @@ public class CartServiceImpl implements CartService{
             }
 
         }
-
+        cartItem.computeWholePrice(discountType, productDao);
         return cartItem;
     }
 
     @Transactional
     @Override
-    public CartItem reduceCartItem(CartPatientInfo cartPatientInfo) {
+    public CartItem reduceCartItem(CartPatientInfo cartPatientInfo, String discountType) {
         CartPatientInfo cartPatientInfo1 = cartDao.getCartPatientInfo(cartPatientInfo.getCart_patient_infoid());
         if (cartPatientInfo1 != null){
             cartPatientInfo = cartPatientInfo1;
@@ -131,6 +144,7 @@ public class CartServiceImpl implements CartService{
             cartDao.deleteCartItem(cartItem);
         }
         cartItem.setQuantity(quantity - 1);
+        cartItem.computeWholePrice(discountType, productDao);
         return cartItem;
     }
 

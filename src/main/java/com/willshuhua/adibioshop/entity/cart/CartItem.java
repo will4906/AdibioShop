@@ -1,5 +1,9 @@
 package com.willshuhua.adibioshop.entity.cart;
 
+import com.willshuhua.adibioshop.dao.ProductDao;
+import com.willshuhua.adibioshop.entity.product.Product;
+import com.willshuhua.adibioshop.entity.product.ProductDiscount;
+import com.willshuhua.adibioshop.service.ProductService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,4 +28,27 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    public void computeWholePrice(String discountType, ProductDao productDao){
+        switch (discountType){
+            case "share":
+                ProductDiscount productDiscount = productDao.getProductDiscount(product_id, discountType);
+                Product product = productDao.queryProductByProductId(product_id);
+                setWhole_price(product.getUnit_price().subtract(productDiscount.getDiscount()).multiply(new BigDecimal(quantity)));
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void computeWholePrice(String discountType, ProductService productService){
+        switch (discountType){
+            case "share":
+                ProductDiscount productDiscount = productService.getProductDiscount(product_id, discountType);
+                Product product = productService.queryProductByProductId(product_id);
+                setWhole_price(product.getUnit_price().subtract(productDiscount.getDiscount()).multiply(new BigDecimal(quantity)));
+                break;
+            default:
+                break;
+        }
+    }
 }
