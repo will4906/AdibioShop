@@ -8,99 +8,112 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
 	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<link rel="stylesheet" type="text/css" data-th-href="@{/bootstrap/css/bootstrap.min.css}">
+	<link rel="stylesheet" type="text/css" data-th-href="@{/adminlte/css/AdminLTE.min.css}">
+	<link rel="stylesheet" type="text/css" data-th-href="@{/font-awesome/css/font-awesome.min.css}">
+
 	<link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/jquery-weui.css}"/>
 	<link rel="stylesheet" type="text/css" data-th-href="@{/jquery-weui/css/weui.min.css}">
 	<link rel="stylesheet" type="text/css" data-th-href="@{/AUI/css/aui.css}" />
+
+	<!--<link rel="stylesheet" type="text/css" href="../../jquery-weui/css/jquery-weui.css"/>-->
+	<!--<link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css"/>-->
+	<!--<link rel="stylesheet" type="text/css" href="../../AUI/css/aui.css" />-->
 
 
 	<title>我的订单</title>
 	
 </head>
-<body style="">
+<body>
 	<div class="weui-tab" id='page-infinite-navbar'>
 		<div class="weui-navbar" style="position: fixed;top: 0;">
-			<a href='#tab1' class="weui-navbar__item weui-bar__item--on">
+			<a href='#tab1' class="weui-navbar__item weui-bar__item--on" id="tabAll">
 				全部
 			</a>
-			<a href='#tab2' class="weui-navbar__item">
+			<a href='#tab2' class="weui-navbar__item" id="tabPaying">
 				待付款
 			</a>
-			<a href='#tab3' class="weui-navbar__item">
+			<a href='#tab3' class="weui-navbar__item" id="tabHanding">
 				处理中
 			</a>
-			<a href='#tab4' class="weui-navbar__item">
+			<a href='#tab4' class="weui-navbar__item" id="tabDone">
 				已完成
 			</a>
-			<a href='#tab5' class="weui-navbar__item">
+			<a href='#tab5' class="weui-navbar__item" id="tabCancel">
 				已取消
 			</a>
 		</div>
-		<div class="weui-tab__bd" style="">
-			<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+		<div class="weui-tab__bd" style="width: 100%;">
+			<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active infinite">
 				<h1 class="doc-head"></h1>
 				<!--*******all list********-->
-				<div class="content-padded aui-content-padded"  id="allList" style="">
+				<div class="content-padded aui-content-padded"  id="allList"  style="">
 					<!--all item-->
-					
+
 					<!--all item-->
 				</div>
-				<div class="weui-loadmore">
+				<div class="weui-loadmore" name='loadMore'>
 					<i class="weui-loading"></i>
 					<span class="weui-loadmore__tips">正在加载</span>
 				</div>
 			</div>
-			<div id="tab2" class="weui-tab__bd-item">
+			<div id="tab2" class="weui-tab__bd-item infinite">
 				<h1 class="doc-head"></h1>
 				<!--******paying list*******-->
-				<div class="content-padded aui-content-padded" id="payingList">
+				<div class="content-padded aui-content-padded" id="payingList"  style="">
 					<!--paying item-->
 					
 					<!--paying item-->
 				</div>
-				<div class="weui-loadmore">
+				<div class="weui-loadmore" name='loadMore'>
 					<i class="weui-loading"></i>
 					<span class="weui-loadmore__tips">正在加载</span>
 				</div>
 			</div>
-			<div id="tab3" class="weui-tab__bd-item">
+			<div id="tab3" class="weui-tab__bd-item infinite" >
 				<h1 class="doc-head"></h1>
 				<!--**********handing list**********-->
-				<div class="content-padded aui-content-padded" id="handingList">
+				<div class="content-padded aui-content-padded" id="handingList" style="">
 					<!--handing item-->
 					
 					<!--hanfing item-->
 				</div>
-				<div class="weui-loadmore">
+				<div class="weui-loadmore" name='loadMore'>
 					<i class="weui-loading"></i>
 					<span class="weui-loadmore__tips">正在加载</span>
 				</div>
 			</div>
-			<div id="tab4" class="weui-tab__bd-item">
+			<div id="tab4" class="weui-tab__bd-item infinite" >
 				<h1 class="doc-head"></h1>
 				<!--***********done list**************-->
-				<div class="content-padded aui-content-padded" id="doneList">
+				<div class="content-padded aui-content-padded" id="doneList" style="">
 					<!--done item-->
+
+					<div style = "display: flex;justify-content: center;align-items: center;padding-top:100px;">
+						<h2>目前没有订单</h2>
+					</div>
 
 					<!--done item-->
 				</div>
-				<div class="weui-loadmore">
+				<div class="weui-loadmore" name='loadMore' style="display: none;">
 					<i class="weui-loading"></i>
 					<span class="weui-loadmore__tips">正在加载</span>
 				</div>
 			</div>
-			<div id="tab5" class="weui-tab__bd-item">
+			<div id="tab5" class="weui-tab__bd-item infinite" >
 				<h1 class="doc-head"></h1>
 				<!--*************cancel list**********-->
-				<div class="content-padded aui-content-padded" id="cancelList">
+				<div class="content-padded aui-content-padded" id="cancelList" style=""">
 					<!--cancel item-->
 
 					<!--cancel item-->
 				</div>
-				<div class="weui-loadmore">
+				<div class="weui-loadmore" name='loadMore'>
 					<i class="weui-loading"></i>
 					<span class="weui-loadmore__tips">正在加载</span>
 				</div>
 			</div>
+
 		</div>
 	</div>
 
@@ -109,32 +122,32 @@
 	<section id='templet' style="display: none;">
 		<!--all-->
 		<div id="all_templet">
-			<div class="aui-card-list" name='allItem'>
+			<div class="box box-solid box-info" name='allItem'>
 				<input type="hidden" name="orderData">
-				<div class="aui-card-list-header order-status_done"><span name="status">已完成</span></div>
-				<div class="aui-card-list-content-padded">
+				<div class="box-header with-border"><span name="status">已完成</span></div>
+				<div class="box-body" style="height: 100px;">
 					<div class="aui-row aui-row-padded">
 						<div class="aui-col-xs-8" style="display: flex;flex-direction: column;" name='productList'>
 							<span class="font-gray" name="productName">肾病早期筛查</span>
-							
+
 						</div>
 						<div class="aui-col-xs-4">
 							<div class=" aui-pull-right font-gray">金额:￥<span name="money">50</span></div>
 						</div>
 					</div>
 				</div>
-				<div class="aui-card-list-footer">
-					<div class=" aui-pull-left">下单时间：<span name="time">2017-08-24 15:30:10</span></div>
-					
+				<div class="box-footer">
+					<div class="pull-left" style="color: #616161;">下单时间：<span name="time">2017-08-24 15:30:10</span></div>
 				</div>
 			</div>
 		</div>
+
 		<!--paying-->
 		<div id="paying_templet">
-			<div class="aui-card-list" name="payingItem">
+			<div class="box box-solid box-success" name="payingItem">
 				<input type="hidden" name="orderData">
-				<div class="aui-card-list-header order-status_done"><span name="status">已完成</span></div>
-				<div class="aui-card-list-content-padded">
+				<div class="box-header with-border"><span name="status">已完成</span></div>
+				<div class="box-body" style="height: 100px;">
 					<div class="aui-row aui-row-padded">
 						<div class="aui-col-xs-8" style="display: flex;flex-direction: column;" name='productList'>
 							<span class="font-gray" name="productName">肾病早期筛查</span>
@@ -142,96 +155,170 @@
 						</div>
 						<div class="aui-col-xs-4"  style="display: flex;flex-direction: column;align-items: flex-end;">
 							<div class=" aui-pull-right font-gray">金额:￥<span name="money">50</span></div>
-							<div class="weui-btn weui-btn_mini weui-btn_primary" name="pay" style="margin: 0 0;">支付</div>
+							<!-- <div class="weui-btn weui-btn_mini weui-btn_primary" name="pay" style="margin: 0 0;">支付</div> -->
 						</div>
 					</div>
 				</div>
-				<div class="aui-card-list-footer">
-					<div class=" aui-pull-left">下单时间：<span name="time">2017-08-24 15:30:10</span></div>
+				<div class="box-footer">
+					<div class="pull-left" style="color: #616161;">下单时间：<span name="time">2017-08-24 15:30:10</span></div>
 					
 				</div>
 			</div>
 		</div>
-		<!--handing-->
-		<div id="handing_templet">
-
+		<!--show no more-->
+		<div id="noMore_templet">
+			<div style = "display: flex;justify-content: center;align-items: center;padding-top:100px;">
+				<h2>目前没有订单</h2>
+			</div>
 		</div>
 	</section>
 	<script type="text/javascript" data-th-src="@{/jquery-weui/js/jquery-3.2.1.min.js}"></script>
 	<script type="text/javascript" data-th-src="@{/jquery-weui/js/jquery-weui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/adminlte/js/adminlte.min.js}"></script>
+	<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<!--<script type="text/javascript" src="../../jquery-3.2.1/jquery-3.2.1.min.js"></script>-->
+	<!--<script type="text/javascript" src="../../jquery-weui/js/jquery-weui.min.js"></script>-->
 
 
 	<script type="text/javascript" th:inline="javascript">
     var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
     var path = context + '/user_init_orders';
-    var pathMore = context + 'load_more_orders';
+    var pathMore = context + '/load_more_orders';
+
+
     var row_all;
     var row_paying;
     var row_handing;
     var row_done;
     var row_cancel;
-    var loading = false;  //状态标记
 
-	$('div.content-padded').height($(document).height());
-	$(document).ready(Init());
 
+	$(document).ready(function(){
+		
+//		$('div.content-padded').height($(document).height()*0.7);
+		Init();
+	});
+
+	
+	//设置上拉刷新
+	function PullUp(){
+		var curID;
+        $('div[name=loadMore]').css('display','block');
+        $(window).off('scroll');
+        $(window).scroll(function () {
+            var scrollTop = $(this).scrollTop();
+            var scrollHeight = $(document).height();
+            var windowHeight = $(this).height();
+            if (scrollTop + windowHeight == scrollHeight) {
+
+                //此处是滚动条到底部时候触发的事件，在这里写要加载的数据，或者是拉动滚动条的操作
+
+                curID = $('div.weui-tab__bd-item--active').attr('id');
+
+                if (curID=='tab1') {
+                    LoadAll();
+                }else if(curID=='tab2'){
+                    LoadPaying();
+                }else if(curID=='tab3'){
+                    LoadHanding();
+                }else if(curID=='tab4'){
+                    //LoadDone();
+                }else{
+                    LoadCancel();
+                }
+
+            }
+        });
+
+	}
+	//倒计时计时器
 	function setTimer(time,statusNode,listNode){
 		if (time == 0) {
 			listNode.remove();
 
 			return 0;
 		}else{
-			statusNode.text('支付剩余时间：'+parseInt(time/60)+':'+((time%60<10?('0'):'')+time%60));
+			statusNode.text('支付剩余时间：'+Math.floor(time/60)+':'+((time%60<10?('0'):'')+time%60));
 			setTimeout(function () {
                 setTimer(time-1,statusNode,listNode);
             },1000);
 		}
 	}
 
+	//初始化tab点击事件
 	function Init(){
-		$('#tab1').click(InitGetAll());
-		$('#tab2').click(InitGetPaying());
-		$('#tab3').click(InitGetHanding());
-		$('#tab4').click(InitGetDone());
-		$('#tab5').click(InitGetCancel());
+        $('#tabAll').click(function(e){
+        	PullUp();
+        	InitGetAll();
+            $(document.body).scrollTop(0);
+        });
+        $('#tabAll').click();
+        $('#tabPaying').click(function(e){
+        	PullUp();
+        	InitGetPaying();
+            $(document.body).scrollTop(0);
+        });
+        $('#tabHanding').click(function(e){
+        	PullUp();
+        	InitGetHanding();
+            $(document.body).scrollTop(0);
+        });
+        $('#tabDone').click(function(e){
+//        	PullUp();
+//        	InitGetDone();
+			ShowNoMore();
+            $(document.body).scrollTop(0);
+        });
+        $('#tabCancel').click(function(e){
+        	PullUp();
+        	InitGetCancel();
+            $(document.body).scrollTop(0);
+        });
 
-		$('div[name=allList]').infinite(30).on('infinite',LoadALL());
-        $('div[name=payingList]').infinite(30).on('infinite',LoadPaying());
-        $('div[name=handingList]').infinite(30).on('infinite',LoadHanding());
-        $('div[name=doneList]').infinite(30).on('infinite',LoadDone());
-        $('div[name=cancelList]').infinite(30).on('infinite',LoadCancel());
-
-
-
-
-
+       
 	}
-	
-	function ClickPay(){
-		$('div[name=pay]').click(function(e){
-			var orderData = $(this).parents('div[name=payingItem]').find('input:hidden').data();
 
-			e.stoppropagation();
-
-		});
-	}
 
 	function GetDetail(clickObj){
-	    var pathDetail = context + '/order_detail'+ '?order_id='+orderData.order_id;
         var orderData=clickObj.find('input:hidden').data();
-        $.ajax({
-            cache: true,
-            type: "GET",
-            url: pathDetail,
-            async: true,
-            error: function (request) {
-                $.hideLoading();
-                alert("Connection error");
-            },
-            success: function (data) {
-                $.hideLoading();
-            }
-		});
+	    var pathDetail = context + '/order_detail_page'+ '?order_id='+orderData.order_id;
+        window.location.href = pathDetail;
+    }
+    //绑定打开订单详情事件
+    function BindDetailEve(){
+    	$('div[name=allItem]').off('click');
+        $('div[name=allItem]').click(function(e){
+            GetDetail($(this));
+            e.stopPropagation();
+        });
+        $('div[name=payingItem]').off('click');
+        $('div[name=payingItem]').click(function(e){
+            GetDetail($(this));
+            e.stopPropagation();
+        });
+    }
+    //显示暂时无订单
+	function ShowNoMore() {
+        var curID;
+        var list;
+        $('infinite').destroyInfinite();
+        $('div[name=loadMore]').css('display','none');
+		curID = $('div.weui-tab__bd-item--active').attr('id');
+		if (curID=='tab1') {
+			list = $('#allList');
+		}else if(curID=='tab2'){
+            list = $('#payingList');
+		}else if(curID=='tab3'){
+            list = $('#handingList');
+		}else if(curID=='tab4'){
+            list = $('#doneList');
+		}else{
+            list = $('#cancelList');
+		}
+		list.empty();
+		list.append($('#noMore_templet').clone());
+
+
     }
 
 	//绑定数据
@@ -240,54 +327,54 @@
     }
     //首次获得所有订单信息
     function InitGetAll(){
-	    var
     	$('#allList').empty();
-    	$.showLoading();
+   
+    	
         $.ajax({
             cache: true,
             type: "GET",
-            url: pathall,
-            data: 'type=ALL',
+            url: path +'?type=ALL',
             async: true,
             error: function (request) {
-				$.hideLoading();
                 alert("Connection error");
+
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm == ''){
+                    ShowNoMore();
+                }else if(data.result=='ok' && data.parm != ''){
                     DrawAllList(data);
-                    $.hideLoading();
+                    if($('div.weui-tab__bd-item--active').height()<$(document.body).height())
+                        $('div[name=loadMore]').css('display','none');
 				}else{
-					$.hideLoading();
                     alert('获取订单信息错误！');
 				}
-                $('div[name=allItem]').click(GetDetail($(this)));
-
             }
         });  
     }
 	//获取所有订单信息
 	function GetAll() {
-		$.showLoading();
         $.ajax({
             cache: true,
             type: "GET",
-            url: pathMore,
-            data: 'type=ALL&row_id=' + row_all,
+            url: pathMore+'?type=ALL&row_id=' + row_all,
             async: true,
             error: function (request) {
-				$.hideLoading();
+				
                 alert("Connection error");
+
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm[0]!=undefined){
                     DrawAllList(data);
-                    $.hideLoading();
+
+                }else if(data.result=='ok'){
+                    $('div[name=loadMore]').css('display','none');
 				}else{
-					$.hideLoading();
+					
                     alert('获取订单信息错误！');
 				}
-				loading = false;
+
 				
             }
         });
@@ -296,8 +383,9 @@
 	function DrawAllList(orderData) {
 		$('#all_templet').find('div[name=productList]').html('<span class="font-gray" name="productName"></span>');
 		var status;
-		var product = $('#all_templet').find('span[name=productName]').clone();
-		for(var i=0; i<orderData.parm.length ;i++){
+        var allItem;
+		var product = $('#all_templet').find('span[name=productName]');
+		for(var i=0;  i<orderData.parm.length; i++){
 			$('#all_templet').find('span[name=time]').text(orderData.parm[i].create_time);
 			switch(orderData.parm[i].status){
 				case "PAID":
@@ -306,48 +394,51 @@
 				case "CANCELED":
 				status = '已取消';
 				break;
+                case 'RE_CREATION':
 				case "CREATION":
-				status = '已完成';
+				status = '未支付';
 				break;
 			}
 			$('#all_templet').find('span[name=status]').text(status);
 			$('#all_templet').find('span[name=money]').text(orderData.parm[i].price);
+
+			$('#all_templet').find('div[name=productList]').empty();
 			for (var j=0; j < orderData.parm[i].orderPreviewList.length; j++) {
-				$('#all_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewList[j].product_name+' x'+orderData.parm[i].orderPreviewList[j].quantity))
+				$('#all_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewList[j].product_name+' x'+orderData.parm[i].orderPreviewList[j].quantity).clone());
 			}
-			var allItem = $('#all_templet').children('div[name=allItem]').clone();
+
+			allItem = $('#all_templet').find('div[name=allItem]').clone();
 			$('#allList').append(allItem);
 			BindData($('#allList').find('input:hidden').last(),orderData.parm[i]);
-			if (i=orderData.parm.length-1) {
+			if (i==orderData.parm.length-1) {
 				row_all = orderData.parm[i].row_id;
 			}
 			
 		}
-
+		BindDetailEve();
     }
     //首次获取待付款订单信息
     function InitGetPaying(){
     	$('#payingList').empty();
-    	$.showLoading();
         $.ajax({
             cache: true,
             type: "GET",
-            url: path,
-            data: 'type=UNPAID',
+            url: path+"?type=UNPAID",
             async: true,
             error: function (request) {
-                $.hideLoading();
                 alert("Connection error");
+
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm == ''){
+                    ShowNoMore();
+                }else if(data.result=='ok' && data.parm != ''){
                     DrawPayingList(data);
-                    $.hideLoading();
+                    if($('div.weui-tab__bd-item--active').height()<$(document.body).height())
+                        $('div[name=loadMore]').css('display','none');
                 }else{
-                	$.hideLoading();
                     alert('获取订单信息错误！');
                 }
-                $('div[name=payingItem]').click(GetDetail($(this)));
             }
         });
 
@@ -355,110 +446,110 @@
     }
     //获取待付款订单信息
 	function GetPaying() {
-        $.showLoading();
         $.ajax({
             cache: true,
             type: "GET",
-            url: pathMore,
-            data: 'type=UNPAID&row_id='+row_paying,
+            url: pathMore + '?type=UNPAID&row_id='+row_paying,
             async: true,
             error: function (request) {
-                $.hideLoading();
                 alert("Connection error");
+
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok'&& data.parm[0]!=undefined){
                     DrawPayingList(data);
-                    $.hideLoading();
+
+                }else if(data.result=='ok'){
+                    $('div[name=loadMore]').css('display','none');
                 }else{
-                	$.hideLoading();
+                	
                     alert('获取订单信息错误！');
                 }
-                loading = false;
+
             }
         });
     }
     //画出待付款订单列表
 	function DrawPayingList(orderData) {
-		var resTime;
-		var date;
+        var seconds
+        var payingItem
 		$('#paying_templet').find('div[name=productList]').html('<span class="font-gray" name="productName"></span>');
 		var status = "待支付";
-		var product = $('#paying_templet').find('span[name=productName]').clone();
+		var product = $('#paying_templet').find('span[name=productName]');
 		for(var i=0; i<orderData.parm.length ;i++){
 
-			date = ChangeDate(orderData.parm[i].create_time);
-			var seconds = IsWithin15(new Date(),new Date(date.month+" "+date.day+","+date.year+" "+date.time));
-			if (seconds==0) {
-				continue;
-			}
+			seconds  = GetSeconds(orderData.parm[i].create_time);
 			$('#paying_templet').find('span[name=time]').text(orderData.parm[i].create_time);
 			$('#paying_templet').find('span[name=money]').text(orderData.parm[i].price);
+
+			$('#paying_templet').find('div[name=productList]').empty();
 			for (var j=0; j < orderData.parm[i].orderPreviewList.length; j++) {
-				$('#paying_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewList[j].product_name+' x'+orderData.parm[i].orderPreviewList[j].quantity))
+				$('#paying_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewList[j].product_name+' x'+orderData.parm[i].orderPreviewList[j].quantity).clone())
 			}
-			var payingItem = $('#paying_templet').children('div[name=payingItem]').clone();
+			payingItem = $('#paying_templet').find('div[name=payingItem]').clone();
 			$('#payingList').append(payingItem);
 			BindData($('#payingList').find('input:hidden').last(),orderData.parm[i]);
 			
-			setTimer(seconds,$('#payingList').find('span[name=status]').last(),$('#payingList').find('div[name=payingItem]').last()); //计时器
-			if (i=orderData.parm.length-1) {
+			setTimer(15*60-seconds,$('#payingList').find('span[name=status]').last(),$('#payingList').find('div[name=payingItem]').last()); //计时器
+			if (i==orderData.parm.length-1) {
 				row_paying = orderData.parm[i].row_id;
 			}
 			
 		}
+		BindDetailEve();
     }
 
     //首次获取处理中订单信息
     function InitGetHanding(){
     	$('#handingList').empty();
-    	$.showLoading();
+    	
         $.ajax({
             cache: true,
             type: "GET",
-            url: path,
-            data: 'type=PROCESSING',
+            url: path +'?type=PROCESSING',
             async: true,
             error: function (request) {
-                $.hideLoading();
                 alert("Connection error");
+
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm == ''){
+                    ShowNoMore();
+                }else if(data.result=='ok' && data.parm != ''){
                     DrawHandingList(data);
-                    $.hideLoading();
+                    if($('div.weui-tab__bd-item--active').height()<$(document.body).height())
+                        $('div[name=loadMore]').css('display','none');
                 }else{
-                	$.hideLoading();
                     alert('获取订单信息错误！');
                 }
-                $('div[name=handingItem]').click(GetDetail($(this)));
             }
         });
-
-
     }
     //获取处理中订单信息
     function GetHanding() {
+    	
         $.ajax({
             cache: true,
             type: "GET",
-            url: path,
-            data: 'type=PROCESSING&row_id='+row_handing,
+            url: path + '?type=PROCESSING&row_id='+row_handing,
             async: true,
             error: function (request) {
-                $.hideLoading();
                 alert("Connection error");
+
             },
             success: function (data) {
-                $.hideLoading();
-                if(data.result=='ok'){
+                
+                if(data.result=='ok' && data.parm[0]!=undefined){
                     DrawHandingList(data);
-                    $.hideLoading();
+
+                    
+                }else if(data.result=='ok'){
+                    $('div[name=loadMore]').css('display','none');
                 }else{
-                    $.hideLoading();
+                    
                     alert('获取订单信息错误！');
                 }
-                loading = false;
+
             }
         });
     }
@@ -466,47 +557,60 @@
     function DrawHandingList(orderData) {
     	$('#all_templet').find('div[name=productList]').html('<span class="font-gray" name="productName"></span>');
 		var status = "处理中";
-		var product = $('#all_templet').find('span[name=productName]').clone();
+        var handingItem;
+		var product = $('#all_templet').find('span[name=productName]');
 		for(var i=0; i<orderData.parm.length ;i++){
 			$('#all_templet').find('span[name=time]').text(orderData.parm[i].create_time);
+			switch(orderData.parm[i].status){
+				case "PAID":
+				status = '已支付';
+				break;
+				// case "CANCELED":
+				// status = '已取消';
+				// break;
+				// case "CREATION":
+				// status = '已完成';
+				// break;
+			}
 			$('#all_templet').find('span[name=status]').text(status);
 			$('#all_templet').find('span[name=money]').text(orderData.parm[i].price);
+
+			$('#all_templet').find('div[name=productList]').empty();
 			for (var j=0; j < orderData.parm[i].orderPreviewList.length; j++) {
-				$('#all_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewList[j].product_name+' x'+orderData.parm[i].orderPreviewList[j].quantity))
+				$('#all_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewList[j].product_name+' x'+orderData.parm[i].orderPreviewList[j].quantity).clone())
 			}
-			var allItem = $('#all_templet').children('div[name=allItem]').clone();
-			$('#handingList').append(allItem);
+			handingItem = $('#all_templet').find('div[name=allItem]').clone();
+			$('#handingList').append(handingItem);
 			BindData($('#handingList').find('input:hidden').last(),orderData.parm[i]);
-			if (i=orderData.parm.length-1) {
+			if (i==orderData.parm.length-1) {
 				row_handing = orderData.parm[i].row_id;
 			}
 			
 		}
+		BindDetailEve();
     }
     //首次获取已完成订单信息
     function InitGetDone(){
     	$('#doneList').empty();
-    	$.showLoading();
+    	
         $.ajax({
             cache: true,
             type: "GET",
-            url: path,
-            data: 'tyep=FINISHED',
+            url: path + '?type=FINISHED',
             async: true,
             error: function (request) {
-                $.hideLoading();
                 alert("Connection error");
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm == ''){
+                    ShowNoMore();
+                }else if(data.result=='ok' && data.parm != ''){
                     DrawDoneList(data);
-                    $.hideLoading();
+                    if($('div.weui-tab__bd-item--active').height()<$(document.body).height())
+                        $('div[name=loadMore]').css('display','none');
                 }else{
-                	$.hideLoading();
                     alert('获取订单信息错误！');
                 }
-                $('div[name=doneItem]').click(GetDetail($(this)));
-
             }
         });
    
@@ -514,26 +618,27 @@
 
     //获取已完成订单信息
     function GetDone() {
-    	$.showLoading();
+    	
         $.ajax({
             cache: true,
             type: "GET",
-            url: pathMore,
-            data: 'tyep=FINISHED&row_id='+row_done,
+            url: pathMore + '?type=FINISHED&row_id='+row_done,
             async: true,
             error: function (request) {
-                $.hideLoading();
                 alert("Connection error");
+
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok'&& data.parm[0]!=undefined){
                     DrawDoneList(data);
-                    $.hideLoading();
+
+                }else if(data.result=='ok'){
+                    $('div[name=loadMore]').css('display','none');
                 }else{
-                	$.hideLoading();
+                	
                     alert('获取订单信息错误！');
                 }
-                loading = false;
+
             }
         });
     }
@@ -541,72 +646,74 @@
     function DrawDoneList(orderData) {
     	$('#all_templet').find('div[name=productList]').html('<span class="font-gray" name="productName"></span>');
 		var status = "已完成";
-		var product = $('#all_templet').find('span[name=productName]').clone();
+        var doneItem;
+		var product = $('#all_templet').find('span[name=productName]');
 		for(var i=0; i<orderData.parm.length ;i++){
 			$('#all_templet').find('span[name=time]').text(orderData.parm[i].create_time);
 			$('#all_templet').find('span[name=status]').text(status);
 			$('#all_templet').find('span[name=money]').text(orderData.parm[i].price);
+
+			$('#all_templet').find('div[name=productList]').empty();
 			for (var j=0; j < orderData.parm[i].orderPreviewList.length; j++) {
-				$('#all_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewList[j].product_name+' x'+orderData.parm[i].orderPreviewList[j].quantity))
+				$('#all_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewList[j].product_name+' x'+orderData.parm[i].orderPreviewList[j].quantity).clone());
 			}
-			var allItem = $('#all_templet').children('div[name=allItem]').clone();
-			$('#doneList').append(allItem);
+			doneItem = $('#all_templet').find('div[name=allItem]').clone();
+			$('#doneList').append(doneItem);
 			BindData($('#doneList').find('input:hidden').last(),orderData.parm[i]);
-			if (i=orderData.parm.length-1) {
+			if (i==orderData.parm.length-1) {
 				row_done = orderData.parm[i].row_id;
 			}
 			
 		}
+		BindDetailEve();
     }
     //首次获得已取消订单信息
     function InitGetCancel(){
     	$('#cancelList').empty();
-    	$.showLoading();
+   
         $.ajax({
             cache: true,
             type: "GET",
-            url: path,
-            data: 'type=CANCELED',
+            url: path +  '?type=CANCELED',
             async: true,
             error: function (request) {
-                $.hideLoading();
                 alert("Connection error");
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm == ''){
+                    ShowNoMore();
+                }else if(data.result=='ok' && data.parm != ''){
                     DrawCancelList(data);
-                    $.hideLoading();
+                    if($('div.weui-tab__bd-item--active').height()<$(document.body).height())
+                        $('div[name=loadMore]').css('display','none');
                 }else{
-                	$.hideLoading();
                     alert('获取订单信息错误！');
                 }
-                $('div[name=cancelItem]').click(GetDetail($(this)));
             }
         });
 
     }
     //获取已取消订单信息
     function GetCancel(cancelReq) {
-    	$.showLoading();
         $.ajax({
             cache: true,
             type: "GET",
-            url: pathMore,
-            data: 'type=CANCELED&row_id='+row_cancel,
+            url: pathMore + '?type=CANCELED&row_id='+row_cancel,
             async: true,
             error: function (request) {
-                $.hideLoading();
                 alert("Connection error");
+
             },
             success: function (data) {
-                if(data.result=='ok'){
+                if(data.result=='ok' && data.parm[0]!=undefined){
                     DrawCancelList(data);
-                    $.hideLoading();
+
+                }else if(data.result=='ok'){
+                    $('div[name=loadMore]').css('display','none');
                 }else{
-                	$.hideLoading();
                     alert('获取订单信息错误！');
                 }
-                loading = false;
+
             }
         });
     }
@@ -614,48 +721,62 @@
     function DrawCancelList(orderData) {
     	$('#all_templet').find('div[name=productList]').html('<span class="font-gray" name="productName"></span>');
 		var status = "已取消";
-		var product = $('#all_templet').find('span[name=productName]').clone();
+        var cancelItem;
+		var product = $('#all_templet').find('span[name=productName]');
 		for(var i=0; i<orderData.parm.length ;i++){
 			$('#all_templet').find('span[name=time]').text(orderData.parm[i].create_time);
 			$('#all_templet').find('span[name=status]').text(status);
 			$('#all_templet').find('span[name=money]').text(orderData.parm[i].price);
+
+			$('#all_templet').find('div[name=productList]').empty();
 			for (var j=0; j < orderData.parm[i].orderPreviewList.length; j++) {
-				$('#all_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewList[j].product_name+' x'+orderData.parm[i].orderPreviewList[j].quantity))
+				$('#all_templet').find('div[name=productList]').append(product.text(orderData.parm[i].orderPreviewList[j].product_name+' x'+orderData.parm[i].orderPreviewList[j].quantity).clone());
 			}
-			var allItem = $('#all_templet').children('div[name=allItem]').clone();
-			$('#cancelList').append(allItem);
+			cancelItem = $('#all_templet').find('div[name=allItem]').clone();
+			$('#cancelList').append(cancelItem);
 			BindData($('#cancelList').find('input:hidden').last(),orderData.parm[i]);
-			if (i=orderData.parm.length-1) {
+			if (i==orderData.parm.length-1) {
 				row_cancel = orderData.parm[i].row_id;
 			}
 		}
+		BindDetailEve();
     }
 
     //全部订单额面加载更多
-    function LoadALL(){
-    	console.log('load more all');
-    	if(loading) return;
-    	GetAll();
+    function LoadAll(){
+
+    	if(row_all>0){
+            GetAll();
+		}
     }
     //待支付订单额面加载更多
     function LoadPaying(){
-    	if(loading) return;
-    	GetPaying();
+
+    	if(row_paying>0){
+            GetPaying();
+		}
     }
     //处理中订单额面加载更多
     function LoadHanding(){
-    	if(loading) return;
-    	GetHanding();
+
+    	if(row_handing>0){
+            GetHanding();
+		}
     }
     //已完成订单额面加载更多
     function LoadDone(){
-    	if(loading) return;
-    	GetDone();
+
+    	if(row_done>0){
+            GetDone();
+		}
+
     }
     //已取消订单额面加载更多
     function LoadCancel(){
-    	if(loading) return;
-    	GetCancel();
+
+    	if(row_cancel){
+            GetCancel();
+		}
     }
 
     //转化返回的date数据
@@ -665,41 +786,11 @@
     		day,
     		times
     	}*/
-    function ChangeDate(date){
-    	var dateObj ={};
-    	var dateArr = [];
-    	var timeArr = [];
-    	date = date.replace(',','');
-    	dateArr = date.split(' ');
-    	dateObj.year = dateArr[2];
-    	dateObj.month = dateArr[0];
-    	dateObj.day = dateArr[1];
-    	timeArr = dateArr[3].split(':');
-    	if (dateArr[4]=='PM') {
-    		timeArr[0] = (parseInt(timeArr[0]) + 12).toString();
-    	}
-    	dateObj.time = timeArr.join(':');
-    	return dateObj;
-    }
-    //比较时间是否为15分钟内
-    function IsWithin15(nowDate,orderDate){
-    	var time = nowDate.getTime() - orderDate.getTime();
-    	//计算出相差天数
-		var days=Math.floor(time/(24*3600*1000))	 
-		//计算出小时数
-		var leave1=time%(24*3600*1000)    //计算天数后剩余的毫秒数
-		var hours=Math.floor(leave1/(3600*1000))
-		//计算相差分钟数
-		var leave2=leave1 %(3600*1000)        //计算小时数后剩余的毫秒数
-		var minutes=Math.floor(leave2/(60*1000))
-		//计算相差秒数
-		var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
-		var seconds=Math.round(leave3/1000)
-		if (days==0 && hours==0 && minutes<15 && minutes>0) {
-			return Math.round(leave2/1000);	//返回相差秒
-		}else{
-			return 0;
-		}
+    function GetSeconds(dateStr){
+    	var nowDate =new Date();
+    	var orderDate = new Date(dateStr);
+    	var seconds = Math.floor((nowDate.getTime()-orderDate.getTime())/1000);
+    	return seconds;
     }
 
 	//下拉刷新
@@ -722,43 +813,6 @@
 	        }
 	    
 	})*/
-    //tab切换
-    /*var auiTab = new auiTab({
-        element:document.getElementById("tab"),
-        index:tabIndex,
-        repeatClick:false
-    },function(ret){
-        tabIndex=ret.index;
-        if (ret.index==1) {
-            //s所有
-            document.getElementById('all').style.display="block";
-            document.getElementById('paying').style.display="none";
-            tabIndex = ret.index;
-
-        }else if (ret.index==2){
-            //待支付
-            document.getElementById('all').style.display="none";
-            document.getElementById('paying').style.display="block";
-            tabIndex = ret.index;
-        }else if (ret.index==3) {
-            //处理中
-            document.getElementById('all').style.display="none";
-            document.getElementById('paying').style.display="none";
-            tabIndex = ret.index;
-        }else if (ret.index==4) {
-            //已完成
-            document.getElementById('all').style.display="none";
-            document.getElementById('paying').style.display="none";
-            tabIndex = ret.index;
-        }else{
-            //已取消
-            document.getElementById('all').style.display="none";
-            document.getElementById('paying').style.display="none";
-            tabIndex = ret.index;
-        }
-
-    });*/
-
 
 </script>
 <style type="text/css">
@@ -769,6 +823,10 @@
 	}
 	.font-gray{
 		color: #888;
+	}
+
+	.weui-toast{
+		margin-left: :0; 
 	}
 </style>
 </body>

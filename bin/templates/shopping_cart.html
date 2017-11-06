@@ -12,11 +12,19 @@
 <body>
 
 <section class="" style="margin-bottom:5rem; " id=border>
+	<div class="weui-navbar weui-cells_checkbox" style="font-size: 20px;display: flex; align-items: center;padding: 7px 10px;">
+		<label class="weui-check__label" style="display: flex;flex-direction: row;align-items: center;">
+			<div class="" onclick="ClickAll(this)">
+				<input type="checkbox" class="weui-check" name="checkbox_all">
+				<i class="weui-icon-checked"></i>
 
-<div class="weui-cells weui-cells_checkbox"  id="content">
-
-
-</div>
+			</div>
+			<p id = "tip">全选</p>
+		</label>
+	</div>
+	<div class="weui-cells weui-cells_checkbox"  id="content">
+		<!--shopping cart list-->
+	</div>
 
 </section>
 
@@ -26,7 +34,7 @@
 		<div class="weui-panel__bd">
 			<div class="weui-cell">
 				<label class="weui-cell__hd weui-check__label">
-					<input type="checkbox" class="weui-check" name="checkbox" checked="checked">
+					<input type="checkbox" class="weui-check" name="checkbox">
 					<i class="weui-icon-checked"></i>
 					<input type="hidden" name="cart_info">
 				</label>
@@ -40,7 +48,7 @@
 							<span name="productName">产品名</span>
 						</h4>
 							<div class="weui-media-box__desc">
-								<p>金额：￥<span name="money">123<span></p>
+								<p>金额：￥<span name="money">123</span></p>
 							</div>
 						</div>
 					</div>
@@ -121,129 +129,127 @@
 	<div id="pop_write" class="weui-popup__container weui-popup-overlay" style="z-index: 999; ">
 		<div class="weui-popup__overlay"></div>
 		<div class="weui-popup__modal">
-			<section >
-				<form id="payinfo_form" name="inform" onchange="changed()" oninput="changed()">
+			<form id="payinfo_form" name="inform" onchange="changed()" oninput="changed()">
 
-					<div class="aui-content aui-margin-b-15">
-						<ul class="aui-list aui-from-list">
-							<li class="aui-list-header">填写信息（必填）</li>
-							<li class="aui-list-item">
-								<div class="aui-list-item-inner">
-									<div class="aui-list-item-label">*姓名:</div>
-									<div class="aui-list-item-input">
-										<input type="text" placeholder="姓名" name="name">
+				<div class="aui-content aui-margin-b-15">
+					<ul class="aui-list aui-from-list">
+						<li class="aui-list-header">填写信息（必填）</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">*姓名:</div>
+								<div class="aui-list-item-input">
+									<input type="text" placeholder="姓名" name="name">
+								</div>
+							</div>
+						</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">*性别:</div>
+								<div class="aui-list-item-input">
+									<label><input class="aui-radio" type="radio" name="gender" value="M"
+										checked="true">男</label>
+									<label><input class="aui-radio" type="radio" name="gender" value="F">女</label>
+
 									</div>
 								</div>
 							</li>
 							<li class="aui-list-item">
 								<div class="aui-list-item-inner">
-									<div class="aui-list-item-label">*性别:</div>
+									<div class="aui-list-item-label">*年龄:</div>
 									<div class="aui-list-item-input">
-										<label><input class="aui-radio" type="radio" name="gender" value="M"
-											checked="true">男</label>
-										<label><input class="aui-radio" type="radio" name="gender" value="F">女</label>
-
-										</div>
-									</div>
-								</li>
-								<li class="aui-list-item">
-									<div class="aui-list-item-inner">
-										<div class="aui-list-item-label">*年龄:</div>
-										<div class="aui-list-item-input">
-											<input type="number" placeholder="年龄" name="age">
-										</div>
-									</div>
-								</li>
-								<li class="aui-list-item">
-									<div class="aui-list-item-inner">
-										<div class="aui-list-item-label">*邮寄地址:</div>
-										<div class="aui-list-item-input">
-											<input type="text" name="province" class="weui-input" value="" id="city-picker">
-										</div>
-									</div>
-								</li>
-								<li class="aui-list-item">
-									<div class="aui-list-item-inner">
-										<div class="aui-list-item-label"></div>
-										<div class="aui-list-item-input">
-											<input type="text" placeholder="详细地址" name="address">
-										</div>
-									</div>
-								</li>
-								<li class="aui-list-item">
-									<div class="aui-list-item-inner">
-										<div class="aui-list-item-label">*联系电话:</div>
-										<div class="aui-list-item-input">
-											<input type="number" placeholder="电话" name="phone">
-										</div>
-									</div>
-								</li>
-
-								<li class="aui-list-item" style="display: none">
-									<div class="aui-list-item-inner">
-										<div class="aui-list-item-label">*是否怀孕:</div>
-										<div class="aui-list-item-input">
-											<label><input class="aui-radio" type="radio" name="is_pregnant" value="1">是</label>
-											<label><input class="aui-radio" type="radio" name="is_pregnant" value="0"
-												checked="true">否</label>
-										</div>
-									</div>
-								</li>
-								<li class="aui-list-item">
-				                    <div class="aui-list-item-inner" style="display: flex;flex-direction: row;justify-content: left;">
-				                        <div class="">*是否有糖尿病史:</div>
-				                        <div class="" style="margin-left: 1em;">
-				                            <label><input class="aui-radio" type="radio" name="has_diabetic" value="1">是</label>
-				                            <label><input class="aui-radio" type="radio" name="has_diabetic" value="0"
-				                                          checked="true">否</label>
-
-				                        </div>
-				                    </div>
-				                </li>
-							</ul>
-						</div>
-					<div class="aui-content aui-margin-b-15">
-						<ul class="aui-list aui-from-list">
-							<li class="aui-list-header">其他信息（选题）</li>
-							<li class="aui-list-item">
-								<div class="aui-list-item-inner">
-									<div class="aui-list-item-label">身高:</div>
-									<div class="aui-list-item-input">
-										<input type="number" placeholder="身高（cm）" name="height">
+										<input type="number" placeholder="年龄" name="age">
 									</div>
 								</div>
 							</li>
 							<li class="aui-list-item">
 								<div class="aui-list-item-inner">
-									<div class="aui-list-item-label">体重:</div>
+									<div class="aui-list-item-label">*邮寄地址:</div>
 									<div class="aui-list-item-input">
-										<input type="number" placeholder="体重（kg）" name="weight">
+										<input type="text" name="province" class="weui-input" value="" id="city-picker">
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label"></div>
+									<div class="aui-list-item-input">
+										<input type="text" placeholder="详细地址" name="address">
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">*联系电话:</div>
+									<div class="aui-list-item-input">
+										<input type="number" placeholder="电话" name="phone">
+									</div>
+								</div>
+							</li>
+
+							<li class="aui-list-item" style="display: none">
+								<div class="aui-list-item-inner">
+									<div class="aui-list-item-label">*是否怀孕:</div>
+									<div class="aui-list-item-input">
+										<label><input class="aui-radio" type="radio" name="is_pregnant" value="1">是</label>
+										<label><input class="aui-radio" type="radio" name="is_pregnant" value="0"
+											checked="true">否</label>
+									</div>
+								</div>
+							</li>
+							<li class="aui-list-item">
+								<div class="aui-list-item-inner" style="display: flex;flex-direction: row;justify-content: left;">
+									<div class="">*是否有糖尿病史:</div>
+									<div class="" style="margin-left: 1em;">
+										<label><input class="aui-radio" type="radio" name="has_diabetic" value="1">是</label>
+										<label><input class="aui-radio" type="radio" name="has_diabetic" value="0"
+													  checked="true">否</label>
+
 									</div>
 								</div>
 							</li>
 						</ul>
 					</div>
-					<!--&lt;!&ndash;/*@thymesVar id="product" type="com.willshuhua.entity.Product"*/&ndash;&gt;-->
-					<!--<input type="hidden" th:value="${product.product_id}" name="product_id">-->
-					<div class="aui-content aui-margin-b-15">
-						<ul class="aui-list aui-from-list">
-							<li class="aui-list-item">
-								<div class="aui-list-item-inner">
-									<div style="display: flex;flex-direction: row">
-										<input class="aui-checkbox" type="radio" name="isagree" onclick="agreeClick(this)">
-										<p>阅读并同意该协议<a href="#">《协议》</a></p>
-									</div>
+				<div class="aui-content aui-margin-b-15">
+					<ul class="aui-list aui-from-list">
+						<li class="aui-list-header">其他信息（选题）</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">身高:</div>
+								<div class="aui-list-item-input">
+									<input type="number" placeholder="身高（cm）" name="height">
 								</div>
-							</li>
-						</ul>
-					</div>
-				</form>
-				<div class="block">
-					<div class="Mask" id="mask"></div>
-					<div class="weui-btn weui-btn_primary" style="position: absolute;top: 0px;" id='patientInfoConfirm'>确认</div>
+							</div>
+						</li>
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div class="aui-list-item-label">体重:</div>
+								<div class="aui-list-item-input">
+									<input type="number" placeholder="体重（kg）" name="weight">
+								</div>
+							</div>
+						</li>
+					</ul>
 				</div>
-
-			</section>
+				<!--&lt;!&ndash;/*@thymesVar id="product" type="com.willshuhua.entity.Product"*/&ndash;&gt;-->
+				<!--<input type="hidden" th:value="${product.product_id}" name="product_id">-->
+				<div class="aui-content aui-margin-b-15">
+					<ul class="aui-list aui-from-list">
+						<li class="aui-list-item">
+							<div class="aui-list-item-inner">
+								<div style="display: flex;flex-direction: row">
+									<input class="aui-checkbox" type="radio" name="isagree" onclick="agreeClick(this)">
+									<p>阅读并同意该协议<a href="#">《协议》</a></p>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</form>
+			<div class="block">
+				<div class="Mask" id="mask"></div>
+				<div class="weui-btn weui-btn_primary" id='patientInfoConfirm'>确认</div>
+				<!--style="position: absolute;top: 0px;"-->
+			</div>
 		</div>
 	</div>
 </section>
@@ -268,7 +274,7 @@
 -->
 <script th:src="@{/js/pay.js}"></script>
 <script type="text/javascript" th:inline="javascript">
-
+	var isAll = 0;
     var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
     //var context = window.location.hostname;
      var cartData={};
@@ -276,9 +282,30 @@
     function InitAll(){
         GetCartData();
     }
-    $(document).ready(InitAll());
-    //点击添加已有检测人或者添加新的检测人
+    $(function () {
+        InitAll();
+        $()
+    })
 
+	//选择全部
+	function ClickAll() {
+        if(!isAll){
+            $("#content").find('input[name="checkbox"]').each(function(index){
+                $(this).prop('checked',true);
+            });
+            $('#tip').text('取消全选');
+            isAll = 1;
+		}else{
+            $("#content").find('input[name="checkbox"]').each(function(index){
+                $(this).prop('checked',false);
+            });
+            $('#tip').text('全选');
+            isAll = 0;
+
+		}
+
+
+    }
 
 	//获取customer拥有的患者信息
 	function GetPatientInfo(cartItem){
@@ -367,7 +394,7 @@
                 }
     		}
             PopSelect();
-            AddClickEven()
+            
     		//BindCartInfo();
     	}else{
     		alert('获取购物车信息失败');
@@ -376,6 +403,7 @@
     //注册弹出选择框事件
     function  PopSelect() {
         //弹出检测人框
+        $('a[name=showPeople]').off('click');
         $('a[name=showPeople]').click(function(e){
             if($(this).is('.isShow')){
                 $('div[name=people_list]').slideUp();
@@ -383,6 +411,7 @@
             }else{
                 //获得检测人信息，画出检测人框
                 GetCartPatient($(this));
+                AddClickEven();
                 $(this).next().slideDown();
                 $(this).addClass('isShow');
             }
@@ -391,6 +420,7 @@
 
     //注册点击添加检测人事件
     function  AddClickEven() {
+    	$("div[name=add]").off('click');
         $("div[name=add]").click(function(e){
             if ($(this).attr('id')=="addPatient") {
                 //弹出已保存的人名单，无保存的填写信息
@@ -401,9 +431,24 @@
                 //弹出全屏的信息填写框
                 PatientInfoConfirm();
                 $("#pop_write").popup();
+                pushHistory(); 
+				window.addEventListener("popstate", function(e) { 
+				$.closePopup(); //根据自己的需求实现自己的功能
+				}, false); 
             }
         });
+
     }
+
+    //加入本地页面
+    function pushHistory() { 
+		var state = { 
+		title: "info", 
+		url: "#" 
+		}; 
+		window.history.pushState(state, "title", "#"); 
+	} 
+
 	//画出购物车对应的检测人
 	function DrawCartPatient(obj,patientInfo){
 		//清空列表
@@ -481,7 +526,7 @@
 	//点击刪除检测人
 	function ClickDelPatient(cartItem){
 		var req = {};
-
+		$('i[name=delete_patient]').off('click');
 		$('i[name=delete_patient]').click(function(e){
 				var patientInfo  = $(this).parent().prevAll('input:hidden').data();
 				req.cart_itemid = cartItem.cart_itemid;
@@ -534,6 +579,7 @@
 		req.cartItem.cart_itemid = cartItem.cart_itemid;
 		req.cartItem.product_id = cartItem.product_id;
 		req.cartItem.quantity = 1;
+		$('div[name=selectAdd').off('click');
 		$('div[name=selectAdd').click(function(e){
 			req.patientInfo = $(this).next().data();
 			AddCartPatient(req);
@@ -580,15 +626,18 @@
 		var path  = context + '/buy_cart_selects';
 //        var path  = context + '/direct_pay';
 		var reqBuy = [];
-		$('input[name="checkbox"]:checked').each(function(index){
+        $("#content").find('input[name="checkbox"]').each(function(index){
+			if($(this).prop('checked')){
 
-			reqBuy.push($(this).nextAll('input:hidden').data());
-			delete reqBuy.product_name;
-			delete reqBuy.unit_price;
-		}); 
-		reqBuy.pop();
+                reqBuy.push($(this).nextAll('input:hidden').data());
+                delete reqBuy.product_name;
+                delete reqBuy.unit_price;
+			}
+		});
+
 		
 		if (reqBuy!='') {
+
             $.showLoading();
 			$.ajax({
 	            cache: true,
@@ -597,7 +646,7 @@
 	            data: JSON.stringify(reqBuy),
                 dataType:"json",
                 contentType: "application/json",
-	            async: false,
+	            async: true,
 	            error: function (request) {
                     $.hideLoading();
 	                alert("购买失败");
@@ -610,6 +659,8 @@
 	                }
 	            }
 	        });
+		}else{
+
 		}
 
     }
@@ -659,6 +710,7 @@
     }
 
     function PatientInfoConfirm(){
+    	$('#patientInfoConfirm').off('click');
     	$('#patientInfoConfirm').click(function(e){
     		//遍历form的元素值
 	       
@@ -795,6 +847,7 @@
 
 	 .block {
         position: relative;
+
     }
 
 	.Mask {
@@ -810,6 +863,7 @@
     .beMask {
         z-index: 1;
         position: absolute;
+
     }
 </style>
 </body>

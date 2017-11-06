@@ -25,21 +25,28 @@
     </div>
     <!--Tabbar-->
     <div class="weui-tabbar" id="tabbar">
-        <a href="javascript:onChangeTab(0);" class="weui-tabbar__item weui-bar__item_on" id="tab_item0">
+        <a href="javascript:onChangeTab(0);" class="weui-tabbar__item weui-bar__item_on" id="tab_item_product_list">
             <i class="aui-iconfont aui-icon-home weui-tabbar__icon"></i>
             <p class="weui-tabbar__label">产品</p>
         </a>
-        <a href="javascript:onChangeTab(1);" class="weui-tabbar__item" id="tab_item1">
+        <a href="javascript:onChangeTab(1);" class="weui-tabbar__item" id="tab_item_shopping_cart">
             <i class="aui-iconfont aui-icon-cart weui-tabbar__icon"></i>
             <p class="weui-tabbar__label">购物车</p>
         </a>
-        <a href="javascript:onChangeTab(2);" class="weui-tabbar__item" id="tab_item2">
+        <a href="javascript:onChangeTab(2);" class="weui-tabbar__item" id="tab_item_customer_info">
             <i class="aui-iconfont aui-icon-my weui-tabbar__item"></i>
             <p class="weui-tabbar__label">我的</p>
         </a>
     </div>
 </div>
 <script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        var byshare = /*[[${byshare}]]*/;
+        if (byshare === true){
+            var from = /*[[${from_nickname != null?from_nickname:''}]]*/;
+            $.toptip('欢迎' + from + '的推荐用户', 'success');
+        }
+    });
     function requestPage(suffix) {
         $.showLoading();
         var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
@@ -60,25 +67,54 @@
     }
 
     function onChangeTab(index) {
-        $('.weui-bar__item_on').removeClass('weui-bar__item_on');
-        $('#tab_item' + index.toString()).addClass('weui-bar__item_on');
         switch (index) {
             case 0:
-                document.title = '首页';
-                requestPage('/product_list');
+                window.location.hash = '#/product_list';
                 break;
             case 1:
-                document.title = '购物车';
-                requestPage('/shopping_cart');
+                window.location.hash = '#/shopping_cart';
                 break;
             case 2:
-                document.title = '我的';
-                requestPage('/customer_info');
+                window.location.hash = '#/customer_info';
                 break;
         }
     }
 
     requestPage('/product_list');
+
+    $(window).on("hashchange", controller);
+    var winhash = window.location.hash;
+    if (winhash === '') {
+        window.location.hash = '#/product_list';
+    } else {
+        controller();
+    }
+    
+    function controller() {
+        var hash_data = window.location.hash;
+        var patharray = hash_data.slice(2).split('/');
+        $('.weui-bar__item_on').removeClass('weui-bar__item_on');
+        $('#tab_item_' + patharray[0]).addClass('weui-bar__item_on');
+        switch (patharray[0]){
+            case 'product_list':{
+                document.title = '首页';
+                requestPage('/product_list');
+                break;
+            }
+            case 'shopping_cart':{
+                document.title = '购物车';
+                requestPage('/shopping_cart');
+                break;
+            }
+            case 'customer_info':{
+                document.title = '我的';
+                requestPage('/customer_info');
+                break;
+            }
+            default:
+                break;
+        }
+    }
 </script>
 </body>
 

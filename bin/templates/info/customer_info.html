@@ -1,4 +1,4 @@
-<span xmlns:th="http://www.thymeleaf.org">
+<section xmlns:th="http://www.thymeleaf.org">
     <div class="weui-cells__title">用户信息</div>
 <div class="weui-cells">
     <div class="weui-cell">
@@ -13,7 +13,7 @@
 </div>
 <div class="weui-cells__title"></div>
 <div class="weui-cells">
-    <a class="weui-cell weui-cell_access" href="javascript:;">
+    <a class="weui-cell weui-cell_access" data-th-href="@{/patient_infos_page}">
         <div class="weui-cell__bd">
             <p>检测人管理</p>
         </div>
@@ -22,6 +22,12 @@
     <a class="weui-cell weui-cell_access" data-th-href="@{/my_order}">
         <div class="weui-cell__bd">
             <p>订单信息</p>
+        </div>
+        <div class="weui-cell__ft"></div>
+    </a>
+    <a class="weui-cell weui-cell_access" href="javascript:turnToShareInfo()">
+        <div class="weui-cell__bd">
+            <p>分享链接</p>
         </div>
         <div class="weui-cell__ft"></div>
     </a>
@@ -41,4 +47,12 @@
 <div class="weui-footer" style="position:absolute; bottom: 70px; width:100%; align-items: center;">
     <p class="weui-footer__text">version: v1.0</p>
 </div>
-</span>
+    <script th:inline="javascript">
+        function turnToShareInfo() {
+            var context = /*[[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]]*/;
+            var customer_id = /*[[${wechat_info.customer_id}]]*/
+            window.location.href= context + '/share_info?from_id=' + customer_id;
+        }
+    </script>
+</section>
+

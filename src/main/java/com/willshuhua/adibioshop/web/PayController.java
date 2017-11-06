@@ -106,7 +106,7 @@ public class PayController {
         OrderItem orderItem = new OrderItem(orderId, UUID.randomUUID().toString(), productId, 1);
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setOrder_itemid(orderItem.getOrder_itemid());
-        orderInfo.setOrder_infoid(UUID.randomUUID().toString());
+        orderInfo.setOrder_infoid(String.valueOf(idWorker.nextId()));
         orderInfo.setProduct_id(productId);
         orderInfo.setPatient_infoid(patientInfo.getPatient_infoid());
         orderService.createOrder(order, orderInfo, orderEvent, orderItem);
@@ -148,7 +148,7 @@ public class PayController {
             BigDecimal unit_price = product.getReal_price();
             wholePrice = wholePrice.add(unit_price.multiply(new BigDecimal(cartItem.getQuantity())));
             for (Map map : cartPatientInfoList) {
-                OrderInfo orderInfo = new OrderInfo(orderItem.getOrder_itemid(), UUID.randomUUID().toString(), cartItem.getProduct_id(), (String) map.get("patient_infoid"));
+                OrderInfo orderInfo = new OrderInfo(orderItem.getOrder_itemid(), String.valueOf(idWorker.nextId()), cartItem.getProduct_id(), (String) map.get("patient_infoid"));
                 orderInfoList.add(orderInfo);
             }
         }

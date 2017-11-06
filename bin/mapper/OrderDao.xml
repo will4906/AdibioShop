@@ -227,6 +227,17 @@
         AND
             patient_infos.patient_infoid = order_infos.patient_infoid
     </select>
+
+    <select id="getCustomerOrder" resultType="Order">
+        SELECT
+            order_id, customer_id, price, status, description
+        FROM
+            orders
+        WHERE
+            order_id = #{order_id}
+            AND
+            customer_id = #{customer_id}
+    </select>
 </mapper>
 
 

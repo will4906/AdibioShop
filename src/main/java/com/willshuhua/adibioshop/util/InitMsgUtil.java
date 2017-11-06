@@ -34,6 +34,7 @@ public class InitMsgUtil {
         //校验签名
         if (!mytoken.equals("") && mytoken.equals(signature)) {
             logger.info("The sign passed!");
+            logger.info(echostr);
             return echostr; //如果检验成功输出echostr，微信服务器接收到此输出，才会确认检验完成。
         } else {
             return "error";
