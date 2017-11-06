@@ -30,6 +30,10 @@
         VALUES (#{order_id}, #{order_itemid}, #{product_id}, #{quantity})
     </insert>
 
+    <insert id="createOrderPatientInfo">
+        INSERT INTO order_patient_infos(order_patient_infoid, order_infoid, name, gender, age, country, province, city, district, address, phone, has_diabetic, is_pregnant, height, weight)
+                VALUES (#{order_patient_infoid}, #{order_infoid}, #{name}, #{gender}, #{age}, #{country}, #{province}, #{city}, #{district}, #{address}, #{phone}, #{has_diabetic}, #{is_pregnant}, #{height}, #{weight})
+    </insert>
     <update id="updateOrderStatus" >
         UPDATE orders SET status = #{status} WHERE order_id = #{orderId}
     </update>

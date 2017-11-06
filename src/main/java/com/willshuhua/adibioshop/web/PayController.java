@@ -11,12 +11,9 @@ import com.willshuhua.adibioshop.dto.wechat_pay.*;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.PatientInfo;
 import com.willshuhua.adibioshop.entity.Share;
+import com.willshuhua.adibioshop.entity.order.*;
 import com.willshuhua.adibioshop.entity.product.Product;
 import com.willshuhua.adibioshop.entity.cart.CartItem;
-import com.willshuhua.adibioshop.entity.order.Order;
-import com.willshuhua.adibioshop.entity.order.OrderEvent;
-import com.willshuhua.adibioshop.entity.order.OrderInfo;
-import com.willshuhua.adibioshop.entity.order.OrderItem;
 import com.willshuhua.adibioshop.entity.product.ProductDiscount;
 import com.willshuhua.adibioshop.properties.WechatProperties;
 import com.willshuhua.adibioshop.retrofit.RetrofitManager;
@@ -96,6 +93,7 @@ public class PayController {
         if (product == null || patientInfo == null) {
             return new Result(Result.ERR, "the parameter is error!");
         }
+        OrderPatientInfo orderPatientInfo = new OrderPatientInfo(patientInfo);
         //配置订单
         SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
         String orderId = String.valueOf(idWorker.nextId());
@@ -109,7 +107,7 @@ public class PayController {
         orderInfo.setOrder_infoid(String.valueOf(idWorker.nextId()));
         orderInfo.setProduct_id(productId);
         orderInfo.setPatient_infoid(patientInfo.getPatient_infoid());
-        orderService.createOrder(order, orderInfo, orderEvent, orderItem);
+        orderService.createOrder(order, orderInfo, orderEvent, orderItem, orderPatientInfo);
         if ("share".equals(discountType)){
             String fromId = (String)httpSession.getAttribute("from_id");
             shareService.createShare(new Share(UUID.randomUUID().toString(), fromId, orderId));
@@ -132,6 +130,7 @@ public class PayController {
         OrderEvent orderEvent = new OrderEvent(UUID.randomUUID().toString(), orderId, new Date(), OrderStatus.CREATION, customer.getCustomer_id(), null);
 
         List<OrderInfo> orderInfoList = new ArrayList<>();
+        List<OrderPatientInfo> orderPatientInfoList = new ArrayList<>();
         List<OrderItem> orderItemList = new ArrayList<>();
 
         BigDecimal wholePrice = new BigDecimal(0);
@@ -149,11 +148,13 @@ public class PayController {
             wholePrice = wholePrice.add(unit_price.multiply(new BigDecimal(cartItem.getQuantity())));
             for (Map map : cartPatientInfoList) {
                 OrderInfo orderInfo = new OrderInfo(orderItem.getOrder_itemid(), String.valueOf(idWorker.nextId()), cartItem.getProduct_id(), (String) map.get("patient_infoid"));
+                PatientInfo patientInfo = customerService.hasPatientInfoId((String) map.get("patient_infoid"));
+                orderPatientInfoList.add(new OrderPatientInfo(patientInfo));
                 orderInfoList.add(orderInfo);
             }
         }
         order.setPrice(wholePrice);
-        orderService.createOrder(order, orderInfoList, orderEvent, orderItemList);
+        orderService.createOrder(order, orderInfoList, orderEvent, orderItemList, orderPatientInfoList);
         cartService.deleteSelectCart(cartItemList);
         logger.info(cartItemList);
         if ("share".equals(discountType)){

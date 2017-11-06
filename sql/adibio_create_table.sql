@@ -104,6 +104,29 @@ CREATE TABLE order_infos
     CONSTRAINT order_infos_infoid_unique UNIQUE (order_infoid)
 );
 
+-- 创建订单检测人历史信息记录
+DROP TABLE IF EXISTS order_patient_infos CASCADE ;
+CREATE TABLE order_patient_infos (
+    row_id SERIAL,
+    order_patient_infoid VARCHAR(255) NOT NULL ,
+    order_infoid VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    gender VARCHAR(5) NOT NULL,
+    age NUMERIC NOT NULL,
+    country VARCHAR(255) NOT NULL,
+    province VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    district VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    phone VARCHAR(255) NOT NULL,
+    has_diabetic INT NOT NULL,
+    is_pregnant INT NOT NULL,
+    height NUMERIC,
+    weight NUMERIC,
+    CONSTRAINT order_patient_infos_rowid_pk PRIMARY KEY (row_id),
+    CONSTRAINT order_patient_infos_infoid UNIQUE (order_patient_infoid)
+);
+
 -- 描述订单事件信息
 DROP TABLE IF EXISTS order_events CASCADE;
 CREATE TABLE order_events

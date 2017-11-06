@@ -40,4 +40,6 @@ public interface CartDao {
     CartPatientInfo getCartPatientInfo(String cart_patient_infoid);
 
     void deleteItemCartPatientInfos(CartItem cartItem);
+
+    void deleteCartByPatientInfoId(@Param("patient_infoid")String patientInfoid);
 }

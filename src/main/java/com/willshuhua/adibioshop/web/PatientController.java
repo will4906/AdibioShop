@@ -3,6 +3,7 @@ package com.willshuhua.adibioshop.web;
 import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.PatientInfo;
+import com.willshuhua.adibioshop.service.CartService;
 import com.willshuhua.adibioshop.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,8 @@ public class PatientController {
 
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private CartService cartService;
 
 
     @RequestMapping(value = "/patient_infos", method = RequestMethod.GET)
@@ -48,6 +51,7 @@ public class PatientController {
     public Object deletePatientInfo(HttpSession httpSession, @RequestParam("patient_infoid")String patient_infoid){
         Customer customer = (Customer)httpSession.getAttribute("customer");
         customerService.deletePatientInfo(patient_infoid);
+//        cartService.reduceCartItem()
         return new Result(Result.OK);
     }
 

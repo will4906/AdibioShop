@@ -12,9 +12,9 @@ import java.util.Map;
 
 public interface OrderService {
 
-    void createOrder(Order order, OrderInfo orderInfo, OrderEvent orderEvent, OrderItem orderItem);
+    void createOrder(Order order, OrderInfo orderInfo, OrderEvent orderEvent, OrderItem orderItem, OrderPatientInfo orderPatientInfo);
 
-    void createOrder(Order order, List<OrderInfo> orderInfoList, OrderEvent orderEvent, List<OrderItem> orderItemList);
+    void createOrder(Order order, List<OrderInfo> orderInfoList, OrderEvent orderEvent, List<OrderItem> orderItemList, List<OrderPatientInfo> orderPatientInfoList);
 
     void changeOrderStatus(OrderEvent orderEvent);
 

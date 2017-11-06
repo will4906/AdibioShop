@@ -28,16 +28,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public void createOrder(Order order, OrderInfo orderInfo, OrderEvent orderEvent, OrderItem orderItem) {
+    public void createOrder(Order order, OrderInfo orderInfo, OrderEvent orderEvent, OrderItem orderItem, OrderPatientInfo orderPatientInfo) {
         orderDao.createOrder(order);
         orderDao.createOrderItem(orderItem);
         orderDao.createOrderEvent(orderEvent);
         orderDao.createOrderInfo(orderInfo);
+        orderDao.createOrderPatientInfo(orderPatientInfo);
     }
 
     @Transactional
     @Override
-    public void createOrder(Order order, List<OrderInfo> orderInfoList, OrderEvent orderEvent, List<OrderItem> orderItemList) {
+    public void createOrder(Order order, List<OrderInfo> orderInfoList, OrderEvent orderEvent, List<OrderItem> orderItemList, List<OrderPatientInfo> orderPatientInfoList) {
         orderDao.createOrder(order);
         for (OrderItem orderItem : orderItemList) {
             orderDao.createOrderItem(orderItem);
@@ -45,6 +46,9 @@ public class OrderServiceImpl implements OrderService {
         orderDao.createOrderEvent(orderEvent);
         for (OrderInfo orderInfo : orderInfoList) {
             orderDao.createOrderInfo(orderInfo);
+        }
+        for (OrderPatientInfo orderPatientInfo : orderPatientInfoList){
+            orderDao.createOrderPatientInfo(orderPatientInfo);
         }
     }
 

@@ -23,6 +23,8 @@ public interface OrderDao {
 
     void createOrderItem(OrderItem orderItem);
 
+    void createOrderPatientInfo(OrderPatientInfo orderPatientInfo);
+
     void updateOrderStatus(@Param("orderId") String orderId, @Param("status") String status);
 
     List<Map<String,Object>> queryOrderInfoByOrderId(@Param("orderId") String orderId);
