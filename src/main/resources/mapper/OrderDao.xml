@@ -223,13 +223,13 @@
 
     <select id="getOrderInfoDetailList" resultType="java.util.Map">
         SELECT order_infos.order_itemid, order_infos.order_infoid, order_infos.product_id, order_infos.patient_infoid,
-            patient_infos.name, patient_infos.age, patient_infos.gender
+            order_patient_infos.name, order_patient_infos.age, order_patient_infos.gender
         FROM
-            order_infos, patient_infos
+            order_infos, order_patient_infos
         WHERE
             order_infos.order_itemid = #{order_itemid}
         AND
-            patient_infos.patient_infoid = order_infos.patient_infoid
+            order_patient_infos.order_infoid = order_infos.order_infoid
     </select>
 
     <select id="getCustomerOrder" resultType="Order">

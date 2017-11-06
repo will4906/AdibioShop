@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OrderPatientInfo {
 
+    private String order_infoid;
     private String order_patient_infoid;
     private String name;
     private String gender;
@@ -27,7 +28,8 @@ public class OrderPatientInfo {
     private float height;
     private float weight;
 
-    public OrderPatientInfo(PatientInfo patientInfo){
+    public OrderPatientInfo(PatientInfo patientInfo, String orderInfoid){
+        this.order_infoid = orderInfoid;
         this.name = patientInfo.getName();
         this.gender = patientInfo.getGender();
         this.age = patientInfo.getAge();

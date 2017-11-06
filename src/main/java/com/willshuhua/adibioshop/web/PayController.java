@@ -93,7 +93,7 @@ public class PayController {
         if (product == null || patientInfo == null) {
             return new Result(Result.ERR, "the parameter is error!");
         }
-        OrderPatientInfo orderPatientInfo = new OrderPatientInfo(patientInfo);
+
         //配置订单
         SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
         String orderId = String.valueOf(idWorker.nextId());
@@ -107,6 +107,7 @@ public class PayController {
         orderInfo.setOrder_infoid(String.valueOf(idWorker.nextId()));
         orderInfo.setProduct_id(productId);
         orderInfo.setPatient_infoid(patientInfo.getPatient_infoid());
+        OrderPatientInfo orderPatientInfo = new OrderPatientInfo(patientInfo, orderInfo.getOrder_infoid());
         orderService.createOrder(order, orderInfo, orderEvent, orderItem, orderPatientInfo);
         if ("share".equals(discountType)){
             String fromId = (String)httpSession.getAttribute("from_id");
@@ -149,7 +150,7 @@ public class PayController {
             for (Map map : cartPatientInfoList) {
                 OrderInfo orderInfo = new OrderInfo(orderItem.getOrder_itemid(), String.valueOf(idWorker.nextId()), cartItem.getProduct_id(), (String) map.get("patient_infoid"));
                 PatientInfo patientInfo = customerService.hasPatientInfoId((String) map.get("patient_infoid"));
-                orderPatientInfoList.add(new OrderPatientInfo(patientInfo));
+                orderPatientInfoList.add(new OrderPatientInfo(patientInfo, orderInfo.getOrder_infoid()));
                 orderInfoList.add(orderInfo);
             }
         }
