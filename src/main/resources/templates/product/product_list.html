@@ -1,17 +1,22 @@
 <p>&nbsp;</p>
-<section data-th-each="product: ${productList}"  xmlns:th="http://www.thymeleaf.org">
+<section data-th-each="product: ${productList}" xmlns:th="http://www.thymeleaf.org">
     <div class="aui-card-list">
-        <a data-th-href="@{'/product_detail?product_id=' + ${product.product_id}}">
-            <!--/*@thymesVar id="name" type="java.lang.String"*/-->
-            <div class="aui-card-list-header" th:text="${product.product_name}">
-                糖尿病早期筛查
-            </div>
-            <div class="aui-card-list-content-padded">
-                <img src="">
-            </div>
-            <div class="aui-card-list-footer">
-                了解更多
-            </div>
-        </a>
+
+        <!--/*@thymesVar id="name" type="java.lang.String"*/-->
+        <div class="aui-card-list-header" th:text="${product.product_name}">
+            糖尿病早期筛查
+        </div>
+        <div class="aui-card-list-content-padded">
+            <img src="">
+        </div>
+        <div class="aui-card-list-footer">
+            <a data-th-href="@{/why_product}">
+                <div style="height: 100%; width: 50%; border: 1px; text-align: center;">为什么要早期检查</div>
+            </a>
+            <a data-th-href="@{'/product_detail?product_id=' + ${product.product_id}}">
+                <div style="height: 100%; width: 50%; border: 1px; text-align: center;">如何进行早期筛查</div>
+            </a>
+        </div>
+
     </div>
 </section>

@@ -133,6 +133,11 @@ public class ProductController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/why_product",method = RequestMethod.GET)
+    public ModelAndView whyProduct(){
+        return new ModelAndView("/product/whyproduct");
+    }
+
     private void analyseCustomer(String code, HttpSession httpSession, boolean isAsnyc) throws IOException {
         Customer hasCustomer = (Customer)httpSession.getAttribute("customer");
         if (hasCustomer != null){
