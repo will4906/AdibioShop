@@ -242,6 +242,25 @@
             AND
             customer_id = #{customer_id}
     </select>
+
+    <select id="selectOrderInfo" resultType="OrderInfo">
+        SELECT order_itemid, order_infoid, product_id, patient_infoid FROM order_infos WHERE order_infoid = #{order_infoid}
+    </select>
+
+    <select id="selectCustomerByOrderInfo" resultType="Customer">
+        SELECT
+            customers.customer_id, customers.openid
+        FROM
+            orders, order_items, order_infos, customers
+        WHERE
+            order_infos.order_infoid = #{order_infoid}
+        AND
+            order_items.order_itemid = order_infos.order_itemid
+        AND
+            orders.order_id = order_items.order_id
+        AND
+            customers.customer_id = orders.customer_id
+    </select>
 </mapper>
 
 

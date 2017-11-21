@@ -12,16 +12,14 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MainTest {
 
     private static Logger logger = Logger.getLogger(MainTest.class);
     public static void main(String[] args) throws Exception {
-        logger.info(UUID.randomUUID());
+//        logger.info(UUID.randomUUID());
+        logger.info(new Date().getDate());
 //        String temp = "{\"openid\":\"owNVIwdLGp07zeIjYZSlZTFDPak8\",\"nickname\":\"树华\",\"sex\":1,\"language\":\"zh_CN\",\"city\":\"深圳\",\"province\":\"广东\",\"country\":\"中国\",\"headimgurl\":\"http:\\/\\/wx.qlogo.cn\\/mmopen\\/vi_32\\/DYAIOgq83eoe2CG5B2YAM7Jib7CarDROfwY8EkEmnRjCMQb6BPYiaZQbYFQV70Fn9ASey9NLVBibl1POqmrrjeB8g\\/0\",\"privilege\":[]}";
 //        Gson gson = new Gson();
 //        CustomerWechat customerWechat = gson.fromJson(temp, CustomerWechat.class);

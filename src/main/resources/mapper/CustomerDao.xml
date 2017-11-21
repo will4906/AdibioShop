@@ -82,4 +82,11 @@
     <update id="updateCashbackInfo">
         UPDATE customers SET zhifubao_account = #{zhifubao_account}, bank_card_number = #{bank_card_number} WHERE customer_id = #{customer_id}
     </update>
+
+    <select id="selectOrderPatientInfo" resultType="OrderPatientInfo">
+        SELECT order_patient_infoid, order_infoid, name, gender, age, country, province, city, district, address, phone, has_diabetic, is_pregnant, height, weight
+        FROM order_patient_infos
+        WHERE
+        order_infoid = #{order_infoid}
+    </select>
 </mapper>

@@ -111,10 +111,15 @@ public class PayController {
         orderService.createOrder(order, orderInfo, orderEvent, orderItem, orderPatientInfo);
         if ("share".equals(discountType)){
             String fromId = (String)httpSession.getAttribute("from_id");
-            shareService.createShare(new Share(UUID.randomUUID().toString(), fromId, orderId));
+            shareService.createShare(new Share(UUID.randomUUID().toString(), fromId, orderId, false));
         }
         return notifyUnifiedOrder(request, order, product.getProduct_name(), customer);
     }
+
+//    @RequestMapping(value = "/firejq",method = RequestMethod.POST)
+//    public Object fireJq(HttpServletRequest request){
+//        return notifyUnifiedOrder(request, order, product.getProduct_name(), customer);
+//    }
 
     @RequestMapping(value = "/buy_cart_selects", method = RequestMethod.POST)
     @ResponseBody
@@ -160,7 +165,7 @@ public class PayController {
         logger.info(cartItemList);
         if ("share".equals(discountType)){
             String fromId = (String)httpSession.getAttribute("from_id");
-            shareService.createShare(new Share(UUID.randomUUID().toString(), fromId, orderId));
+            shareService.createShare(new Share(UUID.randomUUID().toString(), fromId, orderId, false));
         }
         return notifyUnifiedOrder(request, order, "批量检测", customer);
     }

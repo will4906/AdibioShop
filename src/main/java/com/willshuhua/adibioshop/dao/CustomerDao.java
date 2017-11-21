@@ -9,6 +9,7 @@ import com.willshuhua.adibioshop.dto.order.PatientDetail;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.CustomerWechat;
 import com.willshuhua.adibioshop.entity.PatientInfo;
+import com.willshuhua.adibioshop.entity.order.OrderPatientInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -40,4 +41,6 @@ public interface CustomerDao{
     void updatePatientInfo(PatientInfo patientInfo);
 
     void updateCashbackInfo(Customer customer);
+
+    OrderPatientInfo selectOrderPatientInfo(@Param("order_infoid")String orderInfoid);
 }

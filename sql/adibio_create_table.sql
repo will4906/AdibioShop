@@ -226,10 +226,10 @@ CREATE TABLE shares
     share_id VARCHAR(255) NOT NULL,
     from_id VARCHAR(255) NOT NULL,
     order_id VARCHAR(255) NOT NULL,
+    is_paid BOOLEAN NOT NULL ,
     CONSTRAINT shares_rowid_pk PRIMARY KEY (row_id),
     CONSTRAINT shares_shareid_unique UNIQUE (share_id)
 );
-
 
 
 

@@ -84,4 +84,8 @@ public interface OrderDao {
      * @return
      */
     List<MyOrder> getPartServeralOrdersProcessing(OrderQuery orderQuery);
+
+    OrderInfo selectOrderInfo(@Param("order_infoid")String orderInfoid);
+
+    Customer selectCustomerByOrderInfo(@Param("order_infoid")String orderInfoid);
 }

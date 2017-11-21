@@ -12,5 +12,6 @@ public class Share {
     private String share_id;
     private String from_id;
     private String order_id;
+    private boolean is_paid;
 
 }
