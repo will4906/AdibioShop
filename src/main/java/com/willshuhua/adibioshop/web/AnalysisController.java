@@ -1,18 +1,22 @@
 package com.willshuhua.adibioshop.web;
 
 import com.willshuhua.adibioshop.common.TokenInstance;
+import com.willshuhua.adibioshop.define.order.OrderStatus;
 import com.willshuhua.adibioshop.dto.access.Authorization;
 import com.willshuhua.adibioshop.dto.common.Result;
 import com.willshuhua.adibioshop.dto.template.TemplateBack;
 import com.willshuhua.adibioshop.dto.template.WechatTemplate;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.analysis.Analysis;
+import com.willshuhua.adibioshop.entity.order.Order;
+import com.willshuhua.adibioshop.entity.order.OrderEvent;
 import com.willshuhua.adibioshop.entity.order.OrderPatientInfo;
 import com.willshuhua.adibioshop.properties.WechatProperties;
 import com.willshuhua.adibioshop.retrofit.RetrofitManager;
 import com.willshuhua.adibioshop.retrofit.wechat.WechatRequest;
 import com.willshuhua.adibioshop.service.AnalysisService;
 import com.willshuhua.adibioshop.service.CustomerService;
+import com.willshuhua.adibioshop.service.OrderService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -27,8 +31,10 @@ import retrofit2.Retrofit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 public class AnalysisController {
@@ -39,6 +45,8 @@ public class AnalysisController {
     WechatProperties wechatProperties;
     @Autowired
     CustomerService customerService;
+    @Autowired
+    OrderService orderService;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -122,6 +130,14 @@ public class AnalysisController {
             }
         });
 
+        Order order = analysisService.selectOrderByAnalysisId(analysisId);
+        OrderEvent orderEvent = new OrderEvent();
+        orderEvent.setOrder_eventid(UUID.randomUUID().toString());
+        orderEvent.setEvent_title(OrderStatus.FINISHED);
+        orderEvent.setEvent_time(new Date());
+        orderEvent.setOrder_id(order.getOrder_id());
+        orderEvent.setEvent_executor("admin");
+        orderService.changeOrderStatus(orderEvent);
         return new Result();
     }
 

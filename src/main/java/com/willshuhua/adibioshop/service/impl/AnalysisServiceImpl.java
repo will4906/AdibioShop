@@ -6,6 +6,7 @@ import com.willshuhua.adibioshop.dao.OrderDao;
 import com.willshuhua.adibioshop.dao.ProductDao;
 import com.willshuhua.adibioshop.entity.Customer;
 import com.willshuhua.adibioshop.entity.analysis.Analysis;
+import com.willshuhua.adibioshop.entity.order.Order;
 import com.willshuhua.adibioshop.entity.order.OrderInfo;
 import com.willshuhua.adibioshop.entity.order.OrderPatientInfo;
 import com.willshuhua.adibioshop.entity.product.Product;
@@ -51,6 +52,11 @@ public class AnalysisServiceImpl implements AnalysisService{
     @Override
     public Customer selectCustomerByOrderInfoId(String orderInfoid) {
         return analysisDao.selectCustomerByOrderInfoId(orderInfoid);
+    }
+
+    @Override
+    public Order selectOrderByAnalysisId(String analysisId) {
+        return analysisDao.selectOrderByAnalysisId(analysisId);
     }
 
     @Transactional

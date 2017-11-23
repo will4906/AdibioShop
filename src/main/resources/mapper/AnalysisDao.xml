@@ -39,4 +39,18 @@
         AND
                 customers.customer_id = orders.customer_id
     </select>
+
+    <select id="selectOrderByAnalysisId" resultType="Order">
+        SELECT orders.order_id, orders.customer_id, orders.price, orders.status, orders.description
+        FROM
+            orders, analysis, order_infos, order_items
+        WHERE
+            analysis.analysis_id = #{analysis_id}
+        AND
+                order_infos.order_infoid = analysis.order_infoid
+        AND
+                order_items.order_itemid = order_info.order_itemid
+        AND
+                orders.order_id = order_items.order_id
+    </select>
 </mapper>
